@@ -1,4 +1,3 @@
-import 'package:curelink/features/auth/presentation/firebase_test_page.dart';
 import 'package:curelink/features/home/presentation/home_page.dart';
 import 'package:curelink/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
