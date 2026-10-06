@@ -1,3 +1,6 @@
+//import 'package:curelink/features/auth/presentation/firebase_test_page.dart';
+//import 'package:curelink/features/home/presentation/home_page.dart';
+import 'package:curelink/features/onboarding/presentation/splashpage.dart';
 import 'package:curelink/core/router/app_router.dart';
 import 'package:curelink/core/router/routes_names.dart';
 import 'package:curelink/features/home/presentation/home_page.dart';
@@ -10,8 +13,8 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'l10n/app_localizations.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  //WidgetsFlutterBinding.ensureInitialized();
+  //await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
 
@@ -21,10 +24,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'curelink',
       theme: LightTheme.theme,
       darkTheme: DarkTheme.theme,
       themeMode: ThemeMode.light,
+      home: Splashscreen(),
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
