@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 /// صفحة اختبار مؤقتة للتأكد إن Firebase شغال. امسحها بعد التجربة.
 class FirebaseTestPage extends StatefulWidget {
   const FirebaseTestPage({super.key});
+  static const String routeName="/firebaseTest";
 
   @override
   State<FirebaseTestPage> createState() => _FirebaseTestPageState();

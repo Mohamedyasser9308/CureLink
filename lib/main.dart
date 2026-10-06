@@ -1,11 +1,16 @@
 //import 'package:curelink/features/auth/presentation/firebase_test_page.dart';
 //import 'package:curelink/features/home/presentation/home_page.dart';
 import 'package:curelink/features/onboarding/presentation/splashpage.dart';
+import 'package:curelink/core/router/app_router.dart';
+import 'package:curelink/core/router/routes_names.dart';
+import 'package:curelink/features/home/presentation/home_page.dart';
 import 'package:curelink/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'core/theme/dark_theme.dart';
 import 'core/theme/light_theme.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'l10n/app_localizations.dart';
 
 void main() async {
   //WidgetsFlutterBinding.ensureInitialized();
@@ -25,6 +30,18 @@ class MyApp extends StatelessWidget {
       darkTheme: DarkTheme.theme,
       themeMode: ThemeMode.light,
       home: Splashscreen(),
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: AppLocalizations.supportedLocales,
+      locale: const Locale('ar'),
+      routes: AppRouter.routes,
+      onGenerateRoute: AppRouter.onGenerateRoute,
+      onUnknownRoute: AppRouter.onUnknownRoute,
+      initialRoute: RoutesNames.homePage,
     );
   }
 }
