@@ -1,3 +1,5 @@
+import 'package:curelink/core/router/app_navitation.dart';
+import 'package:curelink/features/auth/presentation/firebase_test_page.dart';
 import 'package:flutter/material.dart';
 import '../../../core/widgets/app_button.dart';
 import '../../../core/widgets/app_empty_state.dart';
@@ -6,6 +8,7 @@ import '../../../core/widgets/app_text_field.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
+  static const String routeName = "home";
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +20,15 @@ class HomePage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              AppButton(label: "save", onPressed: () {}),
+              AppButton(
+                label: "save",
+                onPressed: () {
+                  AppNavigator.pushAndClear(
+                    context,
+                    FirebaseTestPage.routeName,
+                  );
+                },
+              ),
               SizedBox(height: 10),
               AppEmptyState(title: "empty"),
               SizedBox(height: 10),
