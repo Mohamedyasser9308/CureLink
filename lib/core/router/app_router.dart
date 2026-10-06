@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import '../../features/auth/presentation/firebase_test_page.dart';
 import '../../features/home/presentation/home_page.dart';
+import 'routes_names.dart';
 
 class AppRouter {
   AppRouter._();
 
   /// Simple routes (no arguments)
   static final Map<String, WidgetBuilder> routes = {
-    HomePage.routeName: (_) => const HomePage(),
+    RoutesNames.homePage: (_) => const HomePage(),
     FirebaseTestPage.routeName: (_) => const FirebaseTestPage(),
   };
 
