@@ -314,6 +314,12 @@ abstract class AppLocalizations {
   /// **'Persona first'**
   String get personaFirst;
 
+  /// No description provided for @ageGroupSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose the age group that fits you.'**
+  String get ageGroupSubtitle;
+
   /// No description provided for @roleChild.
   ///
   /// In en, this message translates to:

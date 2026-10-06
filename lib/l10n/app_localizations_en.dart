@@ -121,6 +121,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get personaFirst => 'Persona first';
 
   @override
+  String get ageGroupSubtitle => 'Choose the age group that fits you.';
+
+  @override
   String get roleChild => 'Child';
 
   @override

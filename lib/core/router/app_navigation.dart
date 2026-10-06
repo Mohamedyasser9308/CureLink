@@ -31,3 +31,4 @@ class AppNavigator {
   static void pop<T extends Object?>(BuildContext context, [T? result]) =>
       Navigator.of(context).pop<T>(result);
 }
+

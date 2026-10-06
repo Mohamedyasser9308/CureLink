@@ -1,6 +1,5 @@
 import 'package:curelink/core/router/app_router.dart';
 import 'package:curelink/core/router/routes_names.dart';
-import 'package:curelink/features/home/presentation/home_page.dart';
 import 'package:curelink/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';

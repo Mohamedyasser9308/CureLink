@@ -6,4 +6,8 @@ class RoutesNames {
   static const String rolePage = "/role";
   static const String ageGroupPage = "/ageGroup";
   static const String profilePage = "/profile";
+
+  /// Home screen of each persona. AppRouter picks the screen
+  /// from SignUpArgs (ageGroup + role).
+  static const String personaHome = "/persona-home";
 }

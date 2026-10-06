@@ -121,6 +121,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get personaFirst => 'الشخصية أولاً';
 
   @override
+  String get ageGroupSubtitle => 'اختر الفئة العمرية المناسبة لك.';
+
+  @override
   String get roleChild => 'طفل';
 
   @override
