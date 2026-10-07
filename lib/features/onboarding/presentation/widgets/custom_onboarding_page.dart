@@ -1,26 +1,23 @@
 import 'package:curelink/core/theme/app_theme.dart';
-import 'package:curelink/core/widgets/app_button.dart';
-import 'package:curelink/features/onboarding/onboardingindicator.dart';
 import 'package:curelink/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class Onboardingpage2 extends StatelessWidget {
-  const Onboardingpage2({
+class CustomOnboardingpage extends StatelessWidget {
+  const CustomOnboardingpage({
     super.key,
     required this.controller,
     required this.currentpage,
+    required this.title,
+    required this.icon,
+    required this.description,
   });
 
   final PageController controller;
   final int currentpage;
-
-  void _nextPage() {
-    controller.nextPage(
-      duration: const Duration(milliseconds: 400),
-      curve: Curves.easeInOut,
-    );
-  }
+  final String title;
+  final String description;
+  final FaIcon icon;
 
   @override
   Widget build(BuildContext context) {
@@ -35,17 +32,13 @@ class Onboardingpage2 extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.fromLTRB(24, 20, 24, 24),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Spacer(),
-
             // Illustration
             Container(
               width: double.infinity,
               height: MediaQuery.sizeOf(context).height * 0.38,
-              constraints: const BoxConstraints(
-                maxHeight: 380,
-                minHeight: 260,
-              ),
+              constraints: const BoxConstraints(maxHeight: 380, minHeight: 260),
               decoration: BoxDecoration(
                 color: AppTheme.mint.withAlpha(
                   theme.brightness == Brightness.light ? 255 : 35,
@@ -75,13 +68,7 @@ class Onboardingpage2 extends StatelessWidget {
                           ),
                         ],
                       ),
-                      child: const Center(
-                        child: FaIcon(
-                          FontAwesomeIcons.capsules,
-                          size: 58,
-                          color: AppTheme.primary,
-                        ),
-                      ),
+                      child: Center(child: icon),
                     ),
                   ),
                 ),
@@ -92,7 +79,7 @@ class Onboardingpage2 extends StatelessWidget {
 
             // Step
             Text(
-              l10n.stepOfTotal(2, 3),
+              l10n.stepOfTotal(currentpage + 1, 3),
               style: theme.textTheme.labelLarge?.copyWith(
                 color: theme.colorScheme.primary,
                 fontWeight: FontWeight.w700,
@@ -103,7 +90,7 @@ class Onboardingpage2 extends StatelessWidget {
 
             // Title
             Text(
-              l10n.onboardingTitle2,
+              title,
               textAlign: TextAlign.center,
               style: theme.textTheme.headlineMedium?.copyWith(
                 color: titleColor,
@@ -117,32 +104,11 @@ class Onboardingpage2 extends StatelessWidget {
 
             // Description
             Text(
-              l10n.onboardingSubtitle2,
+              description,
               textAlign: TextAlign.center,
               style: theme.textTheme.bodyLarge?.copyWith(
                 color: theme.colorScheme.onSurface.withAlpha(155),
                 height: 1.5,
-              ),
-            ),
-
-            const SizedBox(height: 20),
-
-            // Indicator
-            OnboardingIndicator(
-              currentPage: currentpage,
-            ),
-
-            const Spacer(),
-
-            // Next Button
-            SizedBox(
-              width: double.infinity,
-              child: AppButton(
-                label: l10n.next,
-                icon: Directionality.of(context) == TextDirection.rtl
-                    ? Icons.arrow_back_rounded
-                    : Icons.arrow_forward_rounded,
-                onPressed: _nextPage,
               ),
             ),
           ],
