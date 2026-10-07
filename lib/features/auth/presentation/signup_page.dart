@@ -1,3 +1,4 @@
+
 import 'package:curelink/core/router/routes_names.dart';
 import 'package:curelink/core/theme/app_theme.dart';
 import 'package:curelink/core/widgets/app_button.dart';
@@ -5,6 +6,7 @@ import 'package:curelink/core/widgets/app_scaffold.dart';
 import 'package:curelink/core/widgets/app_text_field.dart';
 import 'package:curelink/features/auth/presentation/auth_repository.dart';
 import 'package:curelink/features/auth/presentation/auth_validators.dart';
+import 'package:curelink/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class SignupPage extends StatefulWidget {
@@ -45,6 +47,8 @@ class _SignupPageState extends State<SignupPage> {
 
     if (!isValid) return;
 
+    final l10n = AppLocalizations.of(context)!;
+
     setState(() {
       _isLoading = true;
     });
@@ -55,11 +59,16 @@ class _SignupPageState extends State<SignupPage> {
         phone: _phoneController.text.trim(),
         email: _emailController.text.trim(),
         password: _passwordController.text,
+        l10n: l10n,
       );
 
       if (!mounted) return;
 
-      Navigator.pushReplacementNamed(context, '/role');
+      Navigator.pushReplacementNamed(
+        context,
+        RoutesNames.ageGroupPage,
+        arguments: _nameController.text.trim(),
+      );
     } on AuthException catch (e) {
       if (!mounted) return;
 
@@ -68,6 +77,22 @@ class _SignupPageState extends State<SignupPage> {
         ..showSnackBar(
           SnackBar(
             content: Text(e.message),
+            behavior: SnackBarBehavior.floating,
+            margin: const EdgeInsets.all(16),
+            duration: const Duration(seconds: 3),
+          ),
+        );
+    } catch (_) {
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(
+            content: Text(l10n.somethingWentWrong),
+            behavior: SnackBarBehavior.floating,
+            margin: const EdgeInsets.all(16),
+            duration: const Duration(seconds: 3),
           ),
         );
     } finally {
@@ -79,9 +104,17 @@ class _SignupPageState extends State<SignupPage> {
     }
   }
 
+  void _goToLogin() {
+    Navigator.pushReplacementNamed(
+      context,
+      RoutesNames.loginPage,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
 
     final titleColor = theme.brightness == Brightness.light
         ? AppTheme.navy
@@ -90,115 +123,142 @@ class _SignupPageState extends State<SignupPage> {
     return AppScaffold(
       showAppBar: false,
       scrollable: true,
-      isLoading: _isLoading,
-      padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+      isLoading: false,
+      padding: const EdgeInsets.fromLTRB(24, 32, 24, 28),
       body: Form(
         key: _formKey,
-        autovalidateMode: AutovalidateMode.onUserInteraction,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Create account',
+              l10n.createAccount,
               style: theme.textTheme.headlineMedium?.copyWith(
                 color: titleColor,
-                fontWeight: FontWeight.w400,
+                fontWeight: FontWeight.w700,
+                letterSpacing: -0.5,
               ),
             ),
 
-            const SizedBox(height: 24),
+            const SizedBox(height: 8),
 
-            _FieldLabel(
-              'Name',
-              color: titleColor,
+            Text(
+              l10n.createAccountSubtitle,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: theme.colorScheme.onSurface.withAlpha(160),
+                height: 1.4,
+              ),
             ),
+
+            const SizedBox(height: 30),
+
+            _FieldLabel(l10n.name),
+
             AppTextField(
               controller: _nameController,
-              hint: 'Enter details',
+              hint: l10n.enterYourName,
               keyboardType: TextInputType.name,
               textInputAction: TextInputAction.next,
-              validator: AuthValidators.name,
+              validator: (value) => AuthValidators.name(
+                value,
+                l10n,
+              ),
             ),
 
-            const SizedBox(height: 16),
+            const SizedBox(height: 18),
 
-            _FieldLabel(
-              'Phone',
-              color: titleColor,
-            ),
+            _FieldLabel(l10n.phone),
+
             AppTextField(
               controller: _phoneController,
-              hint: 'Enter details',
+              hint: l10n.enterYourPhone,
               keyboardType: TextInputType.phone,
               textInputAction: TextInputAction.next,
-              validator: AuthValidators.phone,
+              validator: (value) => AuthValidators.phone(
+                value,
+                l10n,
+              ),
             ),
 
-            const SizedBox(height: 16),
+            const SizedBox(height: 18),
 
-            _FieldLabel(
-              'Email',
-              color: titleColor,
-            ),
+            _FieldLabel(l10n.email),
+
             AppTextField(
               controller: _emailController,
-              hint: 'Enter details',
+              hint: l10n.enterYourEmail,
               keyboardType: TextInputType.emailAddress,
               textInputAction: TextInputAction.next,
-              validator: AuthValidators.email,
+              validator: (value) => AuthValidators.email(
+                value,
+                l10n,
+              ),
             ),
 
-            const SizedBox(height: 16),
+            const SizedBox(height: 18),
 
-            _FieldLabel(
-              'Password',
-              color: titleColor,
-            ),
+            _FieldLabel(l10n.password),
+
             AppTextField(
               controller: _passwordController,
-              hint: 'Enter details',
+              hint: l10n.createPassword,
               isPassword: true,
               textInputAction: TextInputAction.next,
-              validator: AuthValidators.password,
+              validator: (value) => AuthValidators.password(
+                value,
+                l10n,
+              ),
             ),
 
-            const SizedBox(height: 16),
+            const SizedBox(height: 18),
 
-            _FieldLabel(
-              'Confirm Password',
-              color: titleColor,
-            ),
+            _FieldLabel(l10n.confirmPassword),
+
             AppTextField(
               controller: _confirmPasswordController,
-              hint: 'Enter details',
+              hint: l10n.reEnterPassword,
               isPassword: true,
               textInputAction: TextInputAction.done,
               onSubmitted: (_) => _submit(),
               validator: AuthValidators.confirmPassword(
                 () => _passwordController.text,
+                l10n,
               ),
             ),
 
-            const SizedBox(height: 24),
+            const SizedBox(height: 28),
 
-            AppButton(
-              label: 'Create account',
-              isLoading: _isLoading,
-              onPressed: _submit,
+            SizedBox(
+              width: double.infinity,
+              child: AppButton(
+                label: l10n.createAccount,
+                isLoading: _isLoading,
+                onPressed: _submit,
+              ),
             ),
 
-            const SizedBox(height: 12),
+            const SizedBox(height: 14),
 
             Center(
               child: TextButton(
-                onPressed: () {
-                  Navigator.pushReplacementNamed(
-                    context,
-                    RoutesNames.loginPage,
-                  );
-                },
-                child: const Text(
-                  'Already have an account? Login',
+                onPressed: _isLoading ? null : _goToLogin,
+                child: RichText(
+                  text: TextSpan(
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: theme.colorScheme.onSurface.withAlpha(170),
+                    ),
+                    children: [
+                      TextSpan(
+                        text: '${l10n.alreadyHaveAccount} ',
+                      ),
+                      TextSpan(
+                        text: l10n.login,
+                        style: TextStyle(
+                          color: theme.colorScheme.primary,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -210,24 +270,26 @@ class _SignupPageState extends State<SignupPage> {
 }
 
 class _FieldLabel extends StatelessWidget {
-  const _FieldLabel(
-    this.text, {
-    required this.color,
-  });
+  const _FieldLabel(this.text);
 
   final String text;
-  final Color color;
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    final color = theme.brightness == Brightness.light
+        ? AppTheme.navy
+        : theme.colorScheme.onSurface;
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: Text(
         text,
-        style: Theme.of(context).textTheme.labelLarge?.copyWith(
-              color: color,
-              fontWeight: FontWeight.w700,
-            ),
+        style: theme.textTheme.labelLarge?.copyWith(
+          color: color,
+          fontWeight: FontWeight.w700,
+        ),
       ),
     );
   }

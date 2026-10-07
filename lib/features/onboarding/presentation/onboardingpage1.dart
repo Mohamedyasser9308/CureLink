@@ -1,91 +1,152 @@
 import 'package:curelink/core/theme/app_theme.dart';
+import 'package:curelink/core/widgets/app_button.dart';
 import 'package:curelink/features/onboarding/onboardingindicator.dart';
+import 'package:curelink/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class Onboardingpage1 extends StatelessWidget {
+  const Onboardingpage1({
+    super.key,
+    required this.controller,
+    required this.currentpage,
+  });
+
   final PageController controller;
   final int currentpage;
-  Onboardingpage1({required this.controller, required this.currentpage});
+
+  void _nextPage() {
+    controller.nextPage(
+      duration: const Duration(milliseconds: 400),
+      curve: Curves.easeInOut,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(24),
-      child: Column(
-        children: [
-          SizedBox(height: 30),
-          Container(
-            width: 400,
-            height: 400,
-            child: Center(
-              child: CircleAvatar(
-                child: FaIcon(
-                  size: 80,
-                  FontAwesomeIcons.alarmClock,
-                  //  Icons.alarm_add_outlined,
-                  color: AppTheme.primary,
-                ),
-                radius: 80,
-                backgroundColor: AppTheme.cyan,
-              ),
-            ),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(30),
-              color: AppTheme.mint,
-            ),
-          ),
-          SizedBox(height: 15),
-          Text(
-            'Step 1 of 3',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: AppTheme.cyan,
-            ),
-          ),
-          SizedBox(height: 10),
-          Text(
-            textAlign: TextAlign.center,
-            'Never miss medication',
-            style: TextStyle(height: 1.1, color: AppTheme.navy, fontSize: 28),
-          ),
-          SizedBox(height: 10),
-          Text(
-            'Gentle reminders keep each dose visiable',
-            style: TextStyle(fontSize: 18, color: AppTheme.lightTextSecondary),
-          ),
-          SizedBox(height: 10),
-          OnboardingIndicator(currentPage: currentpage),
-          SizedBox(height: 15),
-          GestureDetector(
-            onTap: () {
-              controller.nextPage(
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeInOut,
-              );
-            },
-            child: Container(
+    final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
+
+    final titleColor = theme.brightness == Brightness.light
+        ? AppTheme.navy
+        : theme.colorScheme.onSurface;
+
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(24, 20, 24, 24),
+        child: Column(
+          children: [
+            const Spacer(),
+
+            // Illustration
+            Container(
               width: double.infinity,
-              height: 60,
-              decoration: BoxDecoration(
-                color: AppTheme.primary,
-                borderRadius: BorderRadius.circular(16),
+              height: MediaQuery.sizeOf(context).height * 0.38,
+              constraints: const BoxConstraints(
+                maxHeight: 380,
+                minHeight: 260,
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.arrow_forward, color: Colors.white),
-                  SizedBox(width: 10),
-                  Text(
-                    'Next',
-                    style: TextStyle(color: Colors.white, fontSize: 24),
+              decoration: BoxDecoration(
+                color: AppTheme.mint.withAlpha(
+                  theme.brightness == Brightness.light ? 255 : 35,
+                ),
+                borderRadius: BorderRadius.circular(32),
+              ),
+              child: Center(
+                child: Container(
+                  width: 170,
+                  height: 170,
+                  decoration: BoxDecoration(
+                    color: AppTheme.cyan.withAlpha(45),
+                    shape: BoxShape.circle,
                   ),
-                ],
+                  child: Center(
+                    child: Container(
+                      width: 135,
+                      height: 135,
+                      decoration: BoxDecoration(
+                        color: theme.colorScheme.surface,
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            blurRadius: 30,
+                            spreadRadius: 2,
+                            color: AppTheme.primary.withAlpha(30),
+                          ),
+                        ],
+                      ),
+                      child: const Center(
+                        child: FaIcon(
+                          FontAwesomeIcons.alarmClock,
+                          size: 58,
+                          color: AppTheme.primary,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
               ),
             ),
-          ),
-        ],
+
+            const SizedBox(height: 24),
+
+            // Step
+            Text(
+              l10n.stepOfTotal(1, 3),
+              style: theme.textTheme.labelLarge?.copyWith(
+                color: theme.colorScheme.primary,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+
+            const SizedBox(height: 10),
+
+            // Title
+            Text(
+              l10n.onboardingTitle1,
+              textAlign: TextAlign.center,
+              style: theme.textTheme.headlineMedium?.copyWith(
+                color: titleColor,
+                fontWeight: FontWeight.w800,
+                height: 1.15,
+                letterSpacing: -0.5,
+              ),
+            ),
+
+            const SizedBox(height: 10),
+
+            // Description
+            Text(
+              l10n.onboardingSubtitle1,
+              textAlign: TextAlign.center,
+              style: theme.textTheme.bodyLarge?.copyWith(
+                color: theme.colorScheme.onSurface.withAlpha(155),
+                height: 1.5,
+              ),
+            ),
+
+            const SizedBox(height: 20),
+
+            // Indicator
+            OnboardingIndicator(
+              currentPage: currentpage,
+            ),
+
+            const Spacer(),
+
+            // Next Button
+            SizedBox(
+              width: double.infinity,
+              child: AppButton(
+                label: l10n.next,
+                icon: Directionality.of(context) == TextDirection.rtl
+                    ? Icons.arrow_back_rounded
+                    : Icons.arrow_forward_rounded,
+                onPressed: _nextPage,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -1,59 +1,72 @@
+
+import 'package:curelink/l10n/app_localizations.dart';
+
 class AuthValidators {
   AuthValidators._();
 
-  static const String genericError = 'Check this field and try again.';
-
-  static String? name(String? value) {
+  static String? name(
+    String? value,
+    AppLocalizations l10n,
+  ) {
     final text = value?.trim() ?? '';
 
     if (text.isEmpty) {
-      return 'Please enter your name.';
+      return l10n.enterYourName;
     }
 
     if (text.length < 2) {
-      return genericError;
+      return l10n.fieldError;
     }
 
     return null;
   }
 
-  static String? phone(String? value) {
+  static String? phone(
+    String? value,
+    AppLocalizations l10n,
+  ) {
     final text = value?.trim() ?? '';
 
     if (text.isEmpty) {
-      return 'Please enter your phone number.';
+      return l10n.enterYourPhone;
     }
 
     if (!RegExp(r'^\+?\d{10,15}$').hasMatch(text)) {
-      return genericError;
+      return l10n.fieldError;
     }
 
     return null;
   }
 
-  static String? email(String? value) {
+  static String? email(
+    String? value,
+    AppLocalizations l10n,
+  ) {
     final text = value?.trim() ?? '';
 
     if (text.isEmpty) {
-      return 'Please enter your email.';
+      return l10n.enterYourEmail;
     }
 
     if (!RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$').hasMatch(text)) {
-      return genericError;
+      return l10n.fieldError;
     }
 
     return null;
   }
 
-  static String? password(String? value) {
+  static String? password(
+    String? value,
+    AppLocalizations l10n,
+  ) {
     final text = value ?? '';
 
     if (text.isEmpty) {
-      return 'Please enter a password.';
+      return l10n.createPassword;
     }
 
     if (text.length < 8) {
-      return 'Use at least 8 characters.';
+      return l10n.weakPassword;
     }
 
     return null;
@@ -61,14 +74,15 @@ class AuthValidators {
 
   static String? Function(String?) confirmPassword(
     String Function() originalPassword,
+    AppLocalizations l10n,
   ) {
     return (String? value) {
       if ((value ?? '').isEmpty) {
-        return 'Please confirm your password.';
+        return l10n.reEnterPassword;
       }
 
       if (value != originalPassword()) {
-        return 'Passwords do not match.';
+        return l10n.passwordsDoNotMatch;
       }
 
       return null;

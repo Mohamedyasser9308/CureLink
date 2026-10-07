@@ -43,22 +43,23 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String get onboardingTitle1 => 'لا تفوّت أي دواء';
+  String get onboardingTitle1 => 'لا تفوّت أي جرعة';
 
   @override
-  String get onboardingSubtitle1 => 'تذكيرات لطيفة تبقي كل جرعة أمامك.';
+  String get onboardingSubtitle1 =>
+      'تذكيرات لطيفة تساعدك على تناول كل جرعة في موعدها';
 
   @override
-  String get onboardingTitle2 => 'تابع رحلة علاجك';
+  String get onboardingTitle2 => 'تابع رحلة أدويتك';
 
   @override
-  String get onboardingSubtitle2 => 'اطّلع على المواعيد والسجل والتقدم.';
+  String get onboardingSubtitle2 => 'اطّلع على المواعيد والسجل والتقدم';
 
   @override
-  String get onboardingTitle3 => 'ابقَ على اتصال بمقدمي الرعاية';
+  String get onboardingTitle3 => 'ابقَ على تواصل مع مقدمي الرعاية';
 
   @override
-  String get onboardingSubtitle3 => 'شارك فقط ما توافق عليه.';
+  String get onboardingSubtitle3 => 'شارك فقط ما توافق عليه';
 
   @override
   String get welcomeBack => 'مرحباً بعودتك';
@@ -68,6 +69,238 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get emailOrPhone => 'البريد الإلكتروني أو رقم الهاتف';
+
+  @override
+  String get createAccountSubtitle =>
+      'أنشئ حسابك في كيور لينك للبقاء على اتصال.';
+
+  @override
+  String get enterYourName => 'أدخل اسمك';
+
+  @override
+  String get enterYourPhone => 'أدخل رقم هاتفك';
+
+  @override
+  String get enterYourEmail => 'أدخل بريدك الإلكتروني';
+
+  @override
+  String get createPassword => 'أنشئ كلمة مرور';
+
+  @override
+  String get reEnterPassword => 'أعد إدخال كلمة المرور';
+
+  @override
+  String get alreadyHaveAccount => 'لديك حساب بالفعل؟';
+
+  @override
+  String get somethingWentWrong => 'حدث خطأ ما. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get userSessionNotFound =>
+      'لم يتم العثور على جلسة المستخدم. يرجى تسجيل الدخول مرة أخرى.';
+
+  @override
+  String get couldNotSaveAgeGroup =>
+      'تعذر حفظ الفئة العمرية. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get emailAlreadyRegistered => 'هذا البريد الإلكتروني مسجل بالفعل.';
+
+  @override
+  String get passwordsDoNotMatch => 'كلمتا المرور غير متطابقتين.';
+
+  @override
+  String get loginEmailHint => 'أدخل بريدك الإلكتروني';
+
+  @override
+  String get loginPasswordHint => 'أدخل كلمة المرور';
+
+  @override
+  String get enterPassword => 'أدخل كلمة المرور';
+
+  @override
+  String get dontHaveAccount => 'ليس لديك حساب؟';
+
+  @override
+  String get signUp => 'إنشاء حساب';
+
+  @override
+  String get invalidCredentials =>
+      'البريد الإلكتروني أو كلمة المرور غير صحيحة.';
+
+  @override
+  String get authenticationFailed =>
+      'فشل تسجيل الدخول. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get completeProfileSubtitle =>
+      'أضف معلوماتك حتى يتمكن كيور لينك من تقديم تجربة رعاية أفضل.';
+
+  @override
+  String get tapToAddPhoto => 'اضغط لإضافة صورة شخصية';
+
+  @override
+  String get personalInformation => 'المعلومات الشخصية';
+
+  @override
+  String get basicProfileDetails => 'بيانات ملفك الشخصي الأساسية';
+
+  @override
+  String get pleaseEnterName => 'يرجى إدخال اسمك';
+
+  @override
+  String get nameMinLength => 'يجب أن يحتوي الاسم على حرفين على الأقل';
+
+  @override
+  String get cureLinkId => 'معرّف كيور لينك';
+
+  @override
+  String get caregiverConnectionIdHint =>
+      'استخدم هذا المعرّف عند الارتباط بمقدمي الرعاية';
+
+  @override
+  String get emergencyContact => 'جهة اتصال للطوارئ';
+
+  @override
+  String get emergencyContactHint => 'شخص يمكننا التواصل معه في حالات الطوارئ';
+
+  @override
+  String get contactName => 'اسم جهة الاتصال';
+
+  @override
+  String get enterFullName => 'أدخل الاسم الكامل';
+
+  @override
+  String get pleaseEnterEmergencyContactName =>
+      'يرجى إدخال اسم جهة اتصال الطوارئ';
+
+  @override
+  String get phoneNumber => 'رقم الهاتف';
+
+  @override
+  String get enterPhoneNumber => 'أدخل رقم الهاتف';
+
+  @override
+  String get pleaseEnterEmergencyPhone => 'يرجى إدخال رقم هاتف الطوارئ';
+
+  @override
+  String get validPhoneNumber => 'أدخل رقم هاتف صالح';
+
+  @override
+  String get pleaseWaitGeneratingId =>
+      'يرجى الانتظار حتى ننشئ معرّف كيور لينك الخاص بك.';
+
+  @override
+  String get choosePhotoMethod => 'اختر الطريقة التي تريد بها إضافة صورتك';
+
+  @override
+  String get chooseFromGallery => 'اختيار من المعرض';
+
+  @override
+  String get selectPhotoFromDevice => 'اختر صورة من جهازك';
+
+  @override
+  String get useCamera => 'استخدام الكاميرا';
+
+  @override
+  String get takeNewProfilePhoto => 'التقاط صورة شخصية جديدة';
+
+  @override
+  String get unableToSelectImage => 'تعذر اختيار الصورة.';
+
+  @override
+  String get pleaseWaitIdGenerated =>
+      'يرجى الانتظار حتى يتم إنشاء معرّف كيور لينك الخاص بك.';
+
+  @override
+  String get profileCompleted => 'اكتمل الملف الشخصي';
+
+  @override
+  String get profileCreatedSuccessfully =>
+      'تم إنشاء ملفك الشخصي في كيور لينك بنجاح.';
+
+  @override
+  String get yourCureLinkId => 'معرّف كيور لينك الخاص بك';
+
+  @override
+  String get firebasePermissionDenied =>
+      'تم رفض صلاحية Firebase أثناء إنشاء معرّف كيور لينك.';
+
+  @override
+  String get noAuthenticatedUser =>
+      'لم يتم العثور على مستخدم مسجل الدخول. يرجى تسجيل الدخول أولاً.';
+
+  @override
+  String get networkError =>
+      'حدث خطأ في الشبكة. يرجى التحقق من اتصال الإنترنت.';
+
+  @override
+  String get unableToGenerateId => 'تعذر إنشاء معرّف كيور لينك فريد.';
+
+  @override
+  String get profilePermissionDenied =>
+      'ليس لديك صلاحية لحفظ هذا الملف الشخصي.';
+
+  @override
+  String get sessionExpired =>
+      'انتهت جلسة المستخدم. يرجى تسجيل الدخول مرة أخرى.';
+
+  @override
+  String get idNotAvailable => 'غير متاح';
+
+  @override
+  String get invalidEmail => 'عنوان البريد الإلكتروني غير صالح.';
+
+  @override
+  String get forgotPasswordSubtitle =>
+      'أدخل بريدك الإلكتروني وسنرسل لك رابطًا لإعادة تعيين كلمة المرور';
+
+  @override
+  String get sendResetLink => 'إرسال رابط إعادة التعيين';
+
+  @override
+  String get backToLogin => 'العودة لتسجيل الدخول';
+
+  @override
+  String get passwordResetEmailSent =>
+      'تم إرسال بريد إعادة تعيين كلمة المرور. تحقق من بريدك الإلكتروني.';
+
+  @override
+  String get userNotFound => 'لا يوجد حساب مرتبط بهذا البريد الإلكتروني';
+
+  @override
+  String get passwordResetFailed => 'تعذر إرسال بريد إعادة تعيين كلمة المرور';
+
+  @override
+  String get weakPassword => 'كلمة المرور ضعيفة جدًا. استخدم 8 أحرف على الأقل.';
+
+  @override
+  String get noInternetConnection =>
+      'لا يوجد اتصال بالإنترنت. تحقق من الشبكة وحاول مرة أخرى.';
+
+  @override
+  String get emailSignupDisabled =>
+      'التسجيل باستخدام البريد الإلكتروني غير مفعّل في Firebase بعد.';
+
+  @override
+  String get tooManyAttempts =>
+      'محاولات كثيرة جدًا. انتظر قليلاً ثم حاول مرة أخرى.';
+
+  @override
+  String get couldNotCreateAccount =>
+      'تعذر إنشاء الحساب. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get profileSaveFailed =>
+      'تم إنشاء الحساب، لكن تعذر حفظ ملفك الشخصي. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get pageNotFound => 'الصفحة غير موجودة';
+
+  @override
+  String noRouteDefined(String route) {
+    return 'لا يوجد مسار معرف لـ $route';
+  }
 
   @override
   String get enterDetails => 'أدخل البيانات';
@@ -119,6 +352,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get personaFirst => 'الشخصية أولاً';
+
+  @override
+  String get ageGroupSubtitle => 'اختر الفئة العمرية المناسبة لك.';
 
   @override
   String get roleChild => 'طفل';

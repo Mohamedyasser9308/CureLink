@@ -1,4 +1,6 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:curelink/l10n/app_localizations.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthException implements Exception {
@@ -25,24 +27,47 @@ class AuthRepository {
     required String phone,
     required String email,
     required String password,
+    required AppLocalizations l10n,
   }) async {
+    UserCredential credential;
+
+    // -----------------------------
+    // 1. Create Firebase Auth user
+    // -----------------------------
     try {
-      
-      final credential = await _auth.createUserWithEmailAndPassword(
+      credential = await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
+    } on FirebaseAuthException catch (e) {
+      throw AuthException(_messageFor(e.code, l10n));
+    } catch (_) {
+      throw AuthException(
+        l10n.couldNotCreateAccount,
+      );
+    }
 
-      final user = credential.user;
+    final user = credential.user;
 
-      if (user == null) {
-        throw AuthException(
-          'Could not create your account. Please try again.',
-        );
-      }
+    if (user == null) {
+      throw AuthException(
+        l10n.couldNotCreateAccount,
+      );
+    }
 
+    // -----------------------------
+    // 2. Update Firebase profile
+    // -----------------------------
+    try {
       await user.updateDisplayName(name);
+    } catch (_) {
+      // Don't block signup if display name update fails.
+    }
 
+    // -----------------------------
+    // 3. Save profile in Firestore
+    // -----------------------------
+    try {
       await _db.collection('users').doc(user.uid).set({
         'uid': user.uid,
         'name': name,
@@ -50,42 +75,43 @@ class AuthRepository {
         'email': email,
         'createdAt': FieldValue.serverTimestamp(),
       });
-    } on FirebaseAuthException catch (e) {
-      throw AuthException(_messageFor(e.code));
-    } on FirebaseException {
-      throw AuthException(
-        'Account created, but we could not save your profile. '
-        'Please try again.',
+    } on FirebaseException catch (e) {
+      print(
+        'Firestore profile save failed: '
+        '${e.code} - ${e.message}',
       );
-    } catch (_) {
-      throw AuthException(
-        'Something went wrong. Please try again.',
+    } catch (e) {
+      print(
+        'Firestore profile save failed: $e',
       );
     }
   }
 
-  String _messageFor(String code) {
+  String _messageFor(
+    String code,
+    AppLocalizations l10n,
+  ) {
     switch (code) {
       case 'email-already-in-use':
-        return 'This email is already registered.';
+        return l10n.emailAlreadyRegistered;
 
       case 'invalid-email':
-        return 'This email address is not valid.';
+        return l10n.invalidEmail;
 
       case 'weak-password':
-        return 'Password is too weak. Use at least 8 characters.';
+        return l10n.weakPassword;
 
       case 'network-request-failed':
-        return 'No internet connection. Check your network and try again.';
+        return l10n.noInternetConnection;
 
       case 'operation-not-allowed':
-        return 'Email sign-up is not enabled in Firebase yet.';
+        return l10n.emailSignupDisabled;
 
       case 'too-many-requests':
-        return 'Too many attempts. Please wait a moment and try again.';
+        return l10n.tooManyAttempts;
 
       default:
-        return 'Could not create the account. Please try again.';
+        return l10n.couldNotCreateAccount;
     }
   }
 }

@@ -46,19 +46,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get onboardingTitle1 => 'Never miss medication';
 
   @override
-  String get onboardingSubtitle1 => 'Gentle reminders keep each dose visible.';
+  String get onboardingSubtitle1 => 'Gentle reminders keep each dose visible';
 
   @override
   String get onboardingTitle2 => 'Track your medication journey';
 
   @override
-  String get onboardingSubtitle2 => 'See schedules, history, and progress.';
+  String get onboardingSubtitle2 => 'See schedules, history, and progress';
 
   @override
   String get onboardingTitle3 => 'Stay connected with caregivers';
 
   @override
-  String get onboardingSubtitle3 => 'Share only what you approve.';
+  String get onboardingSubtitle3 => 'Share only what you approve';
 
   @override
   String get welcomeBack => 'Welcome back';
@@ -68,6 +68,236 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get emailOrPhone => 'Email or phone';
+
+  @override
+  String get createAccountSubtitle =>
+      'Create your CureLink account to stay connected.';
+
+  @override
+  String get enterYourName => 'Enter your name';
+
+  @override
+  String get enterYourPhone => 'Enter your phone number';
+
+  @override
+  String get enterYourEmail => 'Enter your email address';
+
+  @override
+  String get createPassword => 'Create a password';
+
+  @override
+  String get reEnterPassword => 'Re-enter your password';
+
+  @override
+  String get alreadyHaveAccount => 'Already have an account?';
+
+  @override
+  String get somethingWentWrong => 'Something went wrong. Please try again.';
+
+  @override
+  String get userSessionNotFound =>
+      'User session not found. Please login again.';
+
+  @override
+  String get couldNotSaveAgeGroup =>
+      'Could not save age group. Please try again.';
+
+  @override
+  String get emailAlreadyRegistered => 'This email is already registered.';
+
+  @override
+  String get passwordsDoNotMatch => 'Passwords do not match.';
+
+  @override
+  String get loginEmailHint => 'Enter your email address';
+
+  @override
+  String get loginPasswordHint => 'Enter your password';
+
+  @override
+  String get enterPassword => 'Enter your password';
+
+  @override
+  String get dontHaveAccount => 'Don\'t have an account?';
+
+  @override
+  String get signUp => 'Sign up';
+
+  @override
+  String get invalidCredentials => 'Email or password is incorrect.';
+
+  @override
+  String get authenticationFailed => 'Authentication failed. Please try again.';
+
+  @override
+  String get completeProfileSubtitle =>
+      'Add your information so CureLink can provide a better care experience.';
+
+  @override
+  String get tapToAddPhoto => 'Tap to add a profile photo';
+
+  @override
+  String get personalInformation => 'Personal information';
+
+  @override
+  String get basicProfileDetails => 'Your basic profile details';
+
+  @override
+  String get pleaseEnterName => 'Please enter your name';
+
+  @override
+  String get nameMinLength => 'Name must contain at least 2 characters';
+
+  @override
+  String get cureLinkId => 'CureLink ID';
+
+  @override
+  String get caregiverConnectionIdHint =>
+      'Use this ID when connecting with caregivers';
+
+  @override
+  String get emergencyContact => 'Emergency contact';
+
+  @override
+  String get emergencyContactHint => 'Someone we can contact in an emergency';
+
+  @override
+  String get contactName => 'Contact name';
+
+  @override
+  String get enterFullName => 'Enter full name';
+
+  @override
+  String get pleaseEnterEmergencyContactName =>
+      'Please enter the emergency contact name';
+
+  @override
+  String get phoneNumber => 'Phone number';
+
+  @override
+  String get enterPhoneNumber => 'Enter phone number';
+
+  @override
+  String get pleaseEnterEmergencyPhone => 'Please enter the emergency phone';
+
+  @override
+  String get validPhoneNumber => 'Enter a valid phone number';
+
+  @override
+  String get pleaseWaitGeneratingId =>
+      'Please wait while we generate your unique CureLink ID.';
+
+  @override
+  String get choosePhotoMethod => 'Choose how you want to add your photo';
+
+  @override
+  String get chooseFromGallery => 'Choose from gallery';
+
+  @override
+  String get selectPhotoFromDevice => 'Select a photo from your device';
+
+  @override
+  String get useCamera => 'Use camera';
+
+  @override
+  String get takeNewProfilePhoto => 'Take a new profile photo';
+
+  @override
+  String get unableToSelectImage => 'Unable to select the image.';
+
+  @override
+  String get pleaseWaitIdGenerated =>
+      'Please wait until your CureLink ID is generated.';
+
+  @override
+  String get profileCompleted => 'Profile completed';
+
+  @override
+  String get profileCreatedSuccessfully =>
+      'Your CureLink profile has been created successfully.';
+
+  @override
+  String get yourCureLinkId => 'Your CureLink ID';
+
+  @override
+  String get firebasePermissionDenied =>
+      'Firebase permission denied while generating CureLink ID.';
+
+  @override
+  String get noAuthenticatedUser =>
+      'No authenticated user found. Please login first.';
+
+  @override
+  String get networkError =>
+      'Network error. Please check your internet connection.';
+
+  @override
+  String get unableToGenerateId => 'Unable to generate a unique CureLink ID.';
+
+  @override
+  String get profilePermissionDenied =>
+      'You do not have permission to save this profile.';
+
+  @override
+  String get sessionExpired =>
+      'Your session has expired. Please sign in again.';
+
+  @override
+  String get idNotAvailable => 'Not available';
+
+  @override
+  String get invalidEmail => 'This email address is not valid.';
+
+  @override
+  String get forgotPasswordSubtitle =>
+      'Enter your email and we\'ll send you a link to reset your password';
+
+  @override
+  String get sendResetLink => 'Send Reset Link';
+
+  @override
+  String get backToLogin => 'Back to Login';
+
+  @override
+  String get passwordResetEmailSent =>
+      'Password reset email sent. Check your inbox.';
+
+  @override
+  String get userNotFound => 'No account was found with this email';
+
+  @override
+  String get passwordResetFailed => 'Could not send password reset email';
+
+  @override
+  String get weakPassword => 'Password is too weak. Use at least 8 characters.';
+
+  @override
+  String get noInternetConnection =>
+      'No internet connection. Check your network and try again.';
+
+  @override
+  String get emailSignupDisabled =>
+      'Email sign-up is not enabled in Firebase yet.';
+
+  @override
+  String get tooManyAttempts =>
+      'Too many attempts. Please wait a moment and try again.';
+
+  @override
+  String get couldNotCreateAccount =>
+      'Could not create the account. Please try again.';
+
+  @override
+  String get profileSaveFailed =>
+      'Account created, but we could not save your profile. Please try again.';
+
+  @override
+  String get pageNotFound => 'Page not found';
+
+  @override
+  String noRouteDefined(String route) {
+    return 'No route defined for $route';
+  }
 
   @override
   String get enterDetails => 'Enter details';
@@ -119,6 +349,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get personaFirst => 'Persona first';
+
+  @override
+  String get ageGroupSubtitle => 'Choose the age group that fits you.';
 
   @override
   String get roleChild => 'Child';

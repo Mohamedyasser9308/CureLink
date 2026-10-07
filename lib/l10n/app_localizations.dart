@@ -167,7 +167,7 @@ abstract class AppLocalizations {
   /// No description provided for @onboardingSubtitle1.
   ///
   /// In en, this message translates to:
-  /// **'Gentle reminders keep each dose visible.'**
+  /// **'Gentle reminders keep each dose visible'**
   String get onboardingSubtitle1;
 
   /// No description provided for @onboardingTitle2.
@@ -179,7 +179,7 @@ abstract class AppLocalizations {
   /// No description provided for @onboardingSubtitle2.
   ///
   /// In en, this message translates to:
-  /// **'See schedules, history, and progress.'**
+  /// **'See schedules, history, and progress'**
   String get onboardingSubtitle2;
 
   /// No description provided for @onboardingTitle3.
@@ -191,7 +191,7 @@ abstract class AppLocalizations {
   /// No description provided for @onboardingSubtitle3.
   ///
   /// In en, this message translates to:
-  /// **'Share only what you approve.'**
+  /// **'Share only what you approve'**
   String get onboardingSubtitle3;
 
   /// No description provided for @welcomeBack.
@@ -211,6 +211,420 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Email or phone'**
   String get emailOrPhone;
+
+  /// No description provided for @createAccountSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Create your CureLink account to stay connected.'**
+  String get createAccountSubtitle;
+
+  /// No description provided for @enterYourName.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your name'**
+  String get enterYourName;
+
+  /// No description provided for @enterYourPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your phone number'**
+  String get enterYourPhone;
+
+  /// No description provided for @enterYourEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your email address'**
+  String get enterYourEmail;
+
+  /// No description provided for @createPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a password'**
+  String get createPassword;
+
+  /// No description provided for @reEnterPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Re-enter your password'**
+  String get reEnterPassword;
+
+  /// No description provided for @alreadyHaveAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Already have an account?'**
+  String get alreadyHaveAccount;
+
+  /// No description provided for @somethingWentWrong.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong. Please try again.'**
+  String get somethingWentWrong;
+
+  /// No description provided for @userSessionNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'User session not found. Please login again.'**
+  String get userSessionNotFound;
+
+  /// No description provided for @couldNotSaveAgeGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not save age group. Please try again.'**
+  String get couldNotSaveAgeGroup;
+
+  /// No description provided for @emailAlreadyRegistered.
+  ///
+  /// In en, this message translates to:
+  /// **'This email is already registered.'**
+  String get emailAlreadyRegistered;
+
+  /// No description provided for @passwordsDoNotMatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Passwords do not match.'**
+  String get passwordsDoNotMatch;
+
+  /// No description provided for @loginEmailHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your email address'**
+  String get loginEmailHint;
+
+  /// No description provided for @loginPasswordHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your password'**
+  String get loginPasswordHint;
+
+  /// No description provided for @enterPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your password'**
+  String get enterPassword;
+
+  /// No description provided for @dontHaveAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t have an account?'**
+  String get dontHaveAccount;
+
+  /// No description provided for @signUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign up'**
+  String get signUp;
+
+  /// No description provided for @invalidCredentials.
+  ///
+  /// In en, this message translates to:
+  /// **'Email or password is incorrect.'**
+  String get invalidCredentials;
+
+  /// No description provided for @authenticationFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Authentication failed. Please try again.'**
+  String get authenticationFailed;
+
+  /// No description provided for @completeProfileSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add your information so CureLink can provide a better care experience.'**
+  String get completeProfileSubtitle;
+
+  /// No description provided for @tapToAddPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to add a profile photo'**
+  String get tapToAddPhoto;
+
+  /// No description provided for @personalInformation.
+  ///
+  /// In en, this message translates to:
+  /// **'Personal information'**
+  String get personalInformation;
+
+  /// No description provided for @basicProfileDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Your basic profile details'**
+  String get basicProfileDetails;
+
+  /// No description provided for @pleaseEnterName.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your name'**
+  String get pleaseEnterName;
+
+  /// No description provided for @nameMinLength.
+  ///
+  /// In en, this message translates to:
+  /// **'Name must contain at least 2 characters'**
+  String get nameMinLength;
+
+  /// No description provided for @cureLinkId.
+  ///
+  /// In en, this message translates to:
+  /// **'CureLink ID'**
+  String get cureLinkId;
+
+  /// No description provided for @caregiverConnectionIdHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Use this ID when connecting with caregivers'**
+  String get caregiverConnectionIdHint;
+
+  /// No description provided for @emergencyContact.
+  ///
+  /// In en, this message translates to:
+  /// **'Emergency contact'**
+  String get emergencyContact;
+
+  /// No description provided for @emergencyContactHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Someone we can contact in an emergency'**
+  String get emergencyContactHint;
+
+  /// No description provided for @contactName.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact name'**
+  String get contactName;
+
+  /// No description provided for @enterFullName.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter full name'**
+  String get enterFullName;
+
+  /// No description provided for @pleaseEnterEmergencyContactName.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter the emergency contact name'**
+  String get pleaseEnterEmergencyContactName;
+
+  /// No description provided for @phoneNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone number'**
+  String get phoneNumber;
+
+  /// No description provided for @enterPhoneNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter phone number'**
+  String get enterPhoneNumber;
+
+  /// No description provided for @pleaseEnterEmergencyPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter the emergency phone'**
+  String get pleaseEnterEmergencyPhone;
+
+  /// No description provided for @validPhoneNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid phone number'**
+  String get validPhoneNumber;
+
+  /// No description provided for @pleaseWaitGeneratingId.
+  ///
+  /// In en, this message translates to:
+  /// **'Please wait while we generate your unique CureLink ID.'**
+  String get pleaseWaitGeneratingId;
+
+  /// No description provided for @choosePhotoMethod.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose how you want to add your photo'**
+  String get choosePhotoMethod;
+
+  /// No description provided for @chooseFromGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose from gallery'**
+  String get chooseFromGallery;
+
+  /// No description provided for @selectPhotoFromDevice.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a photo from your device'**
+  String get selectPhotoFromDevice;
+
+  /// No description provided for @useCamera.
+  ///
+  /// In en, this message translates to:
+  /// **'Use camera'**
+  String get useCamera;
+
+  /// No description provided for @takeNewProfilePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Take a new profile photo'**
+  String get takeNewProfilePhoto;
+
+  /// No description provided for @unableToSelectImage.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to select the image.'**
+  String get unableToSelectImage;
+
+  /// No description provided for @pleaseWaitIdGenerated.
+  ///
+  /// In en, this message translates to:
+  /// **'Please wait until your CureLink ID is generated.'**
+  String get pleaseWaitIdGenerated;
+
+  /// No description provided for @profileCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile completed'**
+  String get profileCompleted;
+
+  /// No description provided for @profileCreatedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Your CureLink profile has been created successfully.'**
+  String get profileCreatedSuccessfully;
+
+  /// No description provided for @yourCureLinkId.
+  ///
+  /// In en, this message translates to:
+  /// **'Your CureLink ID'**
+  String get yourCureLinkId;
+
+  /// No description provided for @firebasePermissionDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Firebase permission denied while generating CureLink ID.'**
+  String get firebasePermissionDenied;
+
+  /// No description provided for @noAuthenticatedUser.
+  ///
+  /// In en, this message translates to:
+  /// **'No authenticated user found. Please login first.'**
+  String get noAuthenticatedUser;
+
+  /// No description provided for @networkError.
+  ///
+  /// In en, this message translates to:
+  /// **'Network error. Please check your internet connection.'**
+  String get networkError;
+
+  /// No description provided for @unableToGenerateId.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to generate a unique CureLink ID.'**
+  String get unableToGenerateId;
+
+  /// No description provided for @profilePermissionDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'You do not have permission to save this profile.'**
+  String get profilePermissionDenied;
+
+  /// No description provided for @sessionExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'Your session has expired. Please sign in again.'**
+  String get sessionExpired;
+
+  /// No description provided for @idNotAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Not available'**
+  String get idNotAvailable;
+
+  /// No description provided for @invalidEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'This email address is not valid.'**
+  String get invalidEmail;
+
+  /// No description provided for @forgotPasswordSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your email and we\'ll send you a link to reset your password'**
+  String get forgotPasswordSubtitle;
+
+  /// No description provided for @sendResetLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Send Reset Link'**
+  String get sendResetLink;
+
+  /// No description provided for @backToLogin.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to Login'**
+  String get backToLogin;
+
+  /// No description provided for @passwordResetEmailSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Password reset email sent. Check your inbox.'**
+  String get passwordResetEmailSent;
+
+  /// No description provided for @userNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No account was found with this email'**
+  String get userNotFound;
+
+  /// No description provided for @passwordResetFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not send password reset email'**
+  String get passwordResetFailed;
+
+  /// No description provided for @weakPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Password is too weak. Use at least 8 characters.'**
+  String get weakPassword;
+
+  /// No description provided for @noInternetConnection.
+  ///
+  /// In en, this message translates to:
+  /// **'No internet connection. Check your network and try again.'**
+  String get noInternetConnection;
+
+  /// No description provided for @emailSignupDisabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Email sign-up is not enabled in Firebase yet.'**
+  String get emailSignupDisabled;
+
+  /// No description provided for @tooManyAttempts.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many attempts. Please wait a moment and try again.'**
+  String get tooManyAttempts;
+
+  /// No description provided for @couldNotCreateAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not create the account. Please try again.'**
+  String get couldNotCreateAccount;
+
+  /// No description provided for @profileSaveFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Account created, but we could not save your profile. Please try again.'**
+  String get profileSaveFailed;
+
+  /// No description provided for @pageNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Page not found'**
+  String get pageNotFound;
+
+  /// No description provided for @noRouteDefined.
+  ///
+  /// In en, this message translates to:
+  /// **'No route defined for {route}'**
+  String noRouteDefined(String route);
 
   /// No description provided for @enterDetails.
   ///
@@ -313,6 +727,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Persona first'**
   String get personaFirst;
+
+  /// No description provided for @ageGroupSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose the age group that fits you.'**
+  String get ageGroupSubtitle;
 
   /// No description provided for @roleChild.
   ///
