@@ -1,3 +1,5 @@
+
+import 'package:curelink/core/router/routes_names.dart';
 import 'package:curelink/core/theme/app_theme.dart';
 import 'package:curelink/features/onboarding/presentation/onboardingpage1.dart';
 import 'package:curelink/features/onboarding/presentation/onboardingpage2.dart';
@@ -14,6 +16,13 @@ class Onboardingview extends StatefulWidget {
 class _OnboardingviewState extends State<Onboardingview> {
   final PageController pagecontroller = PageController();
   int currentpage = 0;
+
+  @override
+  void dispose() {
+    pagecontroller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,7 +32,10 @@ class _OnboardingviewState extends State<Onboardingview> {
             padding: const EdgeInsets.only(right: 12),
             child: GestureDetector(
               onTap: () {
-                Navigator.pushNamed(context, '/login');
+                Navigator.pushReplacementNamed(
+                  context,
+                  RoutesNames.loginPage,
+                );
               },
               child: Text(
                 'Skip',
@@ -39,16 +51,25 @@ class _OnboardingviewState extends State<Onboardingview> {
       ),
       backgroundColor: AppTheme.background,
       body: PageView(
+        controller: pagecontroller,
         onPageChanged: (value) {
           setState(() {
             currentpage = value;
           });
         },
-        controller: pagecontroller,
         children: [
-          Onboardingpage1(controller: pagecontroller, currentpage: currentpage),
-          Onboardingpage2(controller: pagecontroller, currentpage: currentpage),
-          Onboardingpage3(controller: pagecontroller, currentpage: currentpage),
+          Onboardingpage1(
+            controller: pagecontroller,
+            currentpage: currentpage,
+          ),
+          Onboardingpage2(
+            controller: pagecontroller,
+            currentpage: currentpage,
+          ),
+          Onboardingpage3(
+            controller: pagecontroller,
+            currentpage: currentpage,
+          ),
         ],
       ),
     );

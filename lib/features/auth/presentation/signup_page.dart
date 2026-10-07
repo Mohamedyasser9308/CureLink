@@ -1,3 +1,4 @@
+import 'package:curelink/core/router/routes_names.dart';
 import 'package:curelink/core/theme/app_theme.dart';
 import 'package:curelink/core/widgets/app_button.dart';
 import 'package:curelink/core/widgets/app_scaffold.dart';
@@ -104,6 +105,7 @@ class _SignupPageState extends State<SignupPage> {
                 fontWeight: FontWeight.w400,
               ),
             ),
+
             const SizedBox(height: 24),
 
             _FieldLabel(
@@ -117,6 +119,7 @@ class _SignupPageState extends State<SignupPage> {
               textInputAction: TextInputAction.next,
               validator: AuthValidators.name,
             ),
+
             const SizedBox(height: 16),
 
             _FieldLabel(
@@ -130,6 +133,7 @@ class _SignupPageState extends State<SignupPage> {
               textInputAction: TextInputAction.next,
               validator: AuthValidators.phone,
             ),
+
             const SizedBox(height: 16),
 
             _FieldLabel(
@@ -143,6 +147,7 @@ class _SignupPageState extends State<SignupPage> {
               textInputAction: TextInputAction.next,
               validator: AuthValidators.email,
             ),
+
             const SizedBox(height: 16),
 
             _FieldLabel(
@@ -156,6 +161,7 @@ class _SignupPageState extends State<SignupPage> {
               textInputAction: TextInputAction.next,
               validator: AuthValidators.password,
             ),
+
             const SizedBox(height: 16),
 
             _FieldLabel(
@@ -172,12 +178,29 @@ class _SignupPageState extends State<SignupPage> {
                 () => _passwordController.text,
               ),
             ),
+
             const SizedBox(height: 24),
 
             AppButton(
               label: 'Create account',
               isLoading: _isLoading,
               onPressed: _submit,
+            ),
+
+            const SizedBox(height: 12),
+
+            Center(
+              child: TextButton(
+                onPressed: () {
+                  Navigator.pushReplacementNamed(
+                    context,
+                    RoutesNames.loginPage,
+                  );
+                },
+                child: const Text(
+                  'Already have an account? Login',
+                ),
+              ),
             ),
           ],
         ),

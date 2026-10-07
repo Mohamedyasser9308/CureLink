@@ -1,68 +1,137 @@
-import 'package:curelink/core/router/app_navigation.dart';
-import 'package:curelink/features/auth/presentation/firebase_test_page.dart';
+
 import 'package:curelink/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
-import '../../../core/widgets/app_button.dart';
-import '../../../core/widgets/app_empty_state.dart';
-import '../../../core/widgets/app_loading.dart';
-import '../../../core/widgets/app_text_field.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
-      appBar: AppBar(centerTitle: true, title: Text(l10n!.welcome("ahmed"))),
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(l10n.appTitle),
+      ),
+
       body: Padding(
-        padding: const EdgeInsets.all(10),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              AppButton(
-                label: "save",
-                onPressed: () {
-                  AppNavigator.pushAndClear(
-                    context,
-                    FirebaseTestPage.routeName,
-                  );
-                },
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              l10n.goodMorning,
+              style: Theme.of(context).textTheme.headlineSmall,
+            ),
+
+            const SizedBox(height: 8),
+
+            Text(
+              l10n.medicationPlanToday,
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
+
+            const SizedBox(height: 30),
+
+            Text(
+              l10n.nextDose,
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+
+            const SizedBox(height: 15),
+
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Row(
+                  children: [
+                    const Icon(
+                      Icons.medication_outlined,
+                      size: 40,
+                    ),
+
+                    const SizedBox(width: 15),
+
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            l10n.medicationName,
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium,
+                          ),
+
+                          const SizedBox(height: 5),
+
+                          Text(
+                            l10n.scheduledTime('08:00 AM'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              SizedBox(height: 10),
-              AppEmptyState(title: "empty"),
-              SizedBox(height: 10),
-              AppLoading(),
-              SizedBox(height: 10),
-              AppTextField(),
-              SizedBox(height: 10),
-              AppTextField(errorText: "hase Error"),
-              TextFormField(),
-            ],
-          ),
+            ),
+
+            const SizedBox(height: 30),
+
+            Text(
+              l10n.todaysProgress,
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+
+            const SizedBox(height: 15),
+
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Row(
+                  children: [
+                    const Icon(
+                      Icons.check_circle_outline,
+                      size: 35,
+                    ),
+
+                    const SizedBox(width: 15),
+
+                    Text(
+                      l10n.progressCount(0, 0),
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
       ),
 
       bottomNavigationBar: NavigationBar(
         selectedIndex: 0,
-        destinations: const [
-          NavigationDestination(icon: Icon(Icons.home_outlined), label: 'Home'),
+        destinations: [
           NavigationDestination(
-            icon: Icon(Icons.access_time),
-            label: 'Schedule',
+            icon: const Icon(Icons.home_outlined),
+            label: l10n.navHome,
           ),
           NavigationDestination(
-            icon: Icon(Icons.calendar_month_outlined),
-            label: 'Calendar',
+            icon: const Icon(Icons.access_time),
+            label: l10n.navSchedule,
           ),
           NavigationDestination(
-            icon: Icon(Icons.notifications_none),
-            label: 'Notifications',
+            icon: const Icon(Icons.calendar_month_outlined),
+            label: l10n.navCalendar,
           ),
           NavigationDestination(
-            icon: Icon(Icons.person_outline),
-            label: 'Profile',
+            icon: const Icon(Icons.notifications_none),
+            label: l10n.navNotifications,
+          ),
+          NavigationDestination(
+            icon: const Icon(Icons.person_outline),
+            label: l10n.navProfile,
           ),
         ],
       ),

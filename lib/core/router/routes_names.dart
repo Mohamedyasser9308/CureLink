@@ -6,4 +6,5 @@ class RoutesNames {
   static const String rolePage = "/role";
   static const String ageGroupPage = "/ageGroup";
   static const String profilePage = "/profile";
+  static const String signUpPage = '/sign-up';
 }
