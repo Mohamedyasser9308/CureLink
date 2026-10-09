@@ -20,8 +20,8 @@ class ProfileService {
   final http.Client _httpClient;
 
   // Replace these with your Cloudinary account details.
-  static const String _cloudName = 'YOUR_CLOUD_NAME';
-  static const String _uploadPreset = 'YOUR_UPLOAD_PRESET';
+  static const String _cloudName = 'm0qi1rny';
+  static const String _uploadPreset = 'curelink_mobile';
 
   Future<String?> uploadProfileImage(File image) async {
     final user = _auth.currentUser;
