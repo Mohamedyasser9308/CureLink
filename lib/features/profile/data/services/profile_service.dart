@@ -1,21 +1,27 @@
+
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:http/http.dart' as http;
 
 class ProfileService {
   ProfileService({
     FirebaseAuth? auth,
     FirebaseFirestore? firestore,
-    FirebaseStorage? storage,
+    http.Client? httpClient,
   })  : _auth = auth ?? FirebaseAuth.instance,
         _firestore = firestore ?? FirebaseFirestore.instance,
-        _storage = storage ?? FirebaseStorage.instance;
+        _httpClient = httpClient ?? http.Client();
 
   final FirebaseAuth _auth;
   final FirebaseFirestore _firestore;
-  final FirebaseStorage _storage;
+  final http.Client _httpClient;
+
+  // Replace these with your Cloudinary account details.
+  static const String _cloudName = 'YOUR_CLOUD_NAME';
+  static const String _uploadPreset = 'YOUR_UPLOAD_PRESET';
 
   Future<String?> uploadProfileImage(File image) async {
     final user = _auth.currentUser;
@@ -24,23 +30,67 @@ class ProfileService {
       throw Exception('No authenticated user found.');
     }
 
-    final extension = image.path.split('.').last.toLowerCase();
+    if (_cloudName == 'YOUR_CLOUD_NAME' ||
+        _uploadPreset == 'YOUR_UPLOAD_PRESET') {
+      throw Exception(
+        'Please configure your Cloudinary cloud name and upload preset.',
+      );
+    }
 
-    final reference = _storage
-        .ref()
-        .child('users')
-        .child(user.uid)
-        .child('profile')
-        .child('profile_image.$extension');
+    if (!await image.exists()) {
+      throw Exception('Selected image does not exist.');
+    }
 
-    await reference.putFile(
-      image,
-      SettableMetadata(
-        contentType: 'image/$extension',
-      ),
+    final uri = Uri.parse(
+      'https://api.cloudinary.com/v1_1/'
+      '$_cloudName/image/upload',
     );
 
-    return reference.getDownloadURL();
+    final request = http.MultipartRequest('POST', uri)
+      ..fields['upload_preset'] = _uploadPreset
+      ..fields['folder'] = 'curelink/users/${user.uid}/profile'
+      ..files.add(
+        await http.MultipartFile.fromPath(
+          'file',
+          image.path,
+        ),
+      );
+
+    final streamedResponse = await _httpClient.send(request);
+    final response = await http.Response.fromStream(
+      streamedResponse,
+    );
+
+    if (response.statusCode != 200 &&
+        response.statusCode != 201) {
+      String message = 'Cloudinary image upload failed.';
+
+      try {
+        final body =
+            jsonDecode(response.body) as Map<String, dynamic>;
+        final error = body['error'];
+
+        if (error is Map<String, dynamic> &&
+            error['message'] is String) {
+          message = error['message'] as String;
+        }
+      } catch (_) {
+        // Keep the default error message if the response is invalid.
+      }
+
+      throw Exception(message);
+    }
+
+    final data = jsonDecode(response.body) as Map<String, dynamic>;
+    final photoUrl = data['secure_url'];
+
+    if (photoUrl is! String || photoUrl.isEmpty) {
+      throw Exception(
+        'Cloudinary did not return a valid image URL.',
+      );
+    }
+
+    return photoUrl;
   }
 
   Future<void> saveProfile({

@@ -1,5 +1,6 @@
 
 import 'dart:io';
+import 'package:http/http.dart' as http;
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -16,10 +17,7 @@ class ProfileCubit extends Cubit<ProfileState> {
 
   final ProfileService _profileService;
 
-  // =========================
   // Generate CureLink ID
-  // =========================
-
   Future<void> generateUserId({
     required String role,
     required AppLocalizations l10n,
@@ -53,10 +51,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     }
   }
 
-  // =========================
   // Save Profile
-  // =========================
-
   Future<void> saveProfile({
     required String name,
     required String role,
@@ -86,11 +81,12 @@ class ProfileCubit extends Cubit<ProfileState> {
     try {
       String? photoUrl;
 
+      // Upload image to Cloudinary if one was selected.
       if (image != null) {
-        photoUrl =
-            await _profileService.uploadProfileImage(image);
+        photoUrl = await _profileService.uploadProfileImage(image);
       }
 
+      // Save profile data and Cloudinary URL to Firestore.
       await _profileService.saveProfile(
         name: name,
         role: role,
@@ -117,10 +113,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     }
   }
 
-  // =========================
   // Generate ID Error
-  // =========================
-
   String _getGenerateIdErrorMessage(
     Object error,
     AppLocalizations l10n,
@@ -146,10 +139,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     return message;
   }
 
-  // =========================
   // Save Profile Error
-  // =========================
-
   String _getErrorMessage(
     Object error,
     AppLocalizations l10n,
@@ -160,11 +150,14 @@ class ProfileCubit extends Cubit<ProfileState> {
       return l10n.profilePermissionDenied;
     }
 
-    if (message.contains('unauthenticated')) {
+    if (message.contains('unauthenticated') ||
+        message.contains('No authenticated user')) {
       return l10n.sessionExpired;
     }
 
-    if (message.contains('network')) {
+    if (message.contains('network') ||
+        error is SocketException ||
+        error is http.ClientException) {
       return l10n.networkError;
     }
 
