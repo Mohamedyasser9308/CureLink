@@ -728,4 +728,30 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get connectedAppearsAfterApproval =>
       'تظهر حالة الارتباط فقط بعد الموافقة.';
+
+  @override
+  String get goodAfternoon => 'نهارك سعيد';
+
+  @override
+  String get goodEvening => 'مساء الخير';
+
+  @override
+  String greetingWithName(String greeting, String name) {
+    return '$greeting، $name';
+  }
+
+  @override
+  String get emptyMedicationsTitle => 'لا توجد أدوية لليوم';
+
+  @override
+  String get emptyMedicationsMessage => 'أضف دواءً لتظهر خطتك هنا.';
+
+  @override
+  String get allDosesDone => 'أنهيت جرعات اليوم';
+
+  @override
+  String get allDosesDoneMessage => 'لا توجد جرعات أخرى مجدولة اليوم.';
+
+  @override
+  String get retry => 'حاول مرة أخرى';
 }

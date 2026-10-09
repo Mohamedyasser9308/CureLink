@@ -1,255 +1,997 @@
 {
   "@@locale": "ar",
-
   "appTitle": "كيور لينك",
+  "@appTitle": {
+    "description": "Localized App title text displayed in the interface."
+  },
   "welcome": "مرحباً، {name}!",
-  "login": "تسجيل الدخول",
-
-  "tagline": "رعاية تبقى متصلة",
-
-  "skip": "تخطي",
-  "next": "التالي",
-  "getStarted": "ابدأ الآن",
-  "continueButton": "متابعة",
-  "done": "تم",
-  "stepOfTotal": "الخطوة {current} من {total}",
-  "onboardingTitle1": "لا تفوّت أي دواء",
-  "onboardingSubtitle1": "تذكيرات لطيفة تبقي كل جرعة أمامك.",
-  "onboardingTitle2": "تابع رحلة علاجك",
-  "onboardingSubtitle2": "اطّلع على المواعيد والسجل والتقدم.",
-  "onboardingTitle3": "ابقَ على اتصال بمقدمي الرعاية",
-  "onboardingSubtitle3": "شارك فقط ما توافق عليه.",
-
-  "welcomeBack": "مرحباً بعودتك",
-  "signInToContinue": "سجّل الدخول للمتابعة.",
-  "emailOrPhone": "البريد الإلكتروني أو رقم الهاتف",
-  "createAccountSubtitle": "أنشئ حسابك في كيور لينك للبقاء على اتصال.",
-"enterYourName": "أدخل اسمك",
-"enterYourPhone": "أدخل رقم هاتفك",
-"enterYourEmail": "أدخل بريدك الإلكتروني",
-"createPassword": "أنشئ كلمة مرور",
-"reEnterPassword": "أعد إدخال كلمة المرور",
-"alreadyHaveAccount": "لديك حساب بالفعل؟",
-"somethingWentWrong": "حدث خطأ ما. يرجى المحاولة مرة أخرى.",
-"userSessionNotFound": "لم يتم العثور على جلسة المستخدم. يرجى تسجيل الدخول مرة أخرى.",
-"couldNotSaveAgeGroup": "تعذر حفظ الفئة العمرية. يرجى المحاولة مرة أخرى.",
-"emailAlreadyRegistered": "هذا البريد الإلكتروني مسجل بالفعل.",
-"invalidEmail": "عنوان البريد الإلكتروني غير صالح.",
-"weakPassword": "كلمة المرور ضعيفة جدًا. استخدم 8 أحرف على الأقل.",
-"noInternetConnection": "لا يوجد اتصال بالإنترنت. تحقق من الشبكة وحاول مرة أخرى.",
-"emailSignupDisabled": "التسجيل باستخدام البريد الإلكتروني غير مفعّل في Firebase بعد.",
-"tooManyAttempts": "محاولات كثيرة جدًا. انتظر قليلاً ثم حاول مرة أخرى.",
-"couldNotCreateAccount": "تعذر إنشاء الحساب. يرجى المحاولة مرة أخرى.",
-"profileSaveFailed": "تم إنشاء الحساب، لكن تعذر حفظ ملفك الشخصي. يرجى المحاولة مرة أخرى.",
-"pageNotFound": "الصفحة غير موجودة",
-"noRouteDefined": "لا يوجد مسار معرف لـ {route}",
-"@noRouteDefined": {
-  "placeholders": {
-    "route": {
-      "type": "String"
+  "@welcome": {
+    "description": "Localized Welcome text displayed in the interface.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
     }
-  }
-},
-  "enterDetails": "أدخل البيانات",
-  "password": "كلمة المرور",
-  "confirmPassword": "تأكيد كلمة المرور",
-  "forgotPassword": "هل نسيت كلمة المرور؟",
-  "createAccount": "إنشاء حساب",
-  "name": "الاسم",
-  "phone": "رقم الهاتف",
-  "email": "البريد الإلكتروني",
-  "fieldError": "تحقق من هذا الحقل وحاول مرة أخرى.",
-  "fieldStates": "حالات الحقول",
-  "stateDefault": "افتراضي",
-  "stateFocus": "نشط",
-  "stateFilled": "ممتلئ",
-  "stateError": "خطأ",
-  "stateDisabled": "معطّل",
-  "passwordsDoNotMatch": "كلمتا المرور غير متطابقتين.",
-  "loginEmailHint": "أدخل بريدك الإلكتروني",
-"loginPasswordHint": "أدخل كلمة المرور",
-"enterPassword": "أدخل كلمة المرور",
-"dontHaveAccount": "ليس لديك حساب؟",
-"signUp": "إنشاء حساب",
-"invalidCredentials": "البريد الإلكتروني أو كلمة المرور غير صحيحة.",
-"authenticationFailed": "فشل تسجيل الدخول. يرجى المحاولة مرة أخرى.",
-
-
-  "chooseYourRole": "اختر دورك",
-  "personaFirst": "الشخصية أولاً",
-  "ageGroupSubtitle": "اختر الفئة العمرية المناسبة لك.",
-  "roleChild": "طفل",
-  "roleTeenAdult": "مراهق / بالغ",
-  "roleOlderAdult": "كبير السن",
-  "childRoleHint": "الطفل مريض فقط؛ لا تظهر الأدوار غير الصالحة.",
-  "teenAdultRoleHint": "اختر مريض أو مقدم رعاية أو كليهما. الوضع الافتراضي عند اختيار كليهما هو وضع المريض.",
-  "olderAdultRoleHint": "كبير السن مريض فقط؛ لا تظهر الأدوار غير الصالحة.",
-  "rolePatient": "مريض",
-  "roleCaregiver": "مقدم رعاية",
-  "roleBoth": "كلاهما",
-  "usePatientHint": "استخدم كيور لينك كمريض.",
-  "useCaregiverHint": "استخدم كيور لينك كمقدم رعاية.",
-  "switchModesHint": "بدّل بين الوضعين عند الحاجة.",
-  "completeProfile": "أكمل ملفك الشخصي",
-  "profilePhoto": "الصورة الشخصية",
-  "selectedRole": "الدور المختار",
-  "ageGroup": "الفئة العمرية",
-  "userIdPlaceholder": "معرّف المستخدم - مؤقت",
-  "generatedAfterSetup": "يُنشأ بعد الإعداد",
-  "patientMode": "وضع المريض",
-  "caregiverMode": "وضع مقدم الرعاية",
-  "saveProfile": "حفظ الملف الشخصي",
-  "completeProfileSubtitle": "أضف معلوماتك حتى يتمكن كيور لينك من تقديم تجربة رعاية أفضل.",
-"tapToAddPhoto": "اضغط لإضافة صورة شخصية",
-"personalInformation": "المعلومات الشخصية",
-"basicProfileDetails": "بيانات ملفك الشخصي الأساسية",
-"pleaseEnterName": "يرجى إدخال اسمك",
-"nameMinLength": "يجب أن يحتوي الاسم على حرفين على الأقل",
-"cureLinkId": "معرّف كيور لينك",
-"caregiverConnectionIdHint": "استخدم هذا المعرّف عند الارتباط بمقدمي الرعاية",
-"emergencyContact": "جهة اتصال للطوارئ",
-"emergencyContactHint": "شخص يمكننا التواصل معه في حالات الطوارئ",
-"contactName": "اسم جهة الاتصال",
-"enterFullName": "أدخل الاسم الكامل",
-"pleaseEnterEmergencyContactName": "يرجى إدخال اسم جهة اتصال الطوارئ",
-"phoneNumber": "رقم الهاتف",
-"enterPhoneNumber": "أدخل رقم الهاتف",
-"pleaseEnterEmergencyPhone": "يرجى إدخال رقم هاتف الطوارئ",
-"validPhoneNumber": "أدخل رقم هاتف صالح",
-"pleaseWaitGeneratingId": "يرجى الانتظار حتى ننشئ معرّف كيور لينك الخاص بك.",
-"choosePhotoMethod": "اختر الطريقة التي تريد بها إضافة صورتك",
-"chooseFromGallery": "اختيار من المعرض",
-"selectPhotoFromDevice": "اختر صورة من جهازك",
-"useCamera": "استخدام الكاميرا",
-"takeNewProfilePhoto": "التقاط صورة شخصية جديدة",
-"unableToSelectImage": "تعذر اختيار الصورة.",
-"pleaseWaitIdGenerated": "يرجى الانتظار حتى يتم إنشاء معرّف كيور لينك الخاص بك.",
-"profileCompleted": "اكتمل الملف الشخصي",
-"profileCreatedSuccessfully": "تم إنشاء ملفك الشخصي في كيور لينك بنجاح.",
-"yourCureLinkId": "معرّف كيور لينك الخاص بك",
-"continueButton": "متابعة",
-"firebasePermissionDenied": "تم رفض صلاحية Firebase أثناء إنشاء معرّف كيور لينك.",
-"noAuthenticatedUser": "لم يتم العثور على مستخدم مسجل الدخول. يرجى تسجيل الدخول أولاً.",
-"networkError": "حدث خطأ في الشبكة. يرجى التحقق من اتصال الإنترنت.",
-"unableToGenerateId": "تعذر إنشاء معرّف كيور لينك فريد.",
-"profilePermissionDenied": "ليس لديك صلاحية لحفظ هذا الملف الشخصي.",
-"sessionExpired": "انتهت جلسة المستخدم. يرجى تسجيل الدخول مرة أخرى.",
-  "navHome": "الرئيسية",
-  "idNotAvailable": "غير متاح",
-  "navSchedule": "الجدول",
-  "navCalendar": "التقويم",
-  "navNotifications": "الإشعارات",
-  "navProfile": "الملف الشخصي",
-
-  "today": "اليوم",
-  "tomorrow": "غداً",
-  "all": "الكل",
-  "morning": "الصباح",
-  "evening": "المساء",
-  "goodMorning": "صباح الخير",
-  "medicationPlanToday": "هذه خطة أدويتك لليوم.",
-  "nextDose": "الجرعة التالية",
-  "inDuration": "بعد {time}",
-  "scheduledTime": "الموعد المحدد · {time}",
-  "statusUpcoming": "قادمة",
-  "statusDueNow": "حان وقتها",
-  "statusTaken": "تم تناولها",
-  "statusMissed": "فائتة",
-  "statusPending": "قيد الانتظار",
-  "todaysProgress": "تقدم اليوم",
-  "progressCount": "{done} من {total}",
-  "emergencySos": "طوارئ / SOS",
-
-  "olderHomeTitle": "يومك مخطط بوضوح",
-  "olderHomeSubtitle": "كل خطوة تالية بسيطة وواضحة.",
-  "confirmDose": "تأكيد الجرعة",
-  "medicationReminder": "تذكير بالدواء",
-  "timeForYourMedication": "حان وقت دوائك",
-  "remindMeLater": "ذكّرني لاحقاً",
-  "doseRecorded": "تم تسجيل الجرعة",
-  "doseComplete": "اكتملت الجرعة",
-  "progressUpdated": "تم تحديث التقدم.",
+  },
+  "login": "تسجيل الدخول",
+  "@login": {
+    "description": "Localized Login text displayed in the interface."
+  },
+  "tagline": "رعاية تبقى متصلة",
+  "@tagline": {
+    "description": "Localized Tagline text displayed in the interface."
+  },
+  "skip": "تخطي",
+  "@skip": {
+    "description": "Localized Skip text displayed in the interface."
+  },
+  "next": "التالي",
+  "@next": {
+    "description": "Localized Next text displayed in the interface."
+  },
+  "getStarted": "ابدأ الآن",
+  "@getStarted": {
+    "description": "Localized Get started text displayed in the interface."
+  },
+  "continueButton": "متابعة",
+  "@continueButton": {
+    "description": "Localized Continue button text displayed in the interface."
+  },
+  "done": "تم",
+  "@done": {
+    "description": "Localized Done text displayed in the interface."
+  },
+  "stepOfTotal": "الخطوة {current} من {total}",
+  "@stepOfTotal": {
+    "description": "Localized Step of total text displayed in the interface.",
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
   "onboardingTitle1": "لا تفوّت أي جرعة",
-"onboardingSubtitle1": "تذكيرات لطيفة تساعدك على تناول كل جرعة في موعدها",
-"onboardingTitle2": "تابع رحلة أدويتك",
-"onboardingSubtitle2": "اطّلع على المواعيد والسجل والتقدم",
-"onboardingTitle3": "ابقَ على تواصل مع مقدمي الرعاية",
-"onboardingSubtitle3": "شارك فقط ما توافق عليه",
+  "@onboardingTitle1": {
+    "description": "Localized Onboarding title 1 text displayed in the interface."
+  },
+  "onboardingSubtitle1": "تذكيرات لطيفة تساعدك على تناول كل جرعة في موعدها",
+  "@onboardingSubtitle1": {
+    "description": "Localized Onboarding subtitle 1 text displayed in the interface."
+  },
+  "onboardingTitle2": "تابع رحلة أدويتك",
+  "@onboardingTitle2": {
+    "description": "Localized Onboarding title 2 text displayed in the interface."
+  },
+  "onboardingSubtitle2": "اطّلع على المواعيد والسجل والتقدم",
+  "@onboardingSubtitle2": {
+    "description": "Localized Onboarding subtitle 2 text displayed in the interface."
+  },
+  "onboardingTitle3": "ابقَ على تواصل مع مقدمي الرعاية",
+  "@onboardingTitle3": {
+    "description": "Localized Onboarding title 3 text displayed in the interface."
+  },
+  "onboardingSubtitle3": "شارك فقط ما توافق عليه",
+  "@onboardingSubtitle3": {
+    "description": "Localized Onboarding subtitle 3 text displayed in the interface."
+  },
+  "welcomeBack": "مرحباً بعودتك",
+  "@welcomeBack": {
+    "description": "Localized Welcome back text displayed in the interface."
+  },
+  "signInToContinue": "سجّل الدخول للمتابعة.",
+  "@signInToContinue": {
+    "description": "Localized Sign in to continue text displayed in the interface."
+  },
+  "emailOrPhone": "البريد الإلكتروني أو رقم الهاتف",
+  "@emailOrPhone": {
+    "description": "Localized Email or phone text displayed in the interface."
+  },
+  "createAccountSubtitle": "أنشئ حسابك في كيور لينك للبقاء على اتصال.",
+  "@createAccountSubtitle": {
+    "description": "Localized Create account subtitle text displayed in the interface."
+  },
+  "enterYourName": "أدخل اسمك",
+  "@enterYourName": {
+    "description": "Localized Enter your name text displayed in the interface."
+  },
+  "enterYourPhone": "أدخل رقم هاتفك",
+  "@enterYourPhone": {
+    "description": "Localized Enter your phone text displayed in the interface."
+  },
+  "enterYourEmail": "أدخل بريدك الإلكتروني",
+  "@enterYourEmail": {
+    "description": "Localized Enter your email text displayed in the interface."
+  },
+  "createPassword": "أنشئ كلمة مرور",
+  "@createPassword": {
+    "description": "Localized Create password text displayed in the interface."
+  },
+  "reEnterPassword": "أعد إدخال كلمة المرور",
+  "@reEnterPassword": {
+    "description": "Localized Re enter password text displayed in the interface."
+  },
+  "alreadyHaveAccount": "لديك حساب بالفعل؟",
+  "@alreadyHaveAccount": {
+    "description": "Localized Already have account text displayed in the interface."
+  },
+  "somethingWentWrong": "حدث خطأ ما. يرجى المحاولة مرة أخرى.",
+  "@somethingWentWrong": {
+    "description": "Localized Something went wrong text displayed in the interface."
+  },
+  "userSessionNotFound": "لم يتم العثور على جلسة المستخدم. يرجى تسجيل الدخول مرة أخرى.",
+  "@userSessionNotFound": {
+    "description": "Localized User session not found text displayed in the interface."
+  },
+  "couldNotSaveAgeGroup": "تعذر حفظ الفئة العمرية. يرجى المحاولة مرة أخرى.",
+  "@couldNotSaveAgeGroup": {
+    "description": "Localized Could not save age group text displayed in the interface."
+  },
+  "emailAlreadyRegistered": "هذا البريد الإلكتروني مسجل بالفعل.",
+  "@emailAlreadyRegistered": {
+    "description": "Localized Email already registered text displayed in the interface."
+  },
+  "invalidEmail": "عنوان البريد الإلكتروني غير صالح.",
+  "@invalidEmail": {
+    "description": "Localized Invalid email text displayed in the interface."
+  },
+  "weakPassword": "كلمة المرور ضعيفة جدًا. استخدم 8 أحرف على الأقل.",
+  "@weakPassword": {
+    "description": "Localized Weak password text displayed in the interface."
+  },
+  "noInternetConnection": "لا يوجد اتصال بالإنترنت. تحقق من الشبكة وحاول مرة أخرى.",
+  "@noInternetConnection": {
+    "description": "Localized No internet connection text displayed in the interface."
+  },
+  "emailSignupDisabled": "التسجيل باستخدام البريد الإلكتروني غير مفعّل في Firebase بعد.",
+  "@emailSignupDisabled": {
+    "description": "Localized Email signup disabled text displayed in the interface."
+  },
+  "tooManyAttempts": "محاولات كثيرة جدًا. انتظر قليلاً ثم حاول مرة أخرى.",
+  "@tooManyAttempts": {
+    "description": "Localized Too many attempts text displayed in the interface."
+  },
+  "couldNotCreateAccount": "تعذر إنشاء الحساب. يرجى المحاولة مرة أخرى.",
+  "@couldNotCreateAccount": {
+    "description": "Localized Could not create account text displayed in the interface."
+  },
+  "profileSaveFailed": "تم إنشاء الحساب، لكن تعذر حفظ ملفك الشخصي. يرجى المحاولة مرة أخرى.",
+  "@profileSaveFailed": {
+    "description": "Localized Profile save failed text displayed in the interface."
+  },
+  "pageNotFound": "الصفحة غير موجودة",
+  "@pageNotFound": {
+    "description": "Localized Page not found text displayed in the interface."
+  },
+  "noRouteDefined": "لا يوجد مسار معرف لـ {route}",
+  "@noRouteDefined": {
+    "placeholders": {
+      "route": {
+        "type": "String"
+      }
+    }
+  },
+  "enterDetails": "أدخل البيانات",
+  "@enterDetails": {
+    "description": "Localized Enter details text displayed in the interface."
+  },
+  "password": "كلمة المرور",
+  "@password": {
+    "description": "Localized Password text displayed in the interface."
+  },
+  "confirmPassword": "تأكيد كلمة المرور",
+  "@confirmPassword": {
+    "description": "Localized Confirm password text displayed in the interface."
+  },
+  "forgotPassword": "هل نسيت كلمة المرور؟",
+  "@forgotPassword": {
+    "description": "Localized Forgot password text displayed in the interface."
+  },
+  "createAccount": "إنشاء حساب",
+  "@createAccount": {
+    "description": "Localized Create account text displayed in the interface."
+  },
+  "name": "الاسم",
+  "@name": {
+    "description": "Localized Name text displayed in the interface."
+  },
+  "phone": "رقم الهاتف",
+  "@phone": {
+    "description": "Localized Phone text displayed in the interface."
+  },
+  "email": "البريد الإلكتروني",
+  "@email": {
+    "description": "Localized Email text displayed in the interface."
+  },
+  "fieldError": "تحقق من هذا الحقل وحاول مرة أخرى.",
+  "@fieldError": {
+    "description": "Localized Field error text displayed in the interface."
+  },
+  "fieldStates": "حالات الحقول",
+  "@fieldStates": {
+    "description": "Localized Field states text displayed in the interface."
+  },
+  "stateDefault": "افتراضي",
+  "@stateDefault": {
+    "description": "Localized State default text displayed in the interface."
+  },
+  "stateFocus": "نشط",
+  "@stateFocus": {
+    "description": "Localized State focus text displayed in the interface."
+  },
+  "stateFilled": "ممتلئ",
+  "@stateFilled": {
+    "description": "Localized State filled text displayed in the interface."
+  },
+  "stateError": "خطأ",
+  "@stateError": {
+    "description": "Localized State error text displayed in the interface."
+  },
+  "stateDisabled": "معطّل",
+  "@stateDisabled": {
+    "description": "Localized State disabled text displayed in the interface."
+  },
+  "passwordsDoNotMatch": "كلمتا المرور غير متطابقتين.",
+  "@passwordsDoNotMatch": {
+    "description": "Localized Passwords do not match text displayed in the interface."
+  },
+  "loginEmailHint": "أدخل بريدك الإلكتروني",
+  "@loginEmailHint": {
+    "description": "Localized Login email hint text displayed in the interface."
+  },
+  "loginPasswordHint": "أدخل كلمة المرور",
+  "@loginPasswordHint": {
+    "description": "Localized Login password hint text displayed in the interface."
+  },
+  "enterPassword": "أدخل كلمة المرور",
+  "@enterPassword": {
+    "description": "Localized Enter password text displayed in the interface."
+  },
+  "dontHaveAccount": "ليس لديك حساب؟",
+  "@dontHaveAccount": {
+    "description": "Localized Dont have account text displayed in the interface."
+  },
+  "signUp": "إنشاء حساب",
+  "@signUp": {
+    "description": "Localized Sign up text displayed in the interface."
+  },
+  "invalidCredentials": "البريد الإلكتروني أو كلمة المرور غير صحيحة.",
+  "@invalidCredentials": {
+    "description": "Localized Invalid credentials text displayed in the interface."
+  },
+  "authenticationFailed": "فشل تسجيل الدخول. يرجى المحاولة مرة أخرى.",
+  "@authenticationFailed": {
+    "description": "Localized Authentication failed text displayed in the interface."
+  },
+  "chooseYourRole": "اختر دورك",
+  "@chooseYourRole": {
+    "description": "Localized Choose your role text displayed in the interface."
+  },
+  "personaFirst": "الشخصية أولاً",
+  "@personaFirst": {
+    "description": "Localized Persona first text displayed in the interface."
+  },
+  "ageGroupSubtitle": "اختر الفئة العمرية المناسبة لك.",
+  "@ageGroupSubtitle": {
+    "description": "Localized Age group subtitle text displayed in the interface."
+  },
+  "roleChild": "طفل",
+  "@roleChild": {
+    "description": "Localized Role child text displayed in the interface."
+  },
+  "roleTeenAdult": "مراهق / بالغ",
+  "@roleTeenAdult": {
+    "description": "Localized Role teen adult text displayed in the interface."
+  },
+  "roleOlderAdult": "كبير السن",
+  "@roleOlderAdult": {
+    "description": "Localized Role older adult text displayed in the interface."
+  },
+  "childRoleHint": "الطفل مريض فقط؛ لا تظهر الأدوار غير الصالحة.",
+  "@childRoleHint": {
+    "description": "Localized Child role hint text displayed in the interface."
+  },
+  "teenAdultRoleHint": "اختر مريض أو مقدم رعاية أو كليهما. الوضع الافتراضي عند اختيار كليهما هو وضع المريض.",
+  "@teenAdultRoleHint": {
+    "description": "Localized Teen adult role hint text displayed in the interface."
+  },
+  "olderAdultRoleHint": "كبير السن مريض فقط؛ لا تظهر الأدوار غير الصالحة.",
+  "@olderAdultRoleHint": {
+    "description": "Localized Older adult role hint text displayed in the interface."
+  },
+  "rolePatient": "مريض",
+  "@rolePatient": {
+    "description": "Localized Role patient text displayed in the interface."
+  },
+  "roleCaregiver": "مقدم رعاية",
+  "@roleCaregiver": {
+    "description": "Localized Role caregiver text displayed in the interface."
+  },
+  "roleBoth": "كلاهما",
+  "@roleBoth": {
+    "description": "Localized Role both text displayed in the interface."
+  },
+  "usePatientHint": "استخدم كيور لينك كمريض.",
+  "@usePatientHint": {
+    "description": "Localized Use patient hint text displayed in the interface."
+  },
+  "useCaregiverHint": "استخدم كيور لينك كمقدم رعاية.",
+  "@useCaregiverHint": {
+    "description": "Localized Use caregiver hint text displayed in the interface."
+  },
+  "switchModesHint": "بدّل بين الوضعين عند الحاجة.",
+  "@switchModesHint": {
+    "description": "Localized Switch modes hint text displayed in the interface."
+  },
+  "completeProfile": "أكمل ملفك الشخصي",
+  "@completeProfile": {
+    "description": "Localized Complete profile text displayed in the interface."
+  },
+  "profilePhoto": "الصورة الشخصية",
+  "@profilePhoto": {
+    "description": "Localized Profile photo text displayed in the interface."
+  },
+  "selectedRole": "الدور المختار",
+  "@selectedRole": {
+    "description": "Localized Selected role text displayed in the interface."
+  },
+  "ageGroup": "الفئة العمرية",
+  "@ageGroup": {
+    "description": "Localized Age group text displayed in the interface."
+  },
+  "userIdPlaceholder": "معرّف المستخدم - مؤقت",
+  "@userIdPlaceholder": {
+    "description": "Localized User id placeholder text displayed in the interface."
+  },
+  "generatedAfterSetup": "يُنشأ بعد الإعداد",
+  "@generatedAfterSetup": {
+    "description": "Localized Generated after setup text displayed in the interface."
+  },
+  "patientMode": "وضع المريض",
+  "@patientMode": {
+    "description": "Localized Patient mode text displayed in the interface."
+  },
+  "caregiverMode": "وضع مقدم الرعاية",
+  "@caregiverMode": {
+    "description": "Localized Caregiver mode text displayed in the interface."
+  },
+  "saveProfile": "حفظ الملف الشخصي",
+  "@saveProfile": {
+    "description": "Localized Save profile text displayed in the interface."
+  },
+  "completeProfileSubtitle": "أضف معلوماتك حتى يتمكن كيور لينك من تقديم تجربة رعاية أفضل.",
+  "@completeProfileSubtitle": {
+    "description": "Localized Complete profile subtitle text displayed in the interface."
+  },
+  "tapToAddPhoto": "اضغط لإضافة صورة شخصية",
+  "@tapToAddPhoto": {
+    "description": "Localized Tap to add photo text displayed in the interface."
+  },
+  "personalInformation": "المعلومات الشخصية",
+  "@personalInformation": {
+    "description": "Localized Personal information text displayed in the interface."
+  },
+  "basicProfileDetails": "بيانات ملفك الشخصي الأساسية",
+  "@basicProfileDetails": {
+    "description": "Localized Basic profile details text displayed in the interface."
+  },
+  "pleaseEnterName": "يرجى إدخال اسمك",
+  "@pleaseEnterName": {
+    "description": "Localized Please enter name text displayed in the interface."
+  },
+  "nameMinLength": "يجب أن يحتوي الاسم على حرفين على الأقل",
+  "@nameMinLength": {
+    "description": "Localized Name min length text displayed in the interface."
+  },
+  "cureLinkId": "معرّف كيور لينك",
+  "@cureLinkId": {
+    "description": "Localized Cure link id text displayed in the interface."
+  },
+  "caregiverConnectionIdHint": "استخدم هذا المعرّف عند الارتباط بمقدمي الرعاية",
+  "@caregiverConnectionIdHint": {
+    "description": "Localized Caregiver connection id hint text displayed in the interface."
+  },
+  "emergencyContact": "جهة اتصال للطوارئ",
+  "@emergencyContact": {
+    "description": "Localized Emergency contact text displayed in the interface."
+  },
+  "emergencyContactHint": "شخص يمكننا التواصل معه في حالات الطوارئ",
+  "@emergencyContactHint": {
+    "description": "Localized Emergency contact hint text displayed in the interface."
+  },
+  "contactName": "اسم جهة الاتصال",
+  "@contactName": {
+    "description": "Localized Contact name text displayed in the interface."
+  },
+  "enterFullName": "أدخل الاسم الكامل",
+  "@enterFullName": {
+    "description": "Localized Enter full name text displayed in the interface."
+  },
+  "pleaseEnterEmergencyContactName": "يرجى إدخال اسم جهة اتصال الطوارئ",
+  "@pleaseEnterEmergencyContactName": {
+    "description": "Localized Please enter emergency contact name text displayed in the interface."
+  },
+  "phoneNumber": "رقم الهاتف",
+  "@phoneNumber": {
+    "description": "Localized Phone number text displayed in the interface."
+  },
+  "enterPhoneNumber": "أدخل رقم الهاتف",
+  "@enterPhoneNumber": {
+    "description": "Localized Enter phone number text displayed in the interface."
+  },
+  "pleaseEnterEmergencyPhone": "يرجى إدخال رقم هاتف الطوارئ",
+  "@pleaseEnterEmergencyPhone": {
+    "description": "Localized Please enter emergency phone text displayed in the interface."
+  },
+  "validPhoneNumber": "أدخل رقم هاتف صالح",
+  "@validPhoneNumber": {
+    "description": "Localized Valid phone number text displayed in the interface."
+  },
+  "pleaseWaitGeneratingId": "يرجى الانتظار حتى ننشئ معرّف كيور لينك الخاص بك.",
+  "@pleaseWaitGeneratingId": {
+    "description": "Localized Please wait generating id text displayed in the interface."
+  },
+  "choosePhotoMethod": "اختر الطريقة التي تريد بها إضافة صورتك",
+  "@choosePhotoMethod": {
+    "description": "Localized Choose photo method text displayed in the interface."
+  },
+  "chooseFromGallery": "اختيار من المعرض",
+  "@chooseFromGallery": {
+    "description": "Localized Choose from gallery text displayed in the interface."
+  },
+  "selectPhotoFromDevice": "اختر صورة من جهازك",
+  "@selectPhotoFromDevice": {
+    "description": "Localized Select photo from device text displayed in the interface."
+  },
+  "useCamera": "استخدام الكاميرا",
+  "@useCamera": {
+    "description": "Localized Use camera text displayed in the interface."
+  },
+  "takeNewProfilePhoto": "التقاط صورة شخصية جديدة",
+  "@takeNewProfilePhoto": {
+    "description": "Localized Take new profile photo text displayed in the interface."
+  },
+  "unableToSelectImage": "تعذر اختيار الصورة.",
+  "@unableToSelectImage": {
+    "description": "Localized Unable to select image text displayed in the interface."
+  },
+  "pleaseWaitIdGenerated": "يرجى الانتظار حتى يتم إنشاء معرّف كيور لينك الخاص بك.",
+  "@pleaseWaitIdGenerated": {
+    "description": "Localized Please wait id generated text displayed in the interface."
+  },
+  "profileCompleted": "اكتمل الملف الشخصي",
+  "@profileCompleted": {
+    "description": "Localized Profile completed text displayed in the interface."
+  },
+  "profileCreatedSuccessfully": "تم إنشاء ملفك الشخصي في كيور لينك بنجاح.",
+  "@profileCreatedSuccessfully": {
+    "description": "Localized Profile created successfully text displayed in the interface."
+  },
+  "yourCureLinkId": "معرّف كيور لينك الخاص بك",
+  "@yourCureLinkId": {
+    "description": "Localized Your cure link id text displayed in the interface."
+  },
+  "firebasePermissionDenied": "تم رفض صلاحية Firebase أثناء إنشاء معرّف كيور لينك.",
+  "@firebasePermissionDenied": {
+    "description": "Localized Firebase permission denied text displayed in the interface."
+  },
+  "noAuthenticatedUser": "لم يتم العثور على مستخدم مسجل الدخول. يرجى تسجيل الدخول أولاً.",
+  "@noAuthenticatedUser": {
+    "description": "Localized No authenticated user text displayed in the interface."
+  },
+  "networkError": "حدث خطأ في الشبكة. يرجى التحقق من اتصال الإنترنت.",
+  "@networkError": {
+    "description": "Localized Network error text displayed in the interface."
+  },
+  "unableToGenerateId": "تعذر إنشاء معرّف كيور لينك فريد.",
+  "@unableToGenerateId": {
+    "description": "Localized Unable to generate id text displayed in the interface."
+  },
+  "profilePermissionDenied": "ليس لديك صلاحية لحفظ هذا الملف الشخصي.",
+  "@profilePermissionDenied": {
+    "description": "Localized Profile permission denied text displayed in the interface."
+  },
+  "sessionExpired": "انتهت جلسة المستخدم. يرجى تسجيل الدخول مرة أخرى.",
+  "@sessionExpired": {
+    "description": "Localized Session expired text displayed in the interface."
+  },
+  "navHome": "الرئيسية",
+  "@navHome": {
+    "description": "Localized Nav home text displayed in the interface."
+  },
+  "idNotAvailable": "غير متاح",
+  "@idNotAvailable": {
+    "description": "Localized Id not available text displayed in the interface."
+  },
+  "navSchedule": "الجدول",
+  "@navSchedule": {
+    "description": "Localized Nav schedule text displayed in the interface."
+  },
+  "navCalendar": "التقويم",
+  "@navCalendar": {
+    "description": "Localized Nav calendar text displayed in the interface."
+  },
+  "navNotifications": "الإشعارات",
+  "@navNotifications": {
+    "description": "Localized Nav notifications text displayed in the interface."
+  },
+  "navProfile": "الملف الشخصي",
+  "@navProfile": {
+    "description": "Localized Nav profile text displayed in the interface."
+  },
+  "today": "اليوم",
+  "@today": {
+    "description": "Localized Today text displayed in the interface."
+  },
+  "tomorrow": "غداً",
+  "@tomorrow": {
+    "description": "Localized Tomorrow text displayed in the interface."
+  },
+  "all": "الكل",
+  "@all": {
+    "description": "Localized All text displayed in the interface."
+  },
+  "morning": "الصباح",
+  "@morning": {
+    "description": "Localized Morning text displayed in the interface."
+  },
+  "evening": "المساء",
+  "@evening": {
+    "description": "Localized Evening text displayed in the interface."
+  },
+  "goodMorning": "صباح الخير",
+  "@goodMorning": {
+    "description": "Localized Good morning text displayed in the interface."
+  },
+  "medicationPlanToday": "هذه خطة أدويتك لليوم.",
+  "@medicationPlanToday": {
+    "description": "Localized Medication plan today text displayed in the interface."
+  },
+  "nextDose": "الجرعة التالية",
+  "@nextDose": {
+    "description": "Localized Next dose text displayed in the interface."
+  },
+  "inDuration": "بعد {time}",
+  "@inDuration": {
+    "description": "Localized In duration text displayed in the interface.",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "scheduledTime": "الموعد المحدد · {time}",
+  "@scheduledTime": {
+    "description": "Localized Scheduled time text displayed in the interface.",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "statusUpcoming": "قادمة",
+  "@statusUpcoming": {
+    "description": "Localized Status upcoming text displayed in the interface."
+  },
+  "statusDueNow": "حان وقتها",
+  "@statusDueNow": {
+    "description": "Localized Status due now text displayed in the interface."
+  },
+  "statusTaken": "تم تناولها",
+  "@statusTaken": {
+    "description": "Localized Status taken text displayed in the interface."
+  },
+  "statusMissed": "فائتة",
+  "@statusMissed": {
+    "description": "Localized Status missed text displayed in the interface."
+  },
+  "statusPending": "قيد الانتظار",
+  "@statusPending": {
+    "description": "Localized Status pending text displayed in the interface."
+  },
+  "todaysProgress": "تقدم اليوم",
+  "@todaysProgress": {
+    "description": "Localized Todays progress text displayed in the interface."
+  },
+  "progressCount": "{done} من {total}",
+  "@progressCount": {
+    "description": "Localized Progress count text displayed in the interface.",
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "emergencySos": "طوارئ / SOS",
+  "@emergencySos": {
+    "description": "Localized Emergency sos text displayed in the interface."
+  },
+  "olderHomeTitle": "يومك مخطط بوضوح",
+  "@olderHomeTitle": {
+    "description": "Localized Older home title text displayed in the interface."
+  },
+  "olderHomeSubtitle": "كل خطوة تالية بسيطة وواضحة.",
+  "@olderHomeSubtitle": {
+    "description": "Localized Older home subtitle text displayed in the interface."
+  },
+  "confirmDose": "تأكيد الجرعة",
+  "@confirmDose": {
+    "description": "Localized Confirm dose text displayed in the interface."
+  },
+  "medicationReminder": "تذكير بالدواء",
+  "@medicationReminder": {
+    "description": "Localized Medication reminder text displayed in the interface."
+  },
+  "timeForYourMedication": "حان وقت دوائك",
+  "@timeForYourMedication": {
+    "description": "Localized Time for your medication text displayed in the interface."
+  },
+  "remindMeLater": "ذكّرني لاحقاً",
+  "@remindMeLater": {
+    "description": "Localized Remind me later text displayed in the interface."
+  },
+  "doseRecorded": "تم تسجيل الجرعة",
+  "@doseRecorded": {
+    "description": "Localized Dose recorded text displayed in the interface."
+  },
+  "doseComplete": "اكتملت الجرعة",
+  "@doseComplete": {
+    "description": "Localized Dose complete text displayed in the interface."
+  },
+  "progressUpdated": "تم تحديث التقدم.",
+  "@progressUpdated": {
+    "description": "Localized Progress updated text displayed in the interface."
+  },
   "forgotPasswordSubtitle": "أدخل بريدك الإلكتروني وسنرسل لك رابطًا لإعادة تعيين كلمة المرور",
-"sendResetLink": "إرسال رابط إعادة التعيين",
-"backToLogin": "العودة لتسجيل الدخول",
-"passwordResetEmailSent": "تم إرسال بريد إعادة تعيين كلمة المرور. تحقق من بريدك الإلكتروني.",
-"userNotFound": "لا يوجد حساب مرتبط بهذا البريد الإلكتروني",
-"passwordResetFailed": "تعذر إرسال بريد إعادة تعيين كلمة المرور",
-
+  "@forgotPasswordSubtitle": {
+    "description": "Localized Forgot password subtitle text displayed in the interface."
+  },
+  "sendResetLink": "إرسال رابط إعادة التعيين",
+  "@sendResetLink": {
+    "description": "Localized Send reset link text displayed in the interface."
+  },
+  "backToLogin": "العودة لتسجيل الدخول",
+  "@backToLogin": {
+    "description": "Localized Back to login text displayed in the interface."
+  },
+  "passwordResetEmailSent": "تم إرسال بريد إعادة تعيين كلمة المرور. تحقق من بريدك الإلكتروني.",
+  "@passwordResetEmailSent": {
+    "description": "Localized Password reset email sent text displayed in the interface."
+  },
+  "userNotFound": "لا يوجد حساب مرتبط بهذا البريد الإلكتروني",
+  "@userNotFound": {
+    "description": "Localized User not found text displayed in the interface."
+  },
+  "passwordResetFailed": "تعذر إرسال بريد إعادة تعيين كلمة المرور",
+  "@passwordResetFailed": {
+    "description": "Localized Password reset failed text displayed in the interface."
+  },
   "childHomeTitle": "هل أنت جاهز لمهمة اليوم؟",
+  "@childHomeTitle": {
+    "description": "Localized Child home title text displayed in the interface."
+  },
   "childHomeSubtitle": "خطوة صغيرة في كل مرة. أنت قادر على ذلك!",
+  "@childHomeSubtitle": {
+    "description": "Localized Child home subtitle text displayed in the interface."
+  },
   "starsNextBadge": "{stars} نجوم · الشارة التالية عند {target}",
+  "@starsNextBadge": {
+    "description": "Localized Stars next badge text displayed in the interface.",
+    "placeholders": {
+      "stars": {
+        "type": "int"
+      },
+      "target": {
+        "type": "int"
+      }
+    }
+  },
   "missionProgress": "تقدم المهمة",
+  "@missionProgress": {
+    "description": "Localized Mission progress text displayed in the interface."
+  },
   "myMission": "مهمتي",
+  "@myMission": {
+    "description": "Localized My mission text displayed in the interface."
+  },
   "markAsTaken": "تحديد كمأخوذ",
+  "@markAsTaken": {
+    "description": "Localized Mark as taken text displayed in the interface."
+  },
   "starEarned": "ربحت نجمة!",
+  "@starEarned": {
+    "description": "Localized Star earned text displayed in the interface."
+  },
   "braveRoutineBadge": "شارة الروتين الشجاع",
-
+  "@braveRoutineBadge": {
+    "description": "Localized Brave routine badge text displayed in the interface."
+  },
   "addMedicine": "إضافة دواء",
+  "@addMedicine": {
+    "description": "Localized Add medicine text displayed in the interface."
+  },
   "editMedicine": "تعديل الدواء",
+  "@editMedicine": {
+    "description": "Localized Edit medicine text displayed in the interface."
+  },
   "deleteMedicine": "حذف الدواء",
+  "@deleteMedicine": {
+    "description": "Localized Delete medicine text displayed in the interface."
+  },
   "medicineDetails": "تفاصيل الدواء",
+  "@medicineDetails": {
+    "description": "Localized Medicine details text displayed in the interface."
+  },
   "medicationName": "اسم الدواء",
+  "@medicationName": {
+    "description": "Localized Medication name text displayed in the interface."
+  },
   "descriptionPlaceholder": "نص الوصف.",
+  "@descriptionPlaceholder": {
+    "description": "Localized Description placeholder text displayed in the interface."
+  },
   "dose": "الجرعة",
+  "@dose": {
+    "description": "Localized Dose text displayed in the interface."
+  },
   "quantity": "الكمية",
+  "@quantity": {
+    "description": "Localized Quantity text displayed in the interface."
+  },
   "time": "الوقت",
+  "@time": {
+    "description": "Localized Time text displayed in the interface."
+  },
   "frequency": "التكرار",
+  "@frequency": {
+    "description": "Localized Frequency text displayed in the interface."
+  },
   "duration": "المدة",
+  "@duration": {
+    "description": "Localized Duration text displayed in the interface."
+  },
   "conditions": "الحالات",
+  "@conditions": {
+    "description": "Localized Conditions text displayed in the interface."
+  },
   "timing": "التوقيت",
+  "@timing": {
+    "description": "Localized Timing text displayed in the interface."
+  },
   "instructions": "التعليمات",
+  "@instructions": {
+    "description": "Localized Instructions text displayed in the interface."
+  },
   "notes": "ملاحظات",
-
+  "@notes": {
+    "description": "Localized Notes text displayed in the interface."
+  },
   "profile": "الملف الشخصي",
+  "@profile": {
+    "description": "Localized Profile text displayed in the interface."
+  },
   "patientName": "اسم المريض",
+  "@patientName": {
+    "description": "Localized Patient name text displayed in the interface."
+  },
   "settings": "الإعدادات",
+  "@settings": {
+    "description": "Localized Settings text displayed in the interface."
+  },
   "theme": "المظهر",
+  "@theme": {
+    "description": "Localized Theme text displayed in the interface."
+  },
   "permissions": "الأذونات",
+  "@permissions": {
+    "description": "Localized Permissions text displayed in the interface."
+  },
   "helpAndSupport": "المساعدة والدعم",
+  "@helpAndSupport": {
+    "description": "Localized Help and support text displayed in the interface."
+  },
   "logOut": "تسجيل الخروج",
-
+  "@logOut": {
+    "description": "Localized Log out text displayed in the interface."
+  },
   "caregiverDashboard": "لوحة مقدم الرعاية",
+  "@caregiverDashboard": {
+    "description": "Localized Caregiver dashboard text displayed in the interface."
+  },
   "careOverview": "نظرة عامة على الرعاية",
+  "@careOverview": {
+    "description": "Localized Care overview text displayed in the interface."
+  },
   "careOverviewSubtitle": "راجع المرضى المرتبطين والعناصر التي تحتاج انتباهاً.",
+  "@careOverviewSubtitle": {
+    "description": "Localized Care overview subtitle text displayed in the interface."
+  },
   "addPatient": "إضافة مريض",
+  "@addPatient": {
+    "description": "Localized Add patient text displayed in the interface."
+  },
   "connectedPatients": "المرضى المرتبطون",
+  "@connectedPatients": {
+    "description": "Localized Connected patients text displayed in the interface."
+  },
   "needsAttention": "يحتاج انتباهاً",
+  "@needsAttention": {
+    "description": "Localized Needs attention text displayed in the interface."
+  },
   "onTrack": "على المسار الصحيح",
+  "@onTrack": {
+    "description": "Localized On track text displayed in the interface."
+  },
   "latestMedicationMissed": "الأحدث: دواء فائت",
+  "@latestMedicationMissed": {
+    "description": "Localized Latest medication missed text displayed in the interface."
+  },
   "latestDoseTaken": "الأحدث: تم تناول الجرعة",
+  "@latestDoseTaken": {
+    "description": "Localized Latest dose taken text displayed in the interface."
+  },
   "dosesSummary": "تم تناولها {taken} · فائتة {missed} · قيد الانتظار {pending}",
+  "@dosesSummary": {
+    "description": "Localized Doses summary text displayed in the interface.",
+    "placeholders": {
+      "taken": {
+        "type": "int"
+      },
+      "missed": {
+        "type": "int"
+      },
+      "pending": {
+        "type": "int"
+      }
+    }
+  },
   "recentAlerts": "أحدث التنبيهات",
+  "@recentAlerts": {
+    "description": "Localized Recent alerts text displayed in the interface."
+  },
   "missedDose": "جرعة فائتة",
+  "@missedDose": {
+    "description": "Localized Missed dose text displayed in the interface."
+  },
   "patientDetails": "تفاصيل المريض",
+  "@patientDetails": {
+    "description": "Localized Patient details text displayed in the interface."
+  },
   "careManage": "إدارة الرعاية",
+  "@careManage": {
+    "description": "Localized Care manage text displayed in the interface."
+  },
   "todaysMedications": "أدوية اليوم",
+  "@todaysMedications": {
+    "description": "Localized Todays medications text displayed in the interface."
+  },
   "adherence": "الالتزام",
+  "@adherence": {
+    "description": "Localized Adherence text displayed in the interface."
+  },
   "historyAndAlerts": "السجل والتنبيهات",
+  "@historyAndAlerts": {
+    "description": "Localized History and alerts text displayed in the interface."
+  },
   "careAlerts": "تنبيهات الرعاية",
+  "@careAlerts": {
+    "description": "Localized Care alerts text displayed in the interface."
+  },
   "noNewAlerts": "لا توجد تنبيهات جديدة",
+  "@noNewAlerts": {
+    "description": "Localized No new alerts text displayed in the interface."
+  },
   "attentionItemsAppearHere": "تظهر العناصر التي تحتاج انتباهاً هنا.",
-
+  "@attentionItemsAppearHere": {
+    "description": "Localized Attention items appear here text displayed in the interface."
+  },
   "caregiverConnection": "الارتباط بمقدم الرعاية",
+  "@caregiverConnection": {
+    "description": "Localized Caregiver connection text displayed in the interface."
+  },
   "connectionState": "حالة الارتباط",
+  "@connectionState": {
+    "description": "Localized Connection state text displayed in the interface."
+  },
   "noLinkedPatients": "لا يوجد مرضى مرتبطون",
+  "@noLinkedPatients": {
+    "description": "Localized No linked patients text displayed in the interface."
+  },
   "reviewPatientAndPermission": "راجع المريض والإذن المطلوب.",
+  "@reviewPatientAndPermission": {
+    "description": "Localized Review patient and permission text displayed in the interface."
+  },
   "patientId": "معرّف المريض",
+  "@patientId": {
+    "description": "Localized Patient id text displayed in the interface."
+  },
   "placeholderUserId": "معرّف المستخدم المؤقت",
+  "@placeholderUserId": {
+    "description": "Localized Placeholder user id text displayed in the interface."
+  },
   "requestAccess": "طلب الوصول",
+  "@requestAccess": {
+    "description": "Localized Request access text displayed in the interface."
+  },
   "patient": "المريض",
+  "@patient": {
+    "description": "Localized Patient text displayed in the interface."
+  },
   "readOnly": "للقراءة فقط",
+  "@readOnly": {
+    "description": "Localized Read only text displayed in the interface."
+  },
   "manageMedications": "إدارة الأدوية",
+  "@manageMedications": {
+    "description": "Localized Manage medications text displayed in the interface."
+  },
   "pending": "قيد الانتظار",
+  "@pending": {
+    "description": "Localized Pending text displayed in the interface."
+  },
   "waitingForApproval": "في انتظار الموافقة. لا يتوفر أي وصول حالياً.",
+  "@waitingForApproval": {
+    "description": "Localized Waiting for approval text displayed in the interface."
+  },
   "waitingForPatient": "في انتظار المريض",
+  "@waitingForPatient": {
+    "description": "Localized Waiting for patient text displayed in the interface."
+  },
   "approved": "تمت الموافقة",
+  "@approved": {
+    "description": "Localized Approved text displayed in the interface."
+  },
   "shownAfterApproval": "يظهر فقط بعد نقطة الموافقة.",
-  "connectedAppearsAfterApproval": "تظهر حالة الارتباط فقط بعد الموافقة."
+  "@shownAfterApproval": {
+    "description": "Localized Shown after approval text displayed in the interface."
+  },
+  "connectedAppearsAfterApproval": "تظهر حالة الارتباط فقط بعد الموافقة.",
+  "@connectedAppearsAfterApproval": {
+    "description": "Localized Connected appears after approval text displayed in the interface."
+  },
+  "goodAfternoon": "نهارك سعيد",
+  "@goodAfternoon": {
+    "description": "Localized afternoon greeting shown to the user."
+  },
+  "goodEvening": "مساء الخير",
+  "@goodEvening": {
+    "description": "Localized Good evening text displayed in the interface."
+  },
+  "greetingWithName": "{greeting}، {name}",
+  "@greetingWithName": {
+    "description": "Localized Greeting with name text displayed in the interface.",
+    "placeholders": {
+      "greeting": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "emptyMedicationsTitle": "لا توجد أدوية لليوم",
+  "@emptyMedicationsTitle": {
+    "description": "Localized Empty medications title text displayed in the interface."
+  },
+  "emptyMedicationsMessage": "أضف دواءً لتظهر خطتك هنا.",
+  "@emptyMedicationsMessage": {
+    "description": "Localized Empty medications message text displayed in the interface."
+  },
+  "allDosesDone": "أنهيت جرعات اليوم",
+  "@allDosesDone": {
+    "description": "Localized All doses done text displayed in the interface."
+  },
+  "allDosesDoneMessage": "لا توجد جرعات أخرى مجدولة اليوم.",
+  "@allDosesDoneMessage": {
+    "description": "Localized All doses done message text displayed in the interface."
+  },
+  "retry": "حاول مرة أخرى",
+  "@retry": {
+    "description": "Localized Retry text displayed in the interface."
+  }
 }

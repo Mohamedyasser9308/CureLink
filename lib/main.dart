@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
 
       theme: LightTheme.theme,
       darkTheme: DarkTheme.theme,
-      themeMode: ThemeMode.light,
+      themeMode: ThemeMode.system,
 
       home: Splashscreen(),
 
@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
       ],
 
       supportedLocales: AppLocalizations.supportedLocales,
-      locale: const Locale('en'),
+      locale: const Locale('ar'),
 
       routes: AppRouter.routes,
       onGenerateRoute: AppRouter.onGenerateRoute,

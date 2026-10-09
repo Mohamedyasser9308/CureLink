@@ -29,13 +29,13 @@ class AppEmptyState extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              width: 96,
-              height: 96,
+              width: 120,
+              height: 120,
               decoration: BoxDecoration(
                 color: scheme.secondary.withValues(alpha: 0.35),
                 shape: BoxShape.circle,
               ),
-              child: Icon(icon, size: 44, color: scheme.primary),
+              child: Icon(icon, size: 50, color: scheme.primary),
             ),
             const SizedBox(height: 24),
             Text(

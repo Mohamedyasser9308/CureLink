@@ -3,9 +3,10 @@ import 'package:curelink/core/theme/app_theme.dart';
 import 'package:curelink/core/widgets/app_button.dart';
 import 'package:curelink/core/widgets/app_scaffold.dart';
 import 'package:curelink/core/widgets/app_text_field.dart';
-import 'package:curelink/features/home/presentation/home_page.dart';
+// import 'package:curelink/features/home/patient_home_screen.dart';
 import 'package:curelink/features/login/cubit/login_cubit.dart';
 import 'package:curelink/features/login/cubit/login_states.dart';
+import 'package:curelink/features/shell/presentation/main_shell.dart';
 import 'package:curelink/l10n/app_localizations.dart';
 import 'package:emails_validator/emails_validator.dart';
 import 'package:flutter/material.dart';
@@ -100,7 +101,7 @@ class _LoginScreenState extends State<LoginScreen> {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (_) => const HomePage(),
+                  builder: (_) => const MainShell(),
                 ),
               );
             }
