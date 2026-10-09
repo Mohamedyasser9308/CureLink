@@ -1,5 +1,4 @@
-
-import 'package:curelink/features/onboarding/presentation/splashpage.dart';
+import 'package:curelink/features/onboarding/splashpage.dart';
 import 'package:curelink/core/router/app_router.dart';
 import 'package:curelink/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -12,9 +11,7 @@ import 'l10n/app_localizations.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   runApp(const MyApp());
 }
@@ -42,7 +39,7 @@ class MyApp extends StatelessWidget {
       ],
 
       supportedLocales: AppLocalizations.supportedLocales,
-      locale: const Locale('ar'),
+      locale: const Locale('en'),
 
       routes: AppRouter.routes,
       onGenerateRoute: AppRouter.onGenerateRoute,
