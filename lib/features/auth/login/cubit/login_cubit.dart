@@ -1,12 +1,16 @@
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../l10n/app_localizations.dart';
+import '../../data/auth_repository.dart';
+import '../../../../l10n/app_localizations.dart';
 import 'login_states.dart';
 
 class LoginCubit extends Cubit<LoginStates> {
-  LoginCubit() : super(LoginInit());
+  LoginCubit({AuthRepository? repository})
+      : _repository = repository ?? AuthRepository(),
+        super(LoginInit());
+
+  final AuthRepository _repository;
 
   Future<void> login({
     required String email,
@@ -16,23 +20,15 @@ class LoginCubit extends Cubit<LoginStates> {
     emit(LoginLoading());
 
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
+      await _repository.signIn(
         email: email,
         password: password,
+        l10n: l10n,
       );
 
       emit(LoginSuccess());
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'invalid-credential') {
-        emit(LoginError(l10n.invalidCredentials));
-        return;
-      }
-
-      emit(
-        LoginError(
-          e.message ?? l10n.authenticationFailed,
-        ),
-      );
+    } on AuthException catch (error) {
+      emit(LoginError(error.message));
     } catch (_) {
       emit(LoginError(l10n.authenticationFailed));
     }

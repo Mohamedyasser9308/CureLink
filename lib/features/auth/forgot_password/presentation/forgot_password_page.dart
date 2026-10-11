@@ -3,6 +3,7 @@ import 'package:curelink/core/theme/app_theme.dart';
 import 'package:curelink/core/widgets/app_button.dart';
 import 'package:curelink/core/widgets/app_scaffold.dart';
 import 'package:curelink/core/widgets/app_text_field.dart';
+import 'package:curelink/features/auth/validators/auth_validators.dart';
 import 'package:curelink/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -64,9 +65,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         ? AppTheme.navy
         : theme.colorScheme.onSurface;
 
-    return BlocProvider(
-      create: (_) => ForgotPasswordCubit(),
-      child: AppScaffold(
+    return AppScaffold(
         title: l10n.forgotPassword,
         scrollable: true,
         padding: const EdgeInsets.fromLTRB(24, 32, 24, 28),
@@ -74,11 +73,6 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           listener: (context, state) {
             if (state is ForgotPasswordSuccess) {
               _showSnackbar(state.message);
-
-              Navigator.pushReplacementNamed(
-                context,
-                RoutesNames.loginPage,
-              );
             }
 
             if (state is ForgotPasswordError) {
@@ -134,23 +128,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                         _sendResetEmail();
                       }
                     },
-                    validator: (value) {
-                      final email = value?.trim() ?? '';
-
-                      if (email.isEmpty) {
-                        return l10n.enterYourEmail;
-                      }
-
-                      final validEmail = RegExp(
-                        r'^[^@\s]+@[^@\s]+\.[^@\s]+$',
-                      ).hasMatch(email);
-
-                      if (!validEmail) {
-                        return l10n.invalidEmail;
-                      }
-
-                      return null;
-                    },
+                    validator: (value) => AuthValidators.email(value, l10n),
                   ),
 
                   const SizedBox(height: 28),
@@ -192,7 +170,6 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
             );
           },
         ),
-      ),
     );
   }
 }

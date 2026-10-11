@@ -43,7 +43,10 @@ class _PatientHomeView extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
 
     return AppScaffold(
-      appBar: AppBar(title: Text(l10n.appTitle)),
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: Text(l10n.appTitle),
+      ),
       body: BlocBuilder<HomeCubit, HomeState>(
         builder: (context, state) {
           if (state is HomeSuccessState) {
