@@ -728,4 +728,103 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get connectedAppearsAfterApproval =>
       'تظهر حالة الارتباط فقط بعد الموافقة.';
+
+  @override
+  String get medSaveMedicine => 'حفظ الدواء';
+
+  @override
+  String get medSavedSuccessfully => 'تم حفظ الدواء بنجاح!';
+
+  @override
+  String get medPatientUnavailable => 'حساب المريض غير متاح';
+
+  @override
+  String get medNameRequired => 'من فضلك أدخل اسم الدواء';
+
+  @override
+  String get medDoseQuantity => 'الجرعة والكمية';
+
+  @override
+  String get medDoseRequired => 'من فضلك أدخل الجرعة والكمية';
+
+  @override
+  String get medTimeRequired => 'من فضلك اختر موعد الدواء';
+
+  @override
+  String get medSelectTime => 'اختر الموعد';
+
+  @override
+  String get medFrequencyDuration => 'التكرار ومدة العلاج';
+
+  @override
+  String get medFrequencyRequired => 'من فضلك اختر التكرار';
+
+  @override
+  String get medSelectFrequency => 'اختر التكرار';
+
+  @override
+  String get medDurationRequired => 'من فضلك اختر مدة العلاج';
+
+  @override
+  String get medSelectDuration => 'اختر مدة العلاج';
+
+  @override
+  String get medDescription => 'الوصف';
+
+  @override
+  String get medNotesInstructions => 'ملاحظات وشروط وتعليمات';
+
+  @override
+  String get medSelectDays => 'اختر الأيام';
+
+  @override
+  String get medCancel => 'إلغاء';
+
+  @override
+  String get medEveryDay => 'كل يوم';
+
+  @override
+  String get medEveryOtherDay => 'يوم بعد يوم';
+
+  @override
+  String get medSpecificDays => 'أيام محددة';
+
+  @override
+  String get medAsNeeded => 'عند الحاجة';
+
+  @override
+  String get medSevenDays => '7 أيام';
+
+  @override
+  String get medFourteenDays => '14 يومًا';
+
+  @override
+  String get medThirtyDays => '30 يومًا';
+
+  @override
+  String get medOngoing => 'مستمر';
+
+  @override
+  String get medMonday => 'الإثنين';
+
+  @override
+  String get medTuesday => 'الثلاثاء';
+
+  @override
+  String get medWednesday => 'الأربعاء';
+
+  @override
+  String get medThursday => 'الخميس';
+
+  @override
+  String get medFriday => 'الجمعة';
+
+  @override
+  String get medSaturday => 'السبت';
+
+  @override
+  String get medSunday => 'الأحد';
+
+  @override
+  String get medMedicineImage => 'صورة الدواء';
 }

@@ -726,4 +726,103 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get connectedAppearsAfterApproval =>
       'Connected appears only after approval.';
+
+  @override
+  String get medSaveMedicine => 'Save Medicine';
+
+  @override
+  String get medSavedSuccessfully => 'Medicine saved successfully!';
+
+  @override
+  String get medPatientUnavailable => 'Patient account is not available';
+
+  @override
+  String get medNameRequired => 'Please enter medicine name';
+
+  @override
+  String get medDoseQuantity => 'Dose & quantity';
+
+  @override
+  String get medDoseRequired => 'Please enter dose and quantity';
+
+  @override
+  String get medTimeRequired => 'Please select a time';
+
+  @override
+  String get medSelectTime => 'Select time';
+
+  @override
+  String get medFrequencyDuration => 'Frequency & duration';
+
+  @override
+  String get medFrequencyRequired => 'Please select frequency';
+
+  @override
+  String get medSelectFrequency => 'Select frequency';
+
+  @override
+  String get medDurationRequired => 'Please select duration';
+
+  @override
+  String get medSelectDuration => 'Select duration';
+
+  @override
+  String get medDescription => 'Description';
+
+  @override
+  String get medNotesInstructions => 'Notes, conditions & instructions';
+
+  @override
+  String get medSelectDays => 'Select days';
+
+  @override
+  String get medCancel => 'Cancel';
+
+  @override
+  String get medEveryDay => 'Every day';
+
+  @override
+  String get medEveryOtherDay => 'Every other day';
+
+  @override
+  String get medSpecificDays => 'Specific days';
+
+  @override
+  String get medAsNeeded => 'As needed';
+
+  @override
+  String get medSevenDays => '7 days';
+
+  @override
+  String get medFourteenDays => '14 days';
+
+  @override
+  String get medThirtyDays => '30 days';
+
+  @override
+  String get medOngoing => 'Ongoing';
+
+  @override
+  String get medMonday => 'Mon';
+
+  @override
+  String get medTuesday => 'Tue';
+
+  @override
+  String get medWednesday => 'Wed';
+
+  @override
+  String get medThursday => 'Thu';
+
+  @override
+  String get medFriday => 'Fri';
+
+  @override
+  String get medSaturday => 'Sat';
+
+  @override
+  String get medSunday => 'Sun';
+
+  @override
+  String get medMedicineImage => 'Medicine image';
 }
