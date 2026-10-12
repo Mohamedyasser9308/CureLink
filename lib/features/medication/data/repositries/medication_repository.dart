@@ -29,6 +29,18 @@ class MedicationRepository {
     await medicationsRef(patientId).doc(medication.id).set(medication.toMap());
   }
 
+    Future<MedicationModel?> getMedicationById({
+    required String patientId,
+    required String medicineId,
+  }) async {
+    final doc = await medicationsRef(patientId).doc(medicineId).get();
+    final data = doc.data();
+
+    if (!doc.exists || data == null) return null;
+
+    return MedicationModel.fromMap(data, doc.id);
+  }
+
   Future<List<MedicationModel>> getMedications({
     required String patientId,
   }) async {
