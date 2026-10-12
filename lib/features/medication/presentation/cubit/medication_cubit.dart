@@ -9,7 +9,52 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class MedicationCubit extends Cubit<MedicationState> {
   final MedicationRepository repository;
 
+  // Set when the medicine already exists on Firestore (Edit Mode).
+  MedicationModel? _existingMedication;
+
+  bool get isEditMode => _existingMedication != null;
+
   MedicationCubit({required this.repository}) : super(MedicationInitial());
+
+  Future<void> loadMedication({
+    required String patientId,
+    String? medicineId,
+  }) async {
+    emit(MedicationLoading());
+
+    // No id provided, so this is a new medicine (Add Mode).
+    if (medicineId == null ||
+        medicineId.trim().isEmpty ||
+        patientId.trim().isEmpty) {
+      _existingMedication = null;
+      emit(MedicationNew());
+      return;
+    }
+
+    if (FirebaseAuth.instance.currentUser == null) {
+      emit(MedicationLoadFailure('Please log in first'));
+      return;
+    }
+
+    try {
+      final medication = await repository.getMedicationById(
+        patientId: patientId,
+        medicineId: medicineId,
+      );
+
+      _existingMedication = medication;
+
+      if (medication == null) {
+        emit(MedicationNew());
+      } else {
+        emit(MedicationLoaded(medication));
+      }
+    } on FirebaseException catch (e) {
+      emit(MedicationLoadFailure('Firebase error: ${e.code}'));
+    } catch (e) {
+      emit(MedicationLoadFailure('Failed to load medication. Please try again.'));
+    }
+  }
 
   Future<void> saveMedication({
     required String patientId,
@@ -52,13 +97,32 @@ class MedicationCubit extends Cubit<MedicationState> {
     emit(MedicationLoading());
 
     try {
-      String? imageUrl;
+      final existing = _existingMedication;
+
+      // Edit Mode keeps the current image unless the user picked a new one.
+      String? imageUrl = existing?.imageUrl;
+      String? imagePublicId = existing?.imagePublicId;
 
       if (image != null) {
-        imageUrl = await CloudinaryService.uploadImage(image);
+        // 1. Delete the old image from Cloudinary.
+        if (imageUrl != null && imageUrl.isNotEmpty) {
+          final oldPublicId =
+              imagePublicId ?? CloudinaryService.publicIdFromUrl(imageUrl);
+
+          if (oldPublicId != null) {
+            await CloudinaryService.deleteImage(oldPublicId);
+          }
+        }
+
+        // 2. Upload the new image.
+        final uploaded = await CloudinaryService.uploadImageWithPublicId(image);
+
+        imageUrl = uploaded.secureUrl;
+        imagePublicId = uploaded.publicId;
       }
 
-      final medicationId = repository.createMedicationId(patientId);
+      final medicationId =
+          existing?.id ?? repository.createMedicationId(patientId);
 
       final now = DateTime.now();
 
@@ -70,17 +134,28 @@ class MedicationCubit extends Cubit<MedicationState> {
         frequency: frequency,
         weekdays: weekdays,
         durationDays: durationDays,
-        startDate: now,
-        createdAt: now,
+        startDate: existing?.startDate ?? now,
+        createdAt: existing?.createdAt ?? now,
         description: description.trim().isEmpty ? null : description.trim(),
         instructions: instructions.trim().isEmpty ? null : instructions.trim(),
         imageUrl: imageUrl,
+        imagePublicId: imagePublicId,
       );
 
-      await repository.addMedication(
-        patientId: patientId,
-        medication: medication,
-      );
+      // 3. Save to Firestore.
+      if (existing == null) {
+        await repository.addMedication(
+          patientId: patientId,
+          medication: medication,
+        );
+      } else {
+        await repository.updateMedication(
+          patientId: patientId,
+          medication: medication,
+        );
+
+        _existingMedication = medication;
+      }
 
       emit(MedicationSuccess());
     } on FirebaseException catch (e) {

@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:curelink/core/theme/app_theme.dart';
+import 'package:curelink/features/medication/data/models/medication_model.dart';
 import 'package:curelink/features/medication/data/repositries/medication_repository.dart';
 import 'package:curelink/features/medication/presentation/cubit/medication_cubit.dart';
 import 'package:curelink/features/medication/presentation/cubit/medication_state.dart';
@@ -11,8 +12,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddMedicinePage extends StatefulWidget {
   final String? patientId;
+  final String? medicineId;
 
-  const AddMedicinePage({super.key, this.patientId});
+  const AddMedicinePage({super.key, this.patientId, this.medicineId});
 
   @override
   State<AddMedicinePage> createState() => _AddMedicinePageState();
@@ -34,11 +36,20 @@ class _AddMedicinePageState extends State<AddMedicinePage> {
   File? selectedMedicineImage;
   List<int> selectedWeekdays = [];
 
+  // True until the medicine check finishes (Edit or Add Mode is known).
+  bool isInitializing = true;
+  String? existingImageUrl;
+
   @override
   void initState() {
     super.initState();
 
     medicationCubit = MedicationCubit(repository: MedicationRepository());
+
+    // Wait for the first frame so BlocConsumer is already listening.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) loadMedicine();
+    });
   }
 
   @override
@@ -54,6 +65,36 @@ class _AddMedicinePageState extends State<AddMedicinePage> {
     medicationCubit.close();
 
     super.dispose();
+  }
+
+  void loadMedicine() {
+    final patientId =
+        widget.patientId ?? FirebaseAuth.instance.currentUser?.uid ?? '';
+
+    medicationCubit.loadMedication(
+      patientId: patientId,
+      medicineId: widget.medicineId,
+    );
+  }
+
+  void fillForm(MedicationModel medication) {
+    nameController.text = medication.name;
+    doseController.text = medication.dosage;
+    timeController.text = medication.times.isNotEmpty
+        ? medication.times.first
+        : '';
+    frequencyController.text = medication.frequency;
+
+    // Same raw values MedicineForm uses, so the save logic stays unchanged.
+    durationController.text = medication.durationDays == null
+        ? 'Ongoing'
+        : '${medication.durationDays} days';
+
+    descriptionController.text = medication.description ?? '';
+    notesController.text = medication.instructions ?? '';
+
+    selectedWeekdays = List<int>.from(medication.weekdays);
+    existingImageUrl = medication.imageUrl;
   }
 
   void saveMedicine() {
@@ -107,7 +148,7 @@ class _AddMedicinePageState extends State<AddMedicinePage> {
         elevation: 0,
         automaticallyImplyLeading: false,
         title: Text(
-          l10n.addMedicine,
+          medicationCubit.isEditMode ? l10n.editMedicine : l10n.addMedicine,
           style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.w400,
@@ -120,6 +161,19 @@ class _AddMedicinePageState extends State<AddMedicinePage> {
         bloc: medicationCubit,
 
         listener: (context, state) {
+          if (state is MedicationLoaded) {
+            setState(() {
+              fillForm(state.medication);
+              isInitializing = false;
+            });
+          }
+
+          if (state is MedicationNew) {
+            setState(() {
+              isInitializing = false;
+            });
+          }
+
           if (state is MedicationSuccess) {
             if (Navigator.of(context).canPop()) {
               Navigator.of(context).pop(true);
@@ -141,6 +195,33 @@ class _AddMedicinePageState extends State<AddMedicinePage> {
         },
 
         builder: (context, state) {
+          if (state is MedicationLoadFailure) {
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      state.message,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: AppTheme.navy, fontSize: 16),
+                    ),
+                    const SizedBox(height: 12),
+                    IconButton(
+                      onPressed: loadMedicine,
+                      icon: Icon(Icons.refresh, color: AppTheme.navy),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }
+
+          if (isInitializing) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
           final isLoading = state is MedicationLoading;
 
           return Form(
@@ -156,6 +237,7 @@ class _AddMedicinePageState extends State<AddMedicinePage> {
                   durationController: durationController,
                   descriptionController: descriptionController,
                   notesController: notesController,
+                  initialImageUrl: existingImageUrl,
 
                   onImageSelected: (image) {
                     selectedMedicineImage = image;

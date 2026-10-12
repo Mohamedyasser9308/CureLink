@@ -17,6 +17,7 @@ class MedicineForm extends StatefulWidget {
 
   final ValueChanged<File?> onImageSelected;
   final ValueChanged<List<int>> onWeekdaysChanged;
+  final String? initialImageUrl;
 
   const MedicineForm({
     super.key,
@@ -29,6 +30,7 @@ class MedicineForm extends StatefulWidget {
     required this.notesController,
     required this.onImageSelected,
     required this.onWeekdaysChanged,
+    this.initialImageUrl,
   });
 
   @override
@@ -77,6 +79,30 @@ class _MedicineFormState extends State<MedicineForm> {
     l10n.medSaturday,
     l10n.medSunday,
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    selectedFrequency = resolveFrequency(widget.frequencyController.text);
+
+    final duration = widget.durationController.text;
+    selectedDuration = durationOptions.contains(duration) ? duration : null;
+  }
+
+  String? resolveFrequency(String value) {
+    if (value.isEmpty) return null;
+
+    if (frequencyOptions.contains(value)) return value;
+
+    for (final locale in AppLocalizations.supportedLocales) {
+      final labels = frequencyLabels(lookupAppLocalizations(locale));
+      final index = labels.indexOf(value);
+
+      if (index != -1) return frequencyOptions[index];
+    }
+
+    return null;
+  }
 
   @override
   void didChangeDependencies() {
@@ -249,7 +275,9 @@ class _MedicineFormState extends State<MedicineForm> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        MedicineImagePicker(onImageSelected: widget.onImageSelected),
+
+        MedicineImagePicker(onImageSelected: widget.onImageSelected,initialImageUrl: widget.initialImageUrl,),
+
         const SizedBox(height: 20),
 
         MedicineTextField(
