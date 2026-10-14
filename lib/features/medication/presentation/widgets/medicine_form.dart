@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 class MedicineForm extends StatefulWidget {
   final TextEditingController nameController;
   final TextEditingController doseController;
-  final TextEditingController timeController;
   final TextEditingController frequencyController;
   final TextEditingController durationController;
   final TextEditingController descriptionController;
@@ -19,17 +18,18 @@ class MedicineForm extends StatefulWidget {
   final ValueChanged<List<int>> onWeekdaysChanged;
   final ValueChanged<String> onFrequencyChanged;
   final ValueChanged<String> onDurationChanged;
+  final ValueChanged<List<String>> onTimesChanged;
 
   final String? initialImageUrl;
   final List<int> initialWeekdays;
   final String? initialFrequency;
   final String? initialDuration;
+  final List<String> initialTimes;
 
   const MedicineForm({
     super.key,
     required this.nameController,
     required this.doseController,
-    required this.timeController,
     required this.frequencyController,
     required this.durationController,
     required this.descriptionController,
@@ -38,10 +38,12 @@ class MedicineForm extends StatefulWidget {
     required this.onWeekdaysChanged,
     required this.onFrequencyChanged,
     required this.onDurationChanged,
+    required this.onTimesChanged,
     this.initialImageUrl,
     this.initialWeekdays = const [],
     this.initialFrequency,
     this.initialDuration,
+    this.initialTimes = const [],
   });
 
   @override
@@ -66,6 +68,7 @@ class _MedicineFormState extends State<MedicineForm> {
   String? selectedFrequency;
   String? selectedDuration;
   List<int> selectedWeekdays = [];
+  List<String> selectedTimes = [];
 
   List<String> frequencyLabels(AppLocalizations l10n) => [
         l10n.medEveryDay,
@@ -108,6 +111,7 @@ class _MedicineFormState extends State<MedicineForm> {
         .toSet()
         .toList()
       ..sort();
+    selectedTimes = List<String>.from(widget.initialTimes);
   }
 
   @override
@@ -230,9 +234,14 @@ class _MedicineFormState extends State<MedicineForm> {
 
     if (!mounted || selectedTime == null) return;
 
-    widget.timeController.text =
+    final time =
         '${selectedTime.hour.toString().padLeft(2, '0')}:'
         '${selectedTime.minute.toString().padLeft(2, '0')}';
+    if (selectedTimes.contains(time)) return;
+    setState(() {
+      selectedTimes = [...selectedTimes, time]..sort();
+    });
+    widget.onTimesChanged(List<String>.from(selectedTimes));
   }
 
   Future<List<int>?> selectDays() async {
@@ -456,24 +465,32 @@ class _MedicineFormState extends State<MedicineForm> {
         Text(l10n.time, style: sectionLabelStyle),
         const SizedBox(height: 8),
 
-        TextFormField(
-          controller: widget.timeController,
-          readOnly: true,
-          onTap: selectTime,
-          validator: (value) {
-            if (value == null || value.trim().isEmpty) {
-              return l10n.medTimeRequired;
-            }
-            return null;
-          },
-          decoration: medicineDecoration(
-            context,
-            suffixIcon: Icon(
-              Icons.access_time_outlined,
-              color: iconColor,
-            ),
-          ).copyWith(hintText: l10n.medSelectTime),
+        OutlinedButton.icon(
+          onPressed: selectTime,
+          icon: Icon(Icons.access_time_outlined, color: iconColor),
+          label: Text(l10n.medSelectTime),
         ),
+        if (selectedTimes.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: Wrap(
+              spacing: 8,
+              runSpacing: 4,
+              children: selectedTimes
+                  .map(
+                    (time) => Chip(
+                      label: Text(time),
+                      onDeleted: () {
+                        setState(() => selectedTimes.remove(time));
+                        widget.onTimesChanged(
+                          List<String>.from(selectedTimes),
+                        );
+                      },
+                    ),
+                  )
+                  .toList(),
+            ),
+          ),
         const SizedBox(height: 20),
 
         Text(l10n.medFrequencyDuration, style: sectionLabelStyle),

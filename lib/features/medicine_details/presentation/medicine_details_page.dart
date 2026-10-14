@@ -1,4 +1,4 @@
-import 'package:curelink/features/medication/presentation/pages/add_medicine_page.dart';
+import 'package:curelink/features/medication/presentation/add_medicine_page.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
@@ -40,25 +40,25 @@ class _MedicineDetailsPageState extends State<MedicineDetailsPage> {
   }
 
   Future<MedicationModel?> _loadMedicine() {
-  if (widget.patientId.trim().isEmpty || widget.medicationId.trim().isEmpty) {
-    throw ArgumentError('Patient ID and medication ID are required.');
+    if (widget.patientId.trim().isEmpty || widget.medicationId.trim().isEmpty) {
+      throw ArgumentError('Patient ID and medication ID are required.');
+    }
+
+    return _repository.getMedication(
+      patientId: widget.patientId,
+      medicationId: widget.medicationId,
+    );
   }
 
-  return _repository.getMedication(
-    patientId: widget.patientId,
-    medicationId: widget.medicationId,
-  );
-}
+  void _reloadMedicine() {
+    setState(() {
+      _medicineFuture = _loadMedicine();
+    });
+  }
 
-void _reloadMedicine() {
-  setState(() {
-    _medicineFuture = _loadMedicine();
-  });
-}
-
-void _retryLoading() {
-  _reloadMedicine();
-}
+  void _retryLoading() {
+    _reloadMedicine();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +71,10 @@ void _retryLoading() {
         : theme.colorScheme.onSurfaceVariant;
 
     return AppScaffold(
-      showAppBar: false,
+      appBar: AppBar(
+        title: Text(l10n.medicineDetails),
+        automaticallyImplyLeading: true,
+      ),
       scrollable: true,
       body: Padding(
         padding: const EdgeInsets.fromLTRB(0, 28, 0, 32),
@@ -170,7 +173,6 @@ void _retryLoading() {
                       setState(() {
                         _medicineFuture = _loadMedicine();
                       });
-                      
                     }
                   },
                   icon: Icons.edit_outlined,
@@ -328,24 +330,18 @@ class _MedicinePlaceholder extends StatelessWidget {
   );
 }
 
-
 class _MedicineSummary extends StatelessWidget {
   final MedicationModel medication;
   final Color titleColor;
 
-  const _MedicineSummary({
-    required this.medication,
-    required this.titleColor,
-  });
+  const _MedicineSummary({required this.medication, required this.titleColor});
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final locale = Localizations.localeOf(context).toString();
 
-    final time = medication.times.isEmpty
-        ? '—'
-        : medication.times.join(', ');
+    final time = medication.times.isEmpty ? '—' : medication.times.join(', ');
 
     final duration = switch (medication.durationDays) {
       null => l10n.ongoing,
@@ -355,25 +351,21 @@ class _MedicineSummary extends StatelessWidget {
       final days => days.toString(),
     };
 
-    final startDate =
-        DateFormat.yMMMd(locale).format(medication.startDate);
+    final startDate = DateFormat.yMMMd(locale).format(medication.startDate);
 
     final weekdays = medication.weekdays.isEmpty
         ? '—'
         : medication.weekdays
-            .map((day) {
-              final date = DateTime(2024, 1, day);
-              return DateFormat.E(locale).format(date);
-            })
-            .join(', ');
+              .map((day) {
+                final date = DateTime(2024, 1, day);
+                return DateFormat.E(locale).format(date);
+              })
+              .join(', ');
 
     final rows = <(String, String)>[
       (l10n.dose, medication.dosage),
       (l10n.time, time),
-      (
-        l10n.frequency,
-        _localizedFrequency(l10n, medication.frequency),
-      ),
+      (l10n.frequency, _localizedFrequency(l10n, medication.frequency)),
       (l10n.duration, duration),
       (l10n.startDate, startDate),
       (l10n.conditions, weekdays),
@@ -381,12 +373,11 @@ class _MedicineSummary extends StatelessWidget {
         (l10n.instructions, medication.instructions!.trim()),
     ];
 
-    final textStyle =
-        Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: titleColor,
-              fontSize: 13,
-              height: 1.5,
-            );
+    final textStyle = Theme.of(context).textTheme.bodySmall?.copyWith(
+      color: titleColor,
+      fontSize: 13,
+      height: 1.5,
+    );
 
     return Container(
       width: double.infinity,
@@ -405,9 +396,7 @@ class _MedicineSummary extends StatelessWidget {
                 children: [
                   TextSpan(
                     text: '${row.$1}: ',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: const TextStyle(fontWeight: FontWeight.w600),
                   ),
                   TextSpan(text: row.$2),
                 ],
@@ -419,10 +408,7 @@ class _MedicineSummary extends StatelessWidget {
     );
   }
 
-  String _localizedFrequency(
-    AppLocalizations l10n,
-    String value,
-  ) {
+  String _localizedFrequency(AppLocalizations l10n, String value) {
     switch (value.trim().toLowerCase()) {
       case 'every day':
       case 'daily':

@@ -108,7 +108,7 @@ class MedicationCubit extends Cubit<MedicationState> {
     required String patientId,
     required String name,
     required String dosage,
-    required String time,
+    required List<String> times,
     required String frequency,
     required List<int> weekdays,
     required int? durationDays,
@@ -130,13 +130,14 @@ class MedicationCubit extends Cubit<MedicationState> {
     final normalizedPatientId = patientId.trim();
     final normalizedName = name.trim();
     final normalizedDosage = dosage.trim();
-    final normalizedTime = time.trim();
+    final normalizedTimes = times.map((time) => time.trim())
+        .where((time) => time.isNotEmpty).toSet().toList()..sort();
     final normalizedFrequency = frequency.trim();
 
     if (normalizedPatientId.isEmpty ||
         normalizedName.isEmpty ||
         normalizedDosage.isEmpty ||
-        normalizedTime.isEmpty ||
+        normalizedTimes.isEmpty ||
         normalizedFrequency.isEmpty) {
       emit(
         const MedicationError(
@@ -229,7 +230,7 @@ class MedicationCubit extends Cubit<MedicationState> {
             repository.createMedicationId(normalizedPatientId),
         name: normalizedName,
         dosage: normalizedDosage,
-        times: [normalizedTime],
+        times: normalizedTimes,
         frequency: normalizedFrequency,
         weekdays: weekdays.toSet().toList()..sort(),
         durationDays: durationDays,

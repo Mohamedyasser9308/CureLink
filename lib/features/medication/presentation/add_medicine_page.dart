@@ -26,36 +26,35 @@ class AddMedicinePage extends StatefulWidget {
 }
 
 class _AddMedicinePageState extends State<AddMedicinePage> {
-  final formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
+
+  late final MedicationCubit medicationCubit;
 
   final nameController = TextEditingController();
   final doseController = TextEditingController();
-  final timeController = TextEditingController();
   final frequencyController = TextEditingController();
   final durationController = TextEditingController();
   final descriptionController = TextEditingController();
   final notesController = TextEditingController();
 
-  late final MedicationCubit medicationCubit;
-
-  File? selectedMedicineImage;
+  File? selectedImage;
   List<int> selectedWeekdays = [];
+  List<String> selectedTimes = [];
 
-  bool isInitializing = true;
-  bool isEditMode = false;
-
-  String? existingImageUrl;
   String? selectedFrequencyValue;
   String? selectedDurationValue;
+  String? existingImageUrl;
 
+  bool isInitializing = true;
   int formRevision = 0;
+
+  bool get isEditMode =>
+      widget.medicineId != null &&
+      widget.medicineId!.trim().isNotEmpty;
 
   @override
   void initState() {
     super.initState();
-
-    isEditMode = widget.medicineId != null &&
-        widget.medicineId!.trim().isNotEmpty;
 
     medicationCubit = MedicationCubit(
       repository: MedicationRepository(),
@@ -66,21 +65,6 @@ class _AddMedicinePageState extends State<AddMedicinePage> {
         loadMedicine();
       }
     });
-  }
-
-  @override
-  void dispose() {
-    nameController.dispose();
-    doseController.dispose();
-    timeController.dispose();
-    frequencyController.dispose();
-    durationController.dispose();
-    descriptionController.dispose();
-    notesController.dispose();
-
-    medicationCubit.close();
-
-    super.dispose();
   }
 
   String get resolvedPatientId {
@@ -101,26 +85,28 @@ class _AddMedicinePageState extends State<AddMedicinePage> {
     nameController.text = medication.name;
     doseController.text = medication.dosage;
 
-    timeController.text = medication.times.isNotEmpty
-        ? medication.times.first
-        : '';
+    selectedTimes = List<String>.from(medication.times);
 
+    frequencyController.text = medication.frequency;
     selectedFrequencyValue = medication.frequency;
-    selectedDurationValue = medication.durationDays == null
+
+    durationController.text = medication.durationDays == null
         ? 'Ongoing'
         : '${medication.durationDays} days';
 
-    frequencyController.text = medication.frequency;
-    durationController.text = selectedDurationValue!;
+    selectedDurationValue = medication.durationDays == null
+        ? 'Ongoing'
+        : '${medication.durationDays} days';
 
     descriptionController.text = medication.description ?? '';
     notesController.text = medication.instructions ?? '';
 
     selectedWeekdays = List<int>.from(medication.weekdays);
     existingImageUrl = medication.imageUrl;
-    selectedMedicineImage = null;
 
-    isEditMode = true;
+    // Clear any newly selected local image when loading a medicine.
+    selectedImage = null;
+
     formRevision++;
   }
 
@@ -138,22 +124,20 @@ class _AddMedicinePageState extends State<AddMedicinePage> {
   }
 
   Future<void> saveMedicine() async {
-    if (isInitializing ||
-        medicationCubit.state is MedicationLoading) {
-      return;
-    }
-
-    if (formKey.currentState?.validate() != true) {
-      return;
-    }
-
     final l10n = AppLocalizations.of(context)!;
-    final patientId = resolvedPatientId;
 
-    if (FirebaseAuth.instance.currentUser == null) {
+    if (medicationCubit.state is MedicationLoading) return;
+
+    if (!(_formKey.currentState?.validate() ?? false)) return;
+
+    final currentUser = FirebaseAuth.instance.currentUser;
+
+    if (currentUser == null) {
       _showMessage(l10n.noAuthenticatedUser);
       return;
     }
+
+    final patientId = resolvedPatientId;
 
     if (patientId.isEmpty) {
       _showMessage(l10n.medPatientUnavailable);
@@ -161,20 +145,24 @@ class _AddMedicinePageState extends State<AddMedicinePage> {
     }
 
     final frequency = selectedFrequencyValue;
+    final duration = selectedDurationValue;
 
-    if (frequency == null || frequency.isEmpty) {
+    if (frequency == null || duration == null) {
       _showMessage(l10n.medFrequencyRequired);
       return;
     }
 
-    final duration = selectedDurationValue;
-
-    if (duration == null || duration.isEmpty) {
-      _showMessage(l10n.medDurationRequired);
+    if (frequency == 'Specific days' && selectedWeekdays.isEmpty) {
+      _showMessage(l10n.medSelectDays);
       return;
     }
 
-    final int? durationDays;
+    if (selectedTimes.isEmpty) {
+      _showMessage(l10n.medTimeRequired);
+      return;
+    }
+
+    int? durationDays;
 
     switch (duration) {
       case '7 days':
@@ -194,24 +182,32 @@ class _AddMedicinePageState extends State<AddMedicinePage> {
         return;
     }
 
-    if (frequency == 'Specific days' &&
-        selectedWeekdays.isEmpty) {
-      _showMessage(l10n.medSelectDays);
-      return;
-    }
-
     await medicationCubit.saveMedication(
       patientId: patientId,
       name: nameController.text.trim(),
       dosage: doseController.text.trim(),
-      time: timeController.text.trim(),
+      times: List<String>.from(selectedTimes),
       frequency: frequency,
       weekdays: List<int>.from(selectedWeekdays),
       durationDays: durationDays,
       description: descriptionController.text.trim(),
       instructions: notesController.text.trim(),
-      image: selectedMedicineImage,
+      image: selectedImage,
     );
+  }
+
+  @override
+  void dispose() {
+    medicationCubit.close();
+
+    nameController.dispose();
+    doseController.dispose();
+    frequencyController.dispose();
+    durationController.dispose();
+    descriptionController.dispose();
+    notesController.dispose();
+
+    super.dispose();
   }
 
   @override
@@ -220,165 +216,164 @@ class _AddMedicinePageState extends State<AddMedicinePage> {
     final theme = Theme.of(context);
     final colors = theme.colorScheme;
 
-    return Scaffold(
-      backgroundColor: theme.scaffoldBackgroundColor,
-      appBar: AppBar(
+    return BlocProvider.value(
+      value: medicationCubit,
+      child: Scaffold(
         backgroundColor: theme.scaffoldBackgroundColor,
-        foregroundColor: colors.onSurface,
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        title: Text(
-          isEditMode ? l10n.editMedicine : l10n.addMedicine,
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.w400,
-            color: colors.onSurface,
+        appBar: AppBar(
+          backgroundColor: theme.scaffoldBackgroundColor,
+          foregroundColor: colors.onSurface,
+          elevation: 0,
+          title: Text(
+            isEditMode ? l10n.editMedicine : l10n.addMedicine,
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.w400,
+              color: colors.onSurface,
+            ),
           ),
         ),
-      ),
-      body: BlocConsumer<MedicationCubit, MedicationState>(
-        bloc: medicationCubit,
-        listener: (context, state) {
-          if (state is MedicationLoaded) {
-            setState(() {
-              fillForm(state.medication);
-              isInitializing = false;
-            });
-          } else if (state is MedicationNew) {
-            setState(() {
-              isEditMode = false;
-              isInitializing = false;
-            });
-          } else if (state is MedicationLoadFailure) {
-            setState(() {
-              isInitializing = false;
-            });
-            _showMessage(state.message);
-          } else if (state is MedicationSuccess) {
-            if (Navigator.of(context).canPop()) {
-              Navigator.of(context).pop(true);
-            } else {
-              _showMessage(l10n.medSavedSuccessfully);
+        body: BlocConsumer<MedicationCubit, MedicationState>(
+          listener: (context, state) {
+            if (state is MedicationLoaded) {
+              setState(() {
+                fillForm(state.medication);
+                isInitializing = false;
+              });
+            } else if (state is MedicationNew) {
+              setState(() {
+                isInitializing = false;
+              });
+            } else if (state is MedicationLoadFailure) {
+              setState(() {
+                isInitializing = false;
+              });
+              _showMessage(state.message);
+            } else if (state is MedicationSuccess) {
+              if (Navigator.of(context).canPop()) {
+                Navigator.of(context).pop(true);
+              } else {
+                _showMessage(l10n.medSavedSuccessfully);
+              }
+            } else if (state is MedicationError) {
+              _showMessage(state.message);
             }
-          } else if (state is MedicationError) {
-            _showMessage(state.message);
-          }
-        },
-        builder: (context, state) {
-          if (state is MedicationLoadFailure) {
-            return Center(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      state.message,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: colors.onSurface,
-                        fontSize: 16,
+          },
+          builder: (context, state) {
+            if (state is MedicationLoadFailure) {
+              return Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        state.message,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: colors.onSurface,
+                          fontSize: 16,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 12),
-                    ElevatedButton.icon(
-                      onPressed: () {
-                        setState(() {
-                          isInitializing = true;
-                        });
-                        loadMedicine();
+                      const SizedBox(height: 12),
+                      ElevatedButton.icon(
+                        onPressed: () {
+                          setState(() {
+                            isInitializing = true;
+                          });
+                          loadMedicine();
+                        },
+                        icon: const Icon(Icons.refresh),
+                        label: Text(l10n.retry),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }
+
+            if (isInitializing || state is MedicationInitial) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+
+            final isLoading = state is MedicationLoading;
+
+            return SafeArea(
+              child: Form(
+                key: _formKey,
+                child: ListView(
+                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
+                  children: [
+                    MedicineForm(
+                      key: ValueKey(formRevision),
+                      nameController: nameController,
+                      doseController: doseController,
+                      initialTimes: selectedTimes,
+                      frequencyController: frequencyController,
+                      durationController: durationController,
+                      descriptionController: descriptionController,
+                      notesController: notesController,
+                      initialImageUrl: existingImageUrl,
+                      initialWeekdays: selectedWeekdays,
+                      initialFrequency: selectedFrequencyValue,
+                      initialDuration: selectedDurationValue,
+                      onImageSelected: (image) {
+                        selectedImage = image;
                       },
-                      icon: const Icon(Icons.refresh),
-                      label: Text(l10n.retry),
+                      onWeekdaysChanged: (days) {
+                        selectedWeekdays = List<int>.from(days);
+                      },
+                      onFrequencyChanged: (frequency) {
+                        selectedFrequencyValue = frequency;
+                      },
+                      onDurationChanged: (duration) {
+                        selectedDurationValue = duration;
+                      },
+                      onTimesChanged: (times) {
+                        selectedTimes = List<String>.from(times);
+                      },
+                    ),
+                    const SizedBox(height: 24),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: isLoading ? null : saveMedicine,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: colors.primary,
+                          foregroundColor: colors.onPrimary,
+                          disabledBackgroundColor:
+                              colors.primary.withValues(alpha: 0.5),
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(14),
+                          ),
+                        ),
+                        child: isLoading
+                            ? const SizedBox(
+                                width: 22,
+                                height: 22,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: Colors.white,
+                                ),
+                              )
+                            : Text(
+                                l10n.medSaveMedicine,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                      ),
                     ),
                   ],
                 ),
               ),
             );
-          }
-
-          if (isInitializing ||
-              state is MedicationInitial) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-
-          final isLoading = state is MedicationLoading;
-
-          return SafeArea(
-            child: Form(
-              key: formKey,
-              child: ListView(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 20,
-                ),
-                children: [
-                  MedicineForm(
-                    key: ValueKey(formRevision),
-                    nameController: nameController,
-                    doseController: doseController,
-                    timeController: timeController,
-                    frequencyController: frequencyController,
-                    durationController: durationController,
-                    descriptionController: descriptionController,
-                    notesController: notesController,
-                    initialImageUrl: existingImageUrl,
-                    initialWeekdays: selectedWeekdays,
-                    initialFrequency: selectedFrequencyValue,
-                    initialDuration: selectedDurationValue,
-                    onImageSelected: (image) {
-                      selectedMedicineImage = image;
-                    },
-                    onWeekdaysChanged: (days) {
-                      selectedWeekdays = List<int>.from(days);
-                    },
-                    onFrequencyChanged: (frequency) {
-                      selectedFrequencyValue = frequency;
-                    },
-                    onDurationChanged: (duration) {
-                      selectedDurationValue = duration;
-                    },
-                  ),
-                  const SizedBox(height: 30),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 55,
-                    child: ElevatedButton(
-                      onPressed: isLoading ? null : saveMedicine,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: colors.primary,
-                        foregroundColor: colors.onPrimary,
-                        disabledBackgroundColor:
-                            colors.primary.withValues(alpha: 0.5),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                      ),
-                      child: isLoading
-                          ? SizedBox(
-                              height: 24,
-                              width: 24,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                color: colors.onPrimary,
-                              ),
-                            )
-                          : Text(
-                              l10n.medSaveMedicine,
-                              style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
+          },
+        ),
       ),
     );
   }

@@ -57,12 +57,14 @@ class AppScaffold extends StatelessWidget {
     return Scaffold(
       backgroundColor: backgroundColor,
       resizeToAvoidBottomInset: resizeToAvoidBottomInset,
-      appBar: appBar ??
+      appBar:
+          appBar ??
           (showAppBar && (title != null || actions != null || leading != null)
               ? AppBar(
                   title: title != null ? Text(title!) : null,
                   actions: actions,
                   leading: leading,
+                  automaticallyImplyLeading: true,
                 )
               : null),
       bottomNavigationBar: bottomNavigationBar,
