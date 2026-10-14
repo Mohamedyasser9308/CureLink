@@ -87,7 +87,7 @@ class _PatientHomeView extends StatelessWidget {
 }
 
 /// يظهر اختيار الوضع فقط للمستخدم الذي دوره Both.
-/// سيتم تفعيل الانتقال لوضع مقدم الرعاية بعد إنشاء شاشته.
+/// سيتم تفعيل التبديل عند إنشاء شاشة مقدم الرعاية.
 Widget _modeToggle(bool canSwitch) {
   if (!canSwitch) {
     return const SizedBox.shrink();
@@ -98,7 +98,7 @@ Widget _modeToggle(bool canSwitch) {
     child: ModeSwitcher(
       mode: AppMode.patient,
       onChanged: (_) {
-        // TODO: Navigate to CaregiverHomeScreen when it is implemented.
+        // TODO: إضافة التنقل إلى CaregiverHomeScreen لاحقًا.
       },
     ),
   );
@@ -128,9 +128,7 @@ class _SuccessBody extends StatelessWidget {
       children: [
         _modeToggle(state.canSwitchMode),
 
-        HomeHeader(
-          userName: state.userName,
-        ),
+        HomeHeader(userName: state.userName),
 
         const SizedBox(height: 20),
 
@@ -183,8 +181,7 @@ class _SuccessBody extends StatelessWidget {
 
         const SizedBox(height: 8),
 
-        // مؤقتًا، عدد الجرعات المكتملة يظل صفرًا
-        // لحين تنفيذ تسجيل تناول الدواء.
+        // سيتم ربط عدد الجرعات المكتملة بسجل تناول الدواء لاحقًا.
         ProgressCard(
           done: 0,
           total: state.doses.length,
@@ -192,9 +189,7 @@ class _SuccessBody extends StatelessWidget {
 
         const SizedBox(height: 12),
 
-        SosButton(
-          onPressed: onSos,
-        ),
+        SosButton(onPressed: onSos),
       ],
     );
   }
@@ -236,9 +231,7 @@ class _EmptyBody extends StatelessWidget {
 
           const Spacer(),
 
-          SosButton(
-            onPressed: onSos,
-          ),
+          SosButton(onPressed: onSos),
 
           const SizedBox(height: 24),
         ],
