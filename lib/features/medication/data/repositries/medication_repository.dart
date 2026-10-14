@@ -5,8 +5,9 @@ import 'package:curelink/features/medication/data/models/medication_model.dart';
 class MedicationRepository {
   final FirebaseFirestore firestore;
 
-  MedicationRepository({FirebaseFirestore? firestore})
-      : firestore = firestore ?? FirebaseFirestore.instance;
+  MedicationRepository({
+    FirebaseFirestore? firestore,
+  }) : firestore = firestore ?? FirebaseFirestore.instance;
 
   CollectionReference<Map<String, dynamic>> medicationsRef(
     String patientId,
@@ -40,6 +41,28 @@ class MedicationRepository {
         .set(medication.toMap());
   }
 
+  /// Get one medication by ID.
+  Future<MedicationModel?> getMedicationById({
+    required String patientId,
+    required String medicineId,
+  }) async {
+    if (medicineId.trim().isEmpty) {
+      throw ArgumentError('Medication ID cannot be empty');
+    }
+
+    final doc = await medicationsRef(patientId)
+        .doc(medicineId)
+        .get();
+
+    final data = doc.data();
+
+    if (!doc.exists || data == null) {
+      return null;
+    }
+
+    return MedicationModel.fromMap(data, doc.id);
+  }
+
   /// Get all medications for a patient.
   Future<List<MedicationModel>> getMedications({
     required String patientId,
@@ -51,7 +74,7 @@ class MedicationRepository {
     }).toList();
   }
 
-  /// Replace an existing medication with the updated model.
+  /// Update an existing medication only.
   Future<void> updateMedication({
     required String patientId,
     required MedicationModel medication,
@@ -62,10 +85,10 @@ class MedicationRepository {
 
     await medicationsRef(patientId)
         .doc(medication.id)
-        .set(medication.toMap());
+        .update(medication.toMap());
   }
 
-  /// Delete a medication document from Firestore.
+  /// Delete a medication.
   Future<void> deleteMedication({
     required String patientId,
     required String medicationId,
@@ -74,6 +97,8 @@ class MedicationRepository {
       throw ArgumentError('Medication ID cannot be empty');
     }
 
-    await medicationsRef(patientId).doc(medicationId).delete();
+    await medicationsRef(patientId)
+        .doc(medicationId)
+        .delete();
   }
 }

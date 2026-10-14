@@ -21,6 +21,9 @@ class MedicineForm extends StatefulWidget {
   final ValueChanged<String> onFrequencyChanged;
   final ValueChanged<String> onDurationChanged;
 
+  final String? initialImageUrl;
+  final List<int> initialWeekdays;
+
   const MedicineForm({
     super.key,
     required this.nameController,
@@ -34,6 +37,8 @@ class MedicineForm extends StatefulWidget {
     required this.onWeekdaysChanged,
     required this.onFrequencyChanged,
     required this.onDurationChanged,
+    this.initialImageUrl,
+    this.initialWeekdays = const [],
   });
 
   @override
@@ -57,6 +62,8 @@ class _MedicineFormState extends State<MedicineForm> {
 
   String? selectedFrequency;
   String? selectedDuration;
+
+  List<int> selectedWeekdays = [];
 
   List<String> frequencyLabels(AppLocalizations l10n) => [
         l10n.medEveryDay,
@@ -83,28 +90,76 @@ class _MedicineFormState extends State<MedicineForm> {
       ];
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
+  void initState() {
+    super.initState();
 
-    final l10n = AppLocalizations.of(context)!;
+    selectedFrequency =
+        resolveFrequency(widget.frequencyController.text);
 
-    if (selectedFrequency != null) {
-      final index = frequencyOptions.indexOf(selectedFrequency!);
+    selectedDuration = resolveDuration(widget.durationController.text);
 
-      if (index != -1) {
-        widget.frequencyController.text =
-            frequencyLabels(l10n)[index];
+    selectedWeekdays = List<int>.from(widget.initialWeekdays);
+  }
+
+  @override
+  void didUpdateWidget(covariant MedicineForm oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.initialWeekdays != widget.initialWeekdays) {
+      selectedWeekdays = List<int>.from(widget.initialWeekdays);
+    }
+
+    if (oldWidget.frequencyController.text !=
+        widget.frequencyController.text) {
+      selectedFrequency =
+          resolveFrequency(widget.frequencyController.text);
+    }
+
+    if (oldWidget.durationController.text !=
+        widget.durationController.text) {
+      selectedDuration =
+          resolveDuration(widget.durationController.text);
+    }
+  }
+
+  String? resolveFrequency(String value) {
+    if (value.isEmpty) return null;
+
+    if (frequencyOptions.contains(value)) return value;
+
+    final normalizedValue = value.trim().toLowerCase();
+
+    for (final locale in AppLocalizations.supportedLocales) {
+      final labels = frequencyLabels(lookupAppLocalizations(locale));
+
+      for (var i = 0; i < labels.length; i++) {
+        if (labels[i].trim().toLowerCase() == normalizedValue) {
+          return frequencyOptions[i];
+        }
       }
     }
 
-    if (selectedDuration != null) {
-      final index = durationOptions.indexOf(selectedDuration!);
+    return null;
+  }
 
-      if (index != -1) {
-        widget.durationController.text =
-            durationLabels(l10n)[index];
+  String? resolveDuration(String value) {
+    if (value.isEmpty) return null;
+
+    if (durationOptions.contains(value)) return value;
+
+    final normalizedValue = value.trim().toLowerCase();
+
+    for (final locale in AppLocalizations.supportedLocales) {
+      final labels = durationLabels(lookupAppLocalizations(locale));
+
+      for (var i = 0; i < labels.length; i++) {
+        if (labels[i].trim().toLowerCase() == normalizedValue) {
+          return durationOptions[i];
+        }
       }
     }
+
+    return null;
   }
 
   Future<void> selectTime() async {
@@ -122,7 +177,7 @@ class _MedicineFormState extends State<MedicineForm> {
 
   Future<List<int>?> selectDays() async {
     final l10n = AppLocalizations.of(context)!;
-    final selectedDays = <int>{};
+    final selectedDays = selectedWeekdays.toSet();
     final names = dayNames(l10n);
 
     return showDialog<List<int>>(
@@ -134,6 +189,7 @@ class _MedicineFormState extends State<MedicineForm> {
               title: Text(l10n.medSelectDays),
               content: Wrap(
                 spacing: 8,
+                runSpacing: 8,
                 children: List.generate(7, (index) {
                   final day = index + 1;
 
@@ -187,6 +243,12 @@ class _MedicineFormState extends State<MedicineForm> {
             children: List.generate(frequencyOptions.length, (index) {
               return ListTile(
                 title: Text(labels[index]),
+                trailing: selectedFrequency == frequencyOptions[index]
+                    ? const Icon(
+                        Icons.check,
+                        color: AppTheme.primary,
+                      )
+                    : null,
                 onTap: () => Navigator.pop(sheetContext, index),
               );
             }),
@@ -211,10 +273,16 @@ class _MedicineFormState extends State<MedicineForm> {
     setState(() {
       selectedFrequency = selected;
       widget.frequencyController.text = labels[selectedIndex];
+
+      if (selected == 'Specific days') {
+        selectedWeekdays = List<int>.from(days);
+      } else {
+        selectedWeekdays = [];
+      }
     });
 
     widget.onFrequencyChanged(selected);
-    widget.onWeekdaysChanged(days);
+    widget.onWeekdaysChanged(List<int>.from(selectedWeekdays));
   }
 
   Future<void> selectDuration() async {
@@ -230,6 +298,12 @@ class _MedicineFormState extends State<MedicineForm> {
             children: List.generate(durationOptions.length, (index) {
               return ListTile(
                 title: Text(labels[index]),
+                trailing: selectedDuration == durationOptions[index]
+                    ? const Icon(
+                        Icons.check,
+                        color: AppTheme.primary,
+                      )
+                    : null,
                 onTap: () => Navigator.pop(sheetContext, index),
               );
             }),
@@ -259,7 +333,9 @@ class _MedicineFormState extends State<MedicineForm> {
       children: [
         MedicineImagePicker(
           onImageSelected: widget.onImageSelected,
+          initialImageUrl: widget.initialImageUrl,
         ),
+
         const SizedBox(height: 20),
 
         MedicineTextField(
@@ -272,6 +348,7 @@ class _MedicineFormState extends State<MedicineForm> {
             return null;
           },
         ),
+
         const SizedBox(height: 20),
 
         MedicineTextField(
@@ -284,6 +361,7 @@ class _MedicineFormState extends State<MedicineForm> {
             return null;
           },
         ),
+
         const SizedBox(height: 20),
 
         Text(
@@ -294,6 +372,7 @@ class _MedicineFormState extends State<MedicineForm> {
             fontWeight: FontWeight.bold,
           ),
         ),
+
         const SizedBox(height: 8),
 
         TextFormField(
@@ -310,10 +389,11 @@ class _MedicineFormState extends State<MedicineForm> {
             context,
             suffixIcon: const Icon(
               Icons.access_time_outlined,
-              color: Color(0xff86449F),
+              color: AppTheme.primary,
             ),
           ).copyWith(hintText: l10n.medSelectTime),
         ),
+
         const SizedBox(height: 20),
 
         Text(
@@ -324,6 +404,7 @@ class _MedicineFormState extends State<MedicineForm> {
             fontWeight: FontWeight.bold,
           ),
         ),
+
         const SizedBox(height: 8),
 
         TextFormField(
@@ -334,16 +415,43 @@ class _MedicineFormState extends State<MedicineForm> {
             if (value == null || value.trim().isEmpty) {
               return l10n.medFrequencyRequired;
             }
+
+            if (selectedFrequency == null) {
+              return l10n.medFrequencyRequired;
+            }
+
+            if (selectedFrequency == 'Specific days' &&
+                selectedWeekdays.isEmpty) {
+              return l10n.medSelectDays;
+            }
+
             return null;
           },
           decoration: medicineDecoration(
             context,
             suffixIcon: const Icon(
               Icons.keyboard_arrow_down,
-              color: Color(0xff86449F),
+              color: AppTheme.primary,
             ),
           ).copyWith(hintText: l10n.medSelectFrequency),
         ),
+
+        if (selectedFrequency == 'Specific days') ...[
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 6,
+            runSpacing: 6,
+            children: selectedWeekdays.map((day) {
+              final names = dayNames(l10n);
+
+              return Chip(
+                label: Text(names[day - 1]),
+                backgroundColor: AppTheme.primary.withValues(alpha: 0.1),
+              );
+            }).toList(),
+          ),
+        ],
+
         const SizedBox(height: 12),
 
         TextFormField(
@@ -354,16 +462,22 @@ class _MedicineFormState extends State<MedicineForm> {
             if (value == null || value.trim().isEmpty) {
               return l10n.medDurationRequired;
             }
+
+            if (selectedDuration == null) {
+              return l10n.medDurationRequired;
+            }
+
             return null;
           },
           decoration: medicineDecoration(
             context,
             suffixIcon: const Icon(
               Icons.calendar_month_outlined,
-              color: Color(0xff86449F),
+              color: AppTheme.primary,
             ),
           ).copyWith(hintText: l10n.medSelectDuration),
         ),
+
         const SizedBox(height: 20),
 
         MedicineTextField(
@@ -371,6 +485,7 @@ class _MedicineFormState extends State<MedicineForm> {
           maxLines: 3,
           controller: widget.descriptionController,
         ),
+
         const SizedBox(height: 20),
 
         MedicineTextField(
