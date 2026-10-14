@@ -24,6 +24,10 @@ class MedicineForm extends StatefulWidget {
   final String? initialImageUrl;
   final List<int> initialWeekdays;
 
+  // Canonical values used internally and stored in Firestore.
+  final String? initialFrequency;
+  final String? initialDuration;
+
   const MedicineForm({
     super.key,
     required this.nameController,
@@ -39,6 +43,8 @@ class MedicineForm extends StatefulWidget {
     required this.onDurationChanged,
     this.initialImageUrl,
     this.initialWeekdays = const [],
+    this.initialFrequency,
+    this.initialDuration,
   });
 
   @override
@@ -62,7 +68,6 @@ class _MedicineFormState extends State<MedicineForm> {
 
   String? selectedFrequency;
   String? selectedDuration;
-
   List<int> selectedWeekdays = [];
 
   List<String> frequencyLabels(AppLocalizations l10n) => [
@@ -93,47 +98,94 @@ class _MedicineFormState extends State<MedicineForm> {
   void initState() {
     super.initState();
 
-    selectedFrequency =
-        resolveFrequency(widget.frequencyController.text);
+    selectedFrequency = resolveFrequency(
+      widget.initialFrequency ?? widget.frequencyController.text,
+    );
 
-    selectedDuration = resolveDuration(widget.durationController.text);
+    selectedDuration = resolveDuration(
+      widget.initialDuration ?? widget.durationController.text,
+    );
 
-    selectedWeekdays = List<int>.from(widget.initialWeekdays);
+    selectedWeekdays = widget.initialWeekdays
+        .where((day) => day >= 1 && day <= 7)
+        .toSet()
+        .toList()
+      ..sort();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _syncLocalizedLabels();
   }
 
   @override
   void didUpdateWidget(covariant MedicineForm oldWidget) {
     super.didUpdateWidget(oldWidget);
 
+    if (oldWidget.initialFrequency != widget.initialFrequency) {
+      selectedFrequency = resolveFrequency(
+        widget.initialFrequency ?? widget.frequencyController.text,
+      );
+    }
+
+    if (oldWidget.initialDuration != widget.initialDuration) {
+      selectedDuration = resolveDuration(
+        widget.initialDuration ?? widget.durationController.text,
+      );
+    }
+
     if (oldWidget.initialWeekdays != widget.initialWeekdays) {
-      selectedWeekdays = List<int>.from(widget.initialWeekdays);
+      selectedWeekdays = widget.initialWeekdays
+          .where((day) => day >= 1 && day <= 7)
+          .toSet()
+          .toList()
+        ..sort();
     }
 
-    if (oldWidget.frequencyController.text !=
-        widget.frequencyController.text) {
-      selectedFrequency =
-          resolveFrequency(widget.frequencyController.text);
+    _syncLocalizedLabels();
+  }
+
+  void _syncLocalizedLabels() {
+    final l10n = AppLocalizations.of(context)!;
+
+    if (selectedFrequency != null) {
+      final index = frequencyOptions.indexOf(selectedFrequency!);
+
+      if (index >= 0) {
+        widget.frequencyController.text =
+            frequencyLabels(l10n)[index];
+      }
     }
 
-    if (oldWidget.durationController.text !=
-        widget.durationController.text) {
-      selectedDuration =
-          resolveDuration(widget.durationController.text);
+    if (selectedDuration != null) {
+      final index = durationOptions.indexOf(selectedDuration!);
+
+      if (index >= 0) {
+        widget.durationController.text =
+            durationLabels(l10n)[index];
+      }
     }
   }
 
   String? resolveFrequency(String value) {
-    if (value.isEmpty) return null;
+    final normalized = value.trim().toLowerCase();
 
-    if (frequencyOptions.contains(value)) return value;
+    if (normalized.isEmpty) return null;
 
-    final normalizedValue = value.trim().toLowerCase();
+    for (var i = 0; i < frequencyOptions.length; i++) {
+      if (frequencyOptions[i].toLowerCase() == normalized) {
+        return frequencyOptions[i];
+      }
+    }
 
     for (final locale in AppLocalizations.supportedLocales) {
-      final labels = frequencyLabels(lookupAppLocalizations(locale));
+      final labels = frequencyLabels(
+        lookupAppLocalizations(locale),
+      );
 
       for (var i = 0; i < labels.length; i++) {
-        if (labels[i].trim().toLowerCase() == normalizedValue) {
+        if (labels[i].trim().toLowerCase() == normalized) {
           return frequencyOptions[i];
         }
       }
@@ -143,19 +195,39 @@ class _MedicineFormState extends State<MedicineForm> {
   }
 
   String? resolveDuration(String value) {
-    if (value.isEmpty) return null;
+    final normalized = value.trim().toLowerCase();
 
-    if (durationOptions.contains(value)) return value;
+    if (normalized.isEmpty) return null;
 
-    final normalizedValue = value.trim().toLowerCase();
+    for (var i = 0; i < durationOptions.length; i++) {
+      if (durationOptions[i].toLowerCase() == normalized) {
+        return durationOptions[i];
+      }
+    }
 
     for (final locale in AppLocalizations.supportedLocales) {
-      final labels = durationLabels(lookupAppLocalizations(locale));
+      final labels = durationLabels(
+        lookupAppLocalizations(locale),
+      );
 
       for (var i = 0; i < labels.length; i++) {
-        if (labels[i].trim().toLowerCase() == normalizedValue) {
+        if (labels[i].trim().toLowerCase() == normalized) {
           return durationOptions[i];
         }
+      }
+    }
+
+    // Also support older values such as "7 أيام".
+    final number = int.tryParse(value.trim().split(' ').first);
+
+    if (number != null) {
+      switch (number) {
+        case 7:
+          return '7 days';
+        case 14:
+          return '14 days';
+        case 30:
+          return '30 days';
       }
     }
 
@@ -272,13 +344,9 @@ class _MedicineFormState extends State<MedicineForm> {
 
     setState(() {
       selectedFrequency = selected;
-      widget.frequencyController.text = labels[selectedIndex];
+      selectedWeekdays = selected == 'Specific days' ? days : [];
 
-      if (selected == 'Specific days') {
-        selectedWeekdays = List<int>.from(days);
-      } else {
-        selectedWeekdays = [];
-      }
+      widget.frequencyController.text = labels[selectedIndex];
     });
 
     widget.onFrequencyChanged(selected);
@@ -327,6 +395,7 @@ class _MedicineFormState extends State<MedicineForm> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final names = dayNames(l10n);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -391,7 +460,9 @@ class _MedicineFormState extends State<MedicineForm> {
               Icons.access_time_outlined,
               color: AppTheme.primary,
             ),
-          ).copyWith(hintText: l10n.medSelectTime),
+          ).copyWith(
+            hintText: l10n.medSelectTime,
+          ),
         ),
 
         const SizedBox(height: 20),
@@ -412,10 +483,6 @@ class _MedicineFormState extends State<MedicineForm> {
           readOnly: true,
           onTap: selectFrequency,
           validator: (value) {
-            if (value == null || value.trim().isEmpty) {
-              return l10n.medFrequencyRequired;
-            }
-
             if (selectedFrequency == null) {
               return l10n.medFrequencyRequired;
             }
@@ -433,7 +500,9 @@ class _MedicineFormState extends State<MedicineForm> {
               Icons.keyboard_arrow_down,
               color: AppTheme.primary,
             ),
-          ).copyWith(hintText: l10n.medSelectFrequency),
+          ).copyWith(
+            hintText: l10n.medSelectFrequency,
+          ),
         ),
 
         if (selectedFrequency == 'Specific days') ...[
@@ -442,11 +511,10 @@ class _MedicineFormState extends State<MedicineForm> {
             spacing: 6,
             runSpacing: 6,
             children: selectedWeekdays.map((day) {
-              final names = dayNames(l10n);
-
               return Chip(
                 label: Text(names[day - 1]),
-                backgroundColor: AppTheme.primary.withValues(alpha: 0.1),
+                backgroundColor:
+                    AppTheme.primary.withValues(alpha: 0.1),
               );
             }).toList(),
           ),
@@ -459,14 +527,9 @@ class _MedicineFormState extends State<MedicineForm> {
           readOnly: true,
           onTap: selectDuration,
           validator: (value) {
-            if (value == null || value.trim().isEmpty) {
-              return l10n.medDurationRequired;
-            }
-
             if (selectedDuration == null) {
               return l10n.medDurationRequired;
             }
-
             return null;
           },
           decoration: medicineDecoration(
@@ -475,7 +538,9 @@ class _MedicineFormState extends State<MedicineForm> {
               Icons.calendar_month_outlined,
               color: AppTheme.primary,
             ),
-          ).copyWith(hintText: l10n.medSelectDuration),
+          ).copyWith(
+            hintText: l10n.medSelectDuration,
+          ),
         ),
 
         const SizedBox(height: 20),
