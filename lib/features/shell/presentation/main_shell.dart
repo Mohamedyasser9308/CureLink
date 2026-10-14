@@ -1,9 +1,12 @@
+
 import 'package:curelink/core/widgets/app_bottom_nav_bar.dart';
 import 'package:curelink/core/widgets/app_empty_state.dart';
 import 'package:curelink/core/widgets/app_scaffold.dart';
 import 'package:curelink/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+
 import '../../home/patient_home_screen.dart';
+import '../../profile/presentation/pages/profile_page.dart';
 
 class MainShell extends StatefulWidget {
   const MainShell({super.key});
@@ -36,22 +39,22 @@ class _MainShellState extends State<MainShell> {
             title: l10n.navNotifications,
             icon: Icons.notifications_none_rounded,
           ),
-          _TabPlaceholder(
-            title: l10n.navProfile,
-            icon: Icons.person_outline_rounded,
-          ),
+          const ProfilePage(),
         ],
       ),
       bottomNavigationBar: AppBottomNavBar(
         currentIndex: _index,
-        onTap: (i) => setState(() => _index = i),
+        onTap: (index) => setState(() => _index = index),
       ),
     );
   }
 }
 
 class _TabPlaceholder extends StatelessWidget {
-  const _TabPlaceholder({required this.title, required this.icon});
+  const _TabPlaceholder({
+    required this.title,
+    required this.icon,
+  });
 
   final String title;
   final IconData icon;
@@ -60,7 +63,10 @@ class _TabPlaceholder extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppScaffold(
       title: title,
-      body: AppEmptyState(title: title, icon: icon),
+      body: AppEmptyState(
+        title: title,
+        icon: icon,
+      ),
     );
   }
 }

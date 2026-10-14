@@ -20,18 +20,17 @@ class MedicationCubit extends Cubit<MedicationState> {
 
   bool get isEditMode => _existingMedication != null;
 
-  /// Loads a medication when editing.
-  /// If medicineId is empty, the Cubit enters Add Mode.
+  /// Load an existing medication or enter Add Mode.
   Future<void> loadMedication({
     required String patientId,
     String? medicineId,
   }) async {
+    if (isClosed) return;
+
     emit(const MedicationLoading());
 
     try {
-      final user = FirebaseAuth.instance.currentUser;
-
-      if (user == null) {
+      if (FirebaseAuth.instance.currentUser == null) {
         _existingMedication = null;
         emit(
           const MedicationLoadFailure(
@@ -41,7 +40,9 @@ class MedicationCubit extends Cubit<MedicationState> {
         return;
       }
 
-      if (patientId.trim().isEmpty) {
+      final normalizedPatientId = patientId.trim();
+
+      if (normalizedPatientId.isEmpty) {
         _existingMedication = null;
         emit(
           const MedicationLoadFailure(
@@ -51,10 +52,11 @@ class MedicationCubit extends Cubit<MedicationState> {
         return;
       }
 
-      final id = medicineId?.trim();
+      final normalizedMedicineId = medicineId?.trim();
 
       // Add Mode.
-      if (id == null || id.isEmpty) {
+      if (normalizedMedicineId == null ||
+          normalizedMedicineId.isEmpty) {
         _existingMedication = null;
         emit(const MedicationNew());
         return;
@@ -62,8 +64,8 @@ class MedicationCubit extends Cubit<MedicationState> {
 
       // Edit Mode.
       final medication = await repository.getMedicationById(
-        patientId: patientId,
-        medicineId: id,
+        patientId: normalizedPatientId,
+        medicineId: normalizedMedicineId,
       );
 
       if (isClosed) return;
@@ -101,7 +103,7 @@ class MedicationCubit extends Cubit<MedicationState> {
     }
   }
 
-  /// Adds a new medication or updates the existing medication.
+  /// Add a medication or update the currently loaded medication.
   Future<void> saveMedication({
     required String patientId,
     required String name,
@@ -114,11 +116,9 @@ class MedicationCubit extends Cubit<MedicationState> {
     required String instructions,
     File? image,
   }) async {
-    if (state is MedicationLoading) return;
+    if (isClosed || state is MedicationLoading) return;
 
-    final user = FirebaseAuth.instance.currentUser;
-
-    if (user == null) {
+    if (FirebaseAuth.instance.currentUser == null) {
       emit(
         const MedicationError(
           'Please log in first.',
@@ -156,6 +156,15 @@ class MedicationCubit extends Cubit<MedicationState> {
       return;
     }
 
+    if (weekdays.any((day) => day < 1 || day > 7)) {
+      emit(
+        const MedicationError(
+          'Invalid weekday selection.',
+        ),
+      );
+      return;
+    }
+
     if (durationDays != null && durationDays <= 0) {
       emit(
         const MedicationError(
@@ -167,19 +176,29 @@ class MedicationCubit extends Cubit<MedicationState> {
 
     final existing = _existingMedication;
 
+    // Prevent accidentally adding a new document when an edit
+    // operation was requested but the medication was not loaded.
+    if (existing != null && existing.id.trim().isEmpty) {
+      emit(
+        const MedicationError(
+          'Invalid medication ID.',
+        ),
+      );
+      return;
+    }
+
     emit(const MedicationLoading());
 
     String? uploadedImagePublicId;
 
     try {
-      // Keep the existing image unless a new image is selected.
+      // Keep the current image unless a replacement is selected.
       String? imageUrl = existing?.imageUrl;
       String? imagePublicId = existing?.imagePublicId;
-
       String? oldImagePublicId;
 
-      // Upload a replacement image if provided.
       if (image != null) {
+        // Upload the new image first.
         final uploaded =
             await CloudinaryService.uploadImageWithDetails(image);
 
@@ -187,7 +206,8 @@ class MedicationCubit extends Cubit<MedicationState> {
         imagePublicId = uploaded.publicId;
         uploadedImagePublicId = uploaded.publicId;
 
-        // Find the previous image's public ID for cleanup.
+        // Remember the previous image so it can be deleted only
+        // after the Firestore save succeeds.
         if (existing != null) {
           oldImagePublicId = existing.imagePublicId;
 
@@ -211,7 +231,7 @@ class MedicationCubit extends Cubit<MedicationState> {
         dosage: normalizedDosage,
         times: [normalizedTime],
         frequency: normalizedFrequency,
-        weekdays: List<int>.from(weekdays),
+        weekdays: weekdays.toSet().toList()..sort(),
         durationDays: durationDays,
         startDate: existing?.startDate ?? now,
         createdAt: existing?.createdAt ?? now,
@@ -226,7 +246,7 @@ class MedicationCubit extends Cubit<MedicationState> {
         isActive: existing?.isActive ?? true,
       );
 
-      // Add or update the Firestore document.
+      // Save to Firestore.
       if (existing == null) {
         await repository.addMedication(
           patientId: normalizedPatientId,
@@ -243,7 +263,7 @@ class MedicationCubit extends Cubit<MedicationState> {
 
       _existingMedication = medication;
 
-      // Delete the previous image only after Firestore succeeds.
+      // Delete the old image only after Firestore succeeds.
       if (image != null &&
           oldImagePublicId != null &&
           oldImagePublicId.isNotEmpty &&
@@ -253,15 +273,15 @@ class MedicationCubit extends Cubit<MedicationState> {
             oldImagePublicId,
           );
         } catch (_) {
-          // Saving succeeded. A failed cleanup should not
-          // turn a successful medication save into an error.
+          // The medication was saved successfully.
+          // Old-image cleanup is best-effort.
         }
       }
 
+      if (isClosed) return;
+
       emit(const MedicationSuccess());
     } on FirebaseException catch (e) {
-      // If upload succeeded but saving failed, attempt to remove
-      // the newly uploaded image to avoid an unused Cloudinary asset.
       await _cleanupUploadedImage(uploadedImagePublicId);
 
       if (isClosed) return;
@@ -284,9 +304,8 @@ class MedicationCubit extends Cubit<MedicationState> {
     }
   }
 
-  Future<void> _cleanupUploadedImage(
-    String? publicId,
-  ) async {
+  /// Best-effort cleanup when a newly uploaded image cannot be saved.
+  Future<void> _cleanupUploadedImage(String? publicId) async {
     if (publicId == null || publicId.isEmpty) return;
 
     try {

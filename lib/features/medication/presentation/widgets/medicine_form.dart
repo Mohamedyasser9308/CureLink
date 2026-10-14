@@ -23,8 +23,6 @@ class MedicineForm extends StatefulWidget {
 
   final String? initialImageUrl;
   final List<int> initialWeekdays;
-
-  // Canonical values used internally and stored in Firestore.
   final String? initialFrequency;
   final String? initialDuration;
 
@@ -153,8 +151,7 @@ class _MedicineFormState extends State<MedicineForm> {
       final index = frequencyOptions.indexOf(selectedFrequency!);
 
       if (index >= 0) {
-        widget.frequencyController.text =
-            frequencyLabels(l10n)[index];
+        widget.frequencyController.text = frequencyLabels(l10n)[index];
       }
     }
 
@@ -162,8 +159,7 @@ class _MedicineFormState extends State<MedicineForm> {
       final index = durationOptions.indexOf(selectedDuration!);
 
       if (index >= 0) {
-        widget.durationController.text =
-            durationLabels(l10n)[index];
+        widget.durationController.text = durationLabels(l10n)[index];
       }
     }
   }
@@ -180,9 +176,7 @@ class _MedicineFormState extends State<MedicineForm> {
     }
 
     for (final locale in AppLocalizations.supportedLocales) {
-      final labels = frequencyLabels(
-        lookupAppLocalizations(locale),
-      );
+      final labels = frequencyLabels(lookupAppLocalizations(locale));
 
       for (var i = 0; i < labels.length; i++) {
         if (labels[i].trim().toLowerCase() == normalized) {
@@ -206,9 +200,7 @@ class _MedicineFormState extends State<MedicineForm> {
     }
 
     for (final locale in AppLocalizations.supportedLocales) {
-      final labels = durationLabels(
-        lookupAppLocalizations(locale),
-      );
+      final labels = durationLabels(lookupAppLocalizations(locale));
 
       for (var i = 0; i < labels.length; i++) {
         if (labels[i].trim().toLowerCase() == normalized) {
@@ -217,21 +209,19 @@ class _MedicineFormState extends State<MedicineForm> {
       }
     }
 
-    // Also support older values such as "7 أيام".
-    final number = int.tryParse(value.trim().split(' ').first);
+    // Supports previously saved Arabic duration values such as "7 أيام".
+    final number = int.tryParse(normalized.split(' ').first);
 
-    if (number != null) {
-      switch (number) {
-        case 7:
-          return '7 days';
-        case 14:
-          return '14 days';
-        case 30:
-          return '30 days';
-      }
+    switch (number) {
+      case 7:
+        return '7 days';
+      case 14:
+        return '14 days';
+      case 30:
+        return '30 days';
+      default:
+        return null;
     }
-
-    return null;
   }
 
   Future<void> selectTime() async {
@@ -316,10 +306,7 @@ class _MedicineFormState extends State<MedicineForm> {
               return ListTile(
                 title: Text(labels[index]),
                 trailing: selectedFrequency == frequencyOptions[index]
-                    ? const Icon(
-                        Icons.check,
-                        color: AppTheme.primary,
-                      )
+                    ? const Icon(Icons.check, color: AppTheme.primary)
                     : null,
                 onTap: () => Navigator.pop(sheetContext, index),
               );
@@ -345,7 +332,6 @@ class _MedicineFormState extends State<MedicineForm> {
     setState(() {
       selectedFrequency = selected;
       selectedWeekdays = selected == 'Specific days' ? days : [];
-
       widget.frequencyController.text = labels[selectedIndex];
     });
 
@@ -367,10 +353,7 @@ class _MedicineFormState extends State<MedicineForm> {
               return ListTile(
                 title: Text(labels[index]),
                 trailing: selectedDuration == durationOptions[index]
-                    ? const Icon(
-                        Icons.check,
-                        color: AppTheme.primary,
-                      )
+                    ? const Icon(Icons.check, color: AppTheme.primary)
                     : null,
                 onTap: () => Navigator.pop(sheetContext, index),
               );
@@ -404,7 +387,6 @@ class _MedicineFormState extends State<MedicineForm> {
           onImageSelected: widget.onImageSelected,
           initialImageUrl: widget.initialImageUrl,
         ),
-
         const SizedBox(height: 20),
 
         MedicineTextField(
@@ -417,7 +399,6 @@ class _MedicineFormState extends State<MedicineForm> {
             return null;
           },
         ),
-
         const SizedBox(height: 20),
 
         MedicineTextField(
@@ -430,7 +411,6 @@ class _MedicineFormState extends State<MedicineForm> {
             return null;
           },
         ),
-
         const SizedBox(height: 20),
 
         Text(
@@ -441,7 +421,6 @@ class _MedicineFormState extends State<MedicineForm> {
             fontWeight: FontWeight.bold,
           ),
         ),
-
         const SizedBox(height: 8),
 
         TextFormField(
@@ -460,11 +439,8 @@ class _MedicineFormState extends State<MedicineForm> {
               Icons.access_time_outlined,
               color: AppTheme.primary,
             ),
-          ).copyWith(
-            hintText: l10n.medSelectTime,
-          ),
+          ).copyWith(hintText: l10n.medSelectTime),
         ),
-
         const SizedBox(height: 20),
 
         Text(
@@ -475,7 +451,6 @@ class _MedicineFormState extends State<MedicineForm> {
             fontWeight: FontWeight.bold,
           ),
         ),
-
         const SizedBox(height: 8),
 
         TextFormField(
@@ -500,9 +475,7 @@ class _MedicineFormState extends State<MedicineForm> {
               Icons.keyboard_arrow_down,
               color: AppTheme.primary,
             ),
-          ).copyWith(
-            hintText: l10n.medSelectFrequency,
-          ),
+          ).copyWith(hintText: l10n.medSelectFrequency),
         ),
 
         if (selectedFrequency == 'Specific days') ...[
@@ -513,8 +486,7 @@ class _MedicineFormState extends State<MedicineForm> {
             children: selectedWeekdays.map((day) {
               return Chip(
                 label: Text(names[day - 1]),
-                backgroundColor:
-                    AppTheme.primary.withValues(alpha: 0.1),
+                backgroundColor: AppTheme.primary.withValues(alpha: 0.1),
               );
             }).toList(),
           ),
@@ -538,11 +510,8 @@ class _MedicineFormState extends State<MedicineForm> {
               Icons.calendar_month_outlined,
               color: AppTheme.primary,
             ),
-          ).copyWith(
-            hintText: l10n.medSelectDuration,
-          ),
+          ).copyWith(hintText: l10n.medSelectDuration),
         ),
-
         const SizedBox(height: 20),
 
         MedicineTextField(
@@ -550,7 +519,6 @@ class _MedicineFormState extends State<MedicineForm> {
           maxLines: 3,
           controller: widget.descriptionController,
         ),
-
         const SizedBox(height: 20),
 
         MedicineTextField(

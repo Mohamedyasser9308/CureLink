@@ -65,9 +65,8 @@ class _MedicineImagePickerState extends State<MedicineImagePicker> {
       selectedImage = null;
     });
 
-    // null means no new local image is selected.
-    // The existing Cloudinary image remains saved unless
-    // the Cubit explicitly supports removing it.
+    // This clears the newly selected local image only.
+    // The existing Cloudinary image remains saved.
     widget.onImageSelected(null);
   }
 
@@ -75,10 +74,9 @@ class _MedicineImagePickerState extends State<MedicineImagePicker> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
+    final imageUrl = widget.initialImageUrl?.trim() ?? '';
     final hasLocalImage = selectedImage != null;
-    final hasRemoteImage =
-        widget.initialImageUrl != null &&
-        widget.initialImageUrl!.trim().isNotEmpty;
+    final hasRemoteImage = imageUrl.isNotEmpty;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -109,61 +107,15 @@ class _MedicineImagePickerState extends State<MedicineImagePicker> {
                 Positioned.fill(
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(12),
-                    child: hasLocalImage
-                        ? Image.file(
-                            selectedImage!,
-                            fit: BoxFit.contain,
-                          )
-                        : hasRemoteImage
-                            ? Image.network(
-                                widget.initialImageUrl!,
-                                fit: BoxFit.contain,
-                                loadingBuilder:
-                                    (context, child, progress) {
-                                  if (progress == null) {
-                                    return child;
-                                  }
-
-                                  return const Center(
-                                    child: CircularProgressIndicator(),
-                                  );
-                                },
-                                errorBuilder:
-                                    (context, error, stackTrace) {
-                                  return const Center(
-                                    child: Icon(
-                                      Icons.broken_image_outlined,
-                                      color: AppTheme.primary,
-                                      size: 36,
-                                    ),
-                                  );
-                                },
-                              )
-                            : Center(
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.center,
-                                  children: [
-                                    const Icon(
-                                      Icons.add_photo_alternate_outlined,
-                                      color: AppTheme.primary,
-                                      size: 28,
-                                    ),
-                                    const SizedBox(width: 10),
-                                    Flexible(
-                                      child: Text(
-                                        l10n.enterDetails,
-                                        style: const TextStyle(
-                                          color: Color(0xff587494),
-                                          fontSize: 15,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
+                    child: _buildImage(
+                      hasLocalImage: hasLocalImage,
+                      hasRemoteImage: hasRemoteImage,
+                      imageUrl: imageUrl,
+                      l10n: l10n,
+                    ),
                   ),
                 ),
+
                 if (hasLocalImage)
                   Positioned(
                     top: 0,
@@ -182,6 +134,7 @@ class _MedicineImagePickerState extends State<MedicineImagePicker> {
                       ),
                     ),
                   ),
+
                 if (hasRemoteImage && !hasLocalImage)
                   Positioned(
                     bottom: 4,
@@ -204,6 +157,73 @@ class _MedicineImagePickerState extends State<MedicineImagePicker> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildImage({
+    required bool hasLocalImage,
+    required bool hasRemoteImage,
+    required String imageUrl,
+    required AppLocalizations l10n,
+  }) {
+    if (hasLocalImage) {
+      return Image.file(
+        selectedImage!,
+        fit: BoxFit.contain,
+        errorBuilder: (context, error, stackTrace) {
+          return _buildImageError();
+        },
+      );
+    }
+
+    if (hasRemoteImage) {
+      return Image.network(
+        imageUrl,
+        fit: BoxFit.contain,
+        loadingBuilder: (context, child, progress) {
+          if (progress == null) return child;
+
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        },
+        errorBuilder: (context, error, stackTrace) {
+          return _buildImageError();
+        },
+      );
+    }
+
+    return Center(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(
+            Icons.add_photo_alternate_outlined,
+            color: AppTheme.primary,
+            size: 28,
+          ),
+          const SizedBox(width: 10),
+          Flexible(
+            child: Text(
+              l10n.enterDetails,
+              style: const TextStyle(
+                color: Color(0xff587494),
+                fontSize: 15,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildImageError() {
+    return const Center(
+      child: Icon(
+        Icons.broken_image_outlined,
+        color: AppTheme.primary,
+        size: 36,
+      ),
     );
   }
 }

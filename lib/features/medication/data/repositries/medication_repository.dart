@@ -9,16 +9,19 @@ class MedicationRepository {
     FirebaseFirestore? firestore,
   }) : firestore = firestore ?? FirebaseFirestore.instance;
 
+  /// Reference to a patient's medications collection.
   CollectionReference<Map<String, dynamic>> medicationsRef(
     String patientId,
   ) {
-    if (patientId.trim().isEmpty) {
-      throw ArgumentError('Patient ID cannot be empty');
+    final normalizedPatientId = patientId.trim();
+
+    if (normalizedPatientId.isEmpty) {
+      throw ArgumentError('Patient ID cannot be empty.');
     }
 
     return firestore
         .collection('users')
-        .doc(patientId)
+        .doc(normalizedPatientId)
         .collection('medications');
   }
 
@@ -32,12 +35,14 @@ class MedicationRepository {
     required String patientId,
     required MedicationModel medication,
   }) async {
-    if (medication.id.trim().isEmpty) {
-      throw ArgumentError('Medication ID cannot be empty');
+    final medicationId = medication.id.trim();
+
+    if (medicationId.isEmpty) {
+      throw ArgumentError('Medication ID cannot be empty.');
     }
 
     await medicationsRef(patientId)
-        .doc(medication.id)
+        .doc(medicationId)
         .set(medication.toMap());
   }
 
@@ -46,21 +51,26 @@ class MedicationRepository {
     required String patientId,
     required String medicineId,
   }) async {
-    if (medicineId.trim().isEmpty) {
-      throw ArgumentError('Medication ID cannot be empty');
+    final medicationId = medicineId.trim();
+
+    if (medicationId.isEmpty) {
+      throw ArgumentError('Medication ID cannot be empty.');
     }
 
-    final doc = await medicationsRef(patientId)
-        .doc(medicineId)
+    final document = await medicationsRef(patientId)
+        .doc(medicationId)
         .get();
 
-    final data = doc.data();
+    final data = document.data();
 
-    if (!doc.exists || data == null) {
+    if (!document.exists || data == null) {
       return null;
     }
 
-    return MedicationModel.fromMap(data, doc.id);
+    return MedicationModel.fromMap(
+      data,
+      document.id,
+    );
   }
 
   /// Get all medications for a patient.
@@ -69,8 +79,11 @@ class MedicationRepository {
   }) async {
     final snapshot = await medicationsRef(patientId).get();
 
-    return snapshot.docs.map((doc) {
-      return MedicationModel.fromMap(doc.data(), doc.id);
+    return snapshot.docs.map((document) {
+      return MedicationModel.fromMap(
+        document.data(),
+        document.id,
+      );
     }).toList();
   }
 
@@ -79,12 +92,14 @@ class MedicationRepository {
     required String patientId,
     required MedicationModel medication,
   }) async {
-    if (medication.id.trim().isEmpty) {
-      throw ArgumentError('Medication ID cannot be empty');
+    final medicationId = medication.id.trim();
+
+    if (medicationId.isEmpty) {
+      throw ArgumentError('Medication ID cannot be empty.');
     }
 
     await medicationsRef(patientId)
-        .doc(medication.id)
+        .doc(medicationId)
         .update(medication.toMap());
   }
 
@@ -93,12 +108,14 @@ class MedicationRepository {
     required String patientId,
     required String medicationId,
   }) async {
-    if (medicationId.trim().isEmpty) {
-      throw ArgumentError('Medication ID cannot be empty');
+    final normalizedMedicationId = medicationId.trim();
+
+    if (normalizedMedicationId.isEmpty) {
+      throw ArgumentError('Medication ID cannot be empty.');
     }
 
     await medicationsRef(patientId)
-        .doc(medicationId)
+        .doc(normalizedMedicationId)
         .delete();
   }
 }

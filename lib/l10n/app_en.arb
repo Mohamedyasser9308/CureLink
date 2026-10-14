@@ -986,6 +986,8 @@
   "@retry": {
     "description": "Localized Retry text displayed in the interface."
   },
+  
+  
   "medSaveMedicine": "Save Medicine",
   "medSavedSuccessfully": "Medicine saved successfully!",
   "medPatientUnavailable": "Patient account is not available",
@@ -1019,10 +1021,18 @@
   "medSaturday": "Sat",
   "medSunday": "Sun",
   "medMedicineImage": "Medicine image",
-
   "medTreatmentDuration": "Treatment duration",
   "medStatus": "Medication status",
   "medActive": "Active",
   "medInactive": "Inactive",
-  "days": "days"
+  "days": "days",
+  "medicineInformation": "Medicine information",
+  "ongoing": "Ongoing",
+  "startDate": "Start date",
+  "schedule": "Schedule",
+  "noScheduleAvailable": "No schedule available",
+  "description": "Description",
+  "deleteMedicineConfirmation": "Are you sure you want to delete this medicine?",
+  "cancel": "Cancel",
+  "delete": "Delete"
 }

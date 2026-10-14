@@ -994,6 +994,7 @@
   "@retry": {
     "description": "Localized Retry text displayed in the interface."
   },
+  
   "medSaveMedicine": "حفظ الدواء",
   "medSavedSuccessfully": "تم حفظ الدواء بنجاح!",
   "medPatientUnavailable": "حساب المريض غير متاح",
@@ -1026,8 +1027,17 @@
   "medFriday": "الجمعة",
   "medSaturday": "السبت",
   "medSunday": "الأحد",
+  
   "medMedicineImage": "صورة الدواء",
-
+  "medicineInformation": "معلومات الدواء",
+  "ongoing": "مستمر",
+  "startDate": "تاريخ البدء",
+  "schedule": "المواعيد",
+  "noScheduleAvailable": "لا توجد مواعيد متاحة",
+  "description": "الوصف",
+  "deleteMedicineConfirmation": "هل أنت متأكد أنك تريد حذف هذا الدواء؟",
+  "cancel": "إلغاء",
+  "delete": "حذف",
   "medTreatmentDuration": "مدة العلاج",
   "medStatus": "حالة الدواء",
   "medActive": "نشط",

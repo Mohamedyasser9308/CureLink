@@ -19,7 +19,7 @@ class CloudinaryService {
   static const String cloudName = 'm0qi1rny';
   static const String uploadPreset = 'curelink_mobile';
 
-  /// Upload an image and return its URL and public ID.
+  /// Upload an image and return its secure URL and public ID.
   static Future<CloudinaryUploadResult> uploadImageWithDetails(
     File image,
   ) async {
@@ -68,14 +68,14 @@ class CloudinaryService {
     );
   }
 
-  /// Backward compatibility with existing callers.
+  /// Backward compatibility: return both URL and public ID.
   static Future<CloudinaryUploadResult> uploadImageWithPublicId(
     File image,
   ) async {
     return uploadImageWithDetails(image);
   }
 
-  /// Upload an image and return only its secure URL.
+  /// Backward compatibility: return only the secure URL.
   static Future<String> uploadImage(File image) async {
     final result = await uploadImageWithDetails(image);
     return result.secureUrl;
@@ -86,21 +86,30 @@ class CloudinaryService {
     final normalizedPublicId = publicId.trim();
 
     if (normalizedPublicId.isEmpty) {
-      throw ArgumentError('Cloudinary public ID cannot be empty.');
+      throw ArgumentError(
+        'Cloudinary public ID cannot be empty.',
+      );
     }
 
     final callable = FirebaseFunctions.instance.httpsCallable(
       'deleteCloudinaryImage',
     );
 
-    final response = await callable.call<Map<dynamic, dynamic>>({
+    final response = await callable.call<dynamic>({
       'publicId': normalizedPublicId,
     });
 
     final data = response.data;
+
+    if (data is! Map) {
+      throw Exception(
+        'Cloudinary deletion returned an invalid response.',
+      );
+    }
+
     final result = data['result']?.toString();
 
-    // Treat an already-deleted image as success.
+    // An already-deleted image is considered successful.
     if (result == 'ok' || result == 'not found') {
       return;
     }
@@ -111,7 +120,11 @@ class CloudinaryService {
     );
   }
 
-  
+  /// Recover a public ID from a Cloudinary delivery URL.
+  ///
+  /// Example:
+  /// https://res.cloudinary.com/<cloud>/image/upload/v123/folder/image.jpg
+  /// Returns: folder/image
   static String? publicIdFromUrl(String url) {
     final uri = Uri.tryParse(url);
 
@@ -135,8 +148,7 @@ class CloudinaryService {
     if (versionIndex != -1) {
       idSegments = idSegments.sublist(versionIndex + 1);
     } else {
-      // Remove common transformation segments if the URL
-      // contains transformations but no version segment.
+      // Handle common transformations when no version is present.
       while (idSegments.isNotEmpty &&
           _looksLikeTransformation(idSegments.first)) {
         idSegments = idSegments.sublist(1);

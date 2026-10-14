@@ -6,6 +6,7 @@ import 'package:curelink/core/widgets/app_error.dart';
 import 'package:curelink/core/widgets/app_loading.dart';
 import 'package:curelink/core/widgets/app_scaffold.dart';
 import 'package:curelink/core/widgets/mode_switcher.dart';
+import 'package:curelink/features/medicine_details/presentation/medicine_details_page.dart';
 import 'package:curelink/features/home/data/services/medication_service.dart';
 import 'package:curelink/features/home/presentation/cubit/home_cubit.dart';
 import 'package:curelink/features/home/presentation/cubit/home_state.dart';
@@ -15,6 +16,7 @@ import 'package:curelink/features/home/presentation/widgets/next_dose_card.dart'
 import 'package:curelink/features/home/presentation/widgets/progress_card.dart';
 import 'package:curelink/features/home/presentation/widgets/sos_button.dart';
 import 'package:curelink/l10n/app_localizations.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -41,6 +43,38 @@ class _PatientHomeView extends StatelessWidget {
     AppNavigator.push(context, RoutesNames.emergency);
   }
 
+  void _openMedicineDetails(
+    BuildContext context,
+    String medicationId,
+  ) {
+    final patientId = FirebaseAuth.instance.currentUser?.uid;
+
+    if (patientId == null || patientId.trim().isEmpty) {
+      final l10n = AppLocalizations.of(context)!;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(l10n.somethingWentWrong),
+        ),
+      );
+      return;
+    }
+
+    Navigator.push<bool>(
+      context,
+      MaterialPageRoute(
+        builder: (_) => MedicineDetailsPage(
+          patientId: patientId,
+          medicationId: medicationId,
+        ),
+      ),
+    ).then((deleted) {
+      if (deleted == true && context.mounted) {
+        context.read<HomeCubit>().refresh();
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -57,6 +91,9 @@ class _PatientHomeView extends StatelessWidget {
               state: state,
               onAdd: () => _openAddMedicine(context),
               onSos: () => _openEmergency(context),
+              onMedicineTap: (medicationId) {
+                _openMedicineDetails(context, medicationId);
+              },
             );
           }
 
@@ -109,11 +146,13 @@ class _SuccessBody extends StatelessWidget {
     required this.state,
     required this.onAdd,
     required this.onSos,
+    required this.onMedicineTap,
   });
 
   final HomeSuccessState state;
   final VoidCallback onAdd;
   final VoidCallback onSos;
+  final ValueChanged<String> onMedicineTap;
 
   @override
   Widget build(BuildContext context) {
@@ -170,11 +209,7 @@ class _SuccessBody extends StatelessWidget {
             child: MedicationCard(
               dose: dose,
               onTap: () {
-                AppNavigator.push(
-                  context,
-                  RoutesNames.medicineDetails,
-                  arguments: dose.medication,
-                );
+                onMedicineTap(dose.medication.id);
               },
             ),
           ),

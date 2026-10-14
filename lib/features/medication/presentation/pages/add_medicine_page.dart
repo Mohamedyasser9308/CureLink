@@ -47,6 +47,10 @@ class _AddMedicinePageState extends State<AddMedicinePage> {
   String? existingImageUrl;
 
   bool isInitializing = true;
+  int formRevision = 0;
+
+  bool get isEditMode =>
+      widget.medicineId != null && widget.medicineId!.trim().isNotEmpty;
 
   @override
   void initState() {
@@ -57,16 +61,22 @@ class _AddMedicinePageState extends State<AddMedicinePage> {
     );
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) loadMedicine();
+      if (mounted) {
+        loadMedicine();
+      }
     });
   }
 
-  void loadMedicine() {
-    final patientId =
-        widget.patientId ?? FirebaseAuth.instance.currentUser?.uid ?? '';
+  String get resolvedPatientId {
+    return (widget.patientId ??
+            FirebaseAuth.instance.currentUser?.uid ??
+            '')
+        .trim();
+  }
 
+  void loadMedicine() {
     medicationCubit.loadMedication(
-      patientId: patientId,
+      patientId: resolvedPatientId,
       medicineId: widget.medicineId,
     );
   }
@@ -94,6 +104,11 @@ class _AddMedicinePageState extends State<AddMedicinePage> {
 
     selectedWeekdays = List<int>.from(medication.weekdays);
     existingImageUrl = medication.imageUrl;
+
+    // Clear any newly selected local image when loading an existing medicine.
+    selectedImage = null;
+
+    formRevision++;
   }
 
   void _showMessage(String message) {
@@ -123,9 +138,9 @@ class _AddMedicinePageState extends State<AddMedicinePage> {
       return;
     }
 
-    final patientId = widget.patientId ?? currentUser.uid;
+    final patientId = resolvedPatientId;
 
-    if (patientId.trim().isEmpty) {
+    if (patientId.isEmpty) {
       _showMessage(l10n.medPatientUnavailable);
       return;
     }
@@ -198,61 +213,50 @@ class _AddMedicinePageState extends State<AddMedicinePage> {
 
     return BlocProvider.value(
       value: medicationCubit,
-      child: BlocConsumer<MedicationCubit, MedicationState>(
-        listener: (context, state) {
-          if (state is MedicationLoaded) {
-            fillForm(state.medication);
-
-            setState(() {
-              isInitializing = false;
-            });
-          } else if (state is MedicationNew) {
-            setState(() {
-              isInitializing = false;
-            });
-          } else if (state is MedicationLoadFailure) {
-            setState(() {
-              isInitializing = false;
-            });
-            _showMessage(state.message);
-          } else if (state is MedicationSuccess) {
-            _showMessage(l10n.medSavedSuccessfully);
-            Navigator.of(context).pop(true);
-          } else if (state is MedicationError) {
-            _showMessage(state.message);
-          }
-        },
-        builder: (context, state) {
-          final isLoading = state is MedicationLoading;
-
-          if (isInitializing) {
-            return Scaffold(
-              backgroundColor: AppTheme.background,
-              appBar: AppBar(
-                title: Text(
-                  widget.medicineId == null
-                      ? l10n.addMedicine
-                      : l10n.editMedicine,
-                ),
-                backgroundColor: AppTheme.background,
-                foregroundColor: AppTheme.navy,
-                elevation: 0,
-              ),
-              body: const Center(
-                child: CircularProgressIndicator(),
-              ),
-            );
-          }
-
-          if (state is MedicationLoadFailure) {
-            return Scaffold(
-              backgroundColor: AppTheme.background,
-              appBar: AppBar(
-                title: Text(l10n.addMedicine),
-                backgroundColor: AppTheme.background,
-                foregroundColor: AppTheme.navy,
-              ),
-              body: Center(
+      child: Scaffold(
+        backgroundColor: AppTheme.background,
+        appBar: AppBar(
+          backgroundColor: AppTheme.background,
+          foregroundColor: AppTheme.navy,
+          elevation: 0,
+          title: Text(
+            isEditMode ? l10n.editMedicine : l10n.addMedicine,
+            style: const TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.w400,
+              color: AppTheme.navy,
+            ),
+          ),
+        ),
+        body: BlocConsumer<MedicationCubit, MedicationState>(
+          listener: (context, state) {
+            if (state is MedicationLoaded) {
+              setState(() {
+                fillForm(state.medication);
+                isInitializing = false;
+              });
+            } else if (state is MedicationNew) {
+              setState(() {
+                isInitializing = false;
+              });
+            } else if (state is MedicationLoadFailure) {
+              setState(() {
+                isInitializing = false;
+              });
+              _showMessage(state.message);
+            } else if (state is MedicationSuccess) {
+              if (Navigator.of(context).canPop()) {
+                Navigator.of(context).pop(true);
+              } else {
+                _showMessage(l10n.medSavedSuccessfully);
+              }
+            } else if (state is MedicationError) {
+              _showMessage(state.message);
+            }
+          },
+          builder: (context, state) {
+            if (state is MedicationLoadFailure) {
+              return Center(
                 child: Padding(
                   padding: const EdgeInsets.all(24),
                   child: Column(
@@ -261,40 +265,44 @@ class _AddMedicinePageState extends State<AddMedicinePage> {
                       Text(
                         state.message,
                         textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          color: AppTheme.navy,
+                          fontSize: 16,
+                        ),
                       ),
                       const SizedBox(height: 12),
                       ElevatedButton.icon(
-                        onPressed: loadMedicine,
+                        onPressed: () {
+                          setState(() {
+                            isInitializing = true;
+                          });
+                          loadMedicine();
+                        },
                         icon: const Icon(Icons.refresh),
                         label: Text(l10n.retry),
                       ),
                     ],
                   ),
                 ),
-              ),
-            );
-          }
+              );
+            }
 
-          return Scaffold(
-            backgroundColor: AppTheme.background,
-            appBar: AppBar(
-              title: Text(
-                widget.medicineId == null
-                    ? l10n.addMedicine
-                    : l10n.editMedicine,
-              ),
-              backgroundColor: AppTheme.background,
-              foregroundColor: AppTheme.navy,
-              elevation: 0,
-            ),
-            body: SafeArea(
+            if (isInitializing || state is MedicationInitial) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+
+            final isLoading = state is MedicationLoading;
+
+            return SafeArea(
               child: Form(
                 key: _formKey,
                 child: ListView(
                   padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
                   children: [
                     MedicineForm(
-                      key: ValueKey(widget.medicineId ?? 'new_medicine'),
+                      key: ValueKey(formRevision),
                       nameController: nameController,
                       doseController: doseController,
                       timeController: timeController,
@@ -304,6 +312,8 @@ class _AddMedicinePageState extends State<AddMedicinePage> {
                       notesController: notesController,
                       initialImageUrl: existingImageUrl,
                       initialWeekdays: selectedWeekdays,
+                      initialFrequency: selectedFrequencyValue,
+                      initialDuration: selectedDurationValue,
                       onImageSelected: (image) {
                         selectedImage = image;
                       },
@@ -353,9 +363,9 @@ class _AddMedicinePageState extends State<AddMedicinePage> {
                   ],
                 ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }
