@@ -1,290 +1,989 @@
 {
   "@@locale": "en",
-
   "appTitle": "CureLink",
+  "@appTitle": {
+    "description": "Localized App title text displayed in the interface."
+  },
   "welcome": "Welcome, {name}!",
   "@welcome": {
-    "placeholders": { "name": { "type": "String" } }
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
   },
   "login": "Log in",
-
+  "@login": {
+    "description": "Localized Login text displayed in the interface."
+  },
   "tagline": "Care that stays connected",
-
+  "@tagline": {
+    "description": "Localized Tagline text displayed in the interface."
+  },
   "skip": "Skip",
+  "@skip": {
+    "description": "Localized Skip text displayed in the interface."
+  },
   "next": "Next",
+  "@next": {
+    "description": "Localized Next text displayed in the interface."
+  },
   "getStarted": "Get started",
+  "@getStarted": {
+    "description": "Localized Get started text displayed in the interface."
+  },
   "continueButton": "Continue",
+  "@continueButton": {
+    "description": "Localized Continue button text displayed in the interface."
+  },
   "done": "Done",
+  "@done": {
+    "description": "Localized Done text displayed in the interface."
+  },
   "stepOfTotal": "Step {current} of {total}",
   "@stepOfTotal": {
     "placeholders": {
-      "current": { "type": "int" },
-      "total": { "type": "int" }
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
     }
   },
   "onboardingTitle1": "Never miss medication",
-  "onboardingSubtitle1": "Gentle reminders keep each dose visible.",
+  "@onboardingTitle1": {
+    "description": "Localized Onboarding title 1 text displayed in the interface."
+  },
+  "onboardingSubtitle1": "Gentle reminders keep each dose visible",
+  "@onboardingSubtitle1": {
+    "description": "Localized Onboarding subtitle 1 text displayed in the interface."
+  },
   "onboardingTitle2": "Track your medication journey",
-  "onboardingSubtitle2": "See schedules, history, and progress.",
+  "@onboardingTitle2": {
+    "description": "Localized Onboarding title 2 text displayed in the interface."
+  },
+  "onboardingSubtitle2": "See schedules, history, and progress",
+  "@onboardingSubtitle2": {
+    "description": "Localized Onboarding subtitle 2 text displayed in the interface."
+  },
   "onboardingTitle3": "Stay connected with caregivers",
-  "onboardingSubtitle3": "Share only what you approve.",
-
+  "@onboardingTitle3": {
+    "description": "Localized Onboarding title 3 text displayed in the interface."
+  },
+  "onboardingSubtitle3": "Share only what you approve",
+  "@onboardingSubtitle3": {
+    "description": "Localized Onboarding subtitle 3 text displayed in the interface."
+  },
   "welcomeBack": "Welcome back",
+  "@welcomeBack": {
+    "description": "Localized Welcome back text displayed in the interface."
+  },
   "signInToContinue": "Sign in to continue.",
+  "@signInToContinue": {
+    "description": "Localized Sign in to continue text displayed in the interface."
+  },
   "emailOrPhone": "Email or phone",
+  "@emailOrPhone": {
+    "description": "Localized Email or phone text displayed in the interface."
+  },
   "createAccountSubtitle": "Create your CureLink account to stay connected.",
+  "@createAccountSubtitle": {
+    "description": "Localized Create account subtitle text displayed in the interface."
+  },
   "enterYourName": "Enter your name",
+  "@enterYourName": {
+    "description": "Localized Enter your name text displayed in the interface."
+  },
   "enterYourPhone": "Enter your phone number",
+  "@enterYourPhone": {
+    "description": "Localized Enter your phone text displayed in the interface."
+  },
   "enterYourEmail": "Enter your email address",
+  "@enterYourEmail": {
+    "description": "Localized Enter your email text displayed in the interface."
+  },
   "createPassword": "Create a password",
+  "@createPassword": {
+    "description": "Localized Create password text displayed in the interface."
+  },
   "reEnterPassword": "Re-enter your password",
+  "@reEnterPassword": {
+    "description": "Localized Re enter password text displayed in the interface."
+  },
   "alreadyHaveAccount": "Already have an account?",
+  "@alreadyHaveAccount": {
+    "description": "Localized Already have account text displayed in the interface."
+  },
   "somethingWentWrong": "Something went wrong. Please try again.",
+  "@somethingWentWrong": {
+    "description": "Localized Something went wrong text displayed in the interface."
+  },
   "userSessionNotFound": "User session not found. Please login again.",
+  "@userSessionNotFound": {
+    "description": "Localized User session not found text displayed in the interface."
+  },
   "couldNotSaveAgeGroup": "Could not save age group. Please try again.",
+  "@couldNotSaveAgeGroup": {
+    "description": "Localized Could not save age group text displayed in the interface."
+  },
   "emailAlreadyRegistered": "This email is already registered.",
+  "@emailAlreadyRegistered": {
+    "description": "Localized Email already registered text displayed in the interface."
+  },
   "passwordsDoNotMatch": "Passwords do not match.",
+  "@passwordsDoNotMatch": {
+    "description": "Localized Passwords do not match text displayed in the interface."
+  },
   "loginEmailHint": "Enter your email address",
-"loginPasswordHint": "Enter your password",
-"enterPassword": "Enter your password",
-"dontHaveAccount": "Don't have an account?",
-"signUp": "Sign up",
-"invalidCredentials": "Email or password is incorrect.",
-"authenticationFailed": "Authentication failed. Please try again.",
-"completeProfileSubtitle": "Add your information so CureLink can provide a better care experience.",
-"tapToAddPhoto": "Tap to add a profile photo",
-"personalInformation": "Personal information",
-"basicProfileDetails": "Your basic profile details",
-"pleaseEnterName": "Please enter your name",
-"nameMinLength": "Name must contain at least 2 characters",
-"cureLinkId": "CureLink ID",
-"caregiverConnectionIdHint": "Use this ID when connecting with caregivers",
-"emergencyContact": "Emergency contact",
-"emergencyContactHint": "Someone we can contact in an emergency",
-"contactName": "Contact name",
-"enterFullName": "Enter full name",
-"pleaseEnterEmergencyContactName": "Please enter the emergency contact name",
-"phoneNumber": "Phone number",
-"enterPhoneNumber": "Enter phone number",
-"pleaseEnterEmergencyPhone": "Please enter the emergency phone",
-"validPhoneNumber": "Enter a valid phone number",
-"pleaseWaitGeneratingId": "Please wait while we generate your unique CureLink ID.",
-"choosePhotoMethod": "Choose how you want to add your photo",
-"chooseFromGallery": "Choose from gallery",
-"selectPhotoFromDevice": "Select a photo from your device",
-"useCamera": "Use camera",
-"takeNewProfilePhoto": "Take a new profile photo",
-"unableToSelectImage": "Unable to select the image.",
-"pleaseWaitIdGenerated": "Please wait until your CureLink ID is generated.",
-"profileCompleted": "Profile completed",
-"profileCreatedSuccessfully": "Your CureLink profile has been created successfully.",
-"yourCureLinkId": "Your CureLink ID",
-"continueButton": "Continue",
-"firebasePermissionDenied": "Firebase permission denied while generating CureLink ID.",
-"noAuthenticatedUser": "No authenticated user found. Please login first.",
-"networkError": "Network error. Please check your internet connection.",
-"unableToGenerateId": "Unable to generate a unique CureLink ID.",
-"profilePermissionDenied": "You do not have permission to save this profile.",
-"sessionExpired": "Your session has expired. Please sign in again.",
-"idNotAvailable": "Not available",
-"onboardingTitle1": "Never miss medication",
-"onboardingSubtitle1": "Gentle reminders keep each dose visible",
+  "@loginEmailHint": {
+    "description": "Localized Login email hint text displayed in the interface."
+  },
+  "loginPasswordHint": "Enter your password",
+  "@loginPasswordHint": {
+    "description": "Localized Login password hint text displayed in the interface."
+  },
+  "enterPassword": "Enter your password",
+  "@enterPassword": {
+    "description": "Localized Enter password text displayed in the interface."
+  },
+  "dontHaveAccount": "Don't have an account?",
+  "@dontHaveAccount": {
+    "description": "Localized Dont have account text displayed in the interface."
+  },
+  "signUp": "Sign up",
+  "@signUp": {
+    "description": "Localized Sign up text displayed in the interface."
+  },
+  "invalidCredentials": "Email or password is incorrect.",
+  "@invalidCredentials": {
+    "description": "Localized Invalid credentials text displayed in the interface."
+  },
+  "authenticationFailed": "Authentication failed. Please try again.",
+  "@authenticationFailed": {
+    "description": "Localized Authentication failed text displayed in the interface."
+  },
+  "completeProfileSubtitle": "Add your information so CureLink can provide a better care experience.",
+  "@completeProfileSubtitle": {
+    "description": "Localized Complete profile subtitle text displayed in the interface."
+  },
+  "tapToAddPhoto": "Tap to add a profile photo",
+  "@tapToAddPhoto": {
+    "description": "Localized Tap to add photo text displayed in the interface."
+  },
+  "personalInformation": "Personal information",
+  "@personalInformation": {
+    "description": "Localized Personal information text displayed in the interface."
+  },
+  "basicProfileDetails": "Your basic profile details",
+  "@basicProfileDetails": {
+    "description": "Localized Basic profile details text displayed in the interface."
+  },
+  "pleaseEnterName": "Please enter your name",
+  "@pleaseEnterName": {
+    "description": "Localized Please enter name text displayed in the interface."
+  },
+  "nameMinLength": "Name must contain at least 2 characters",
+  "@nameMinLength": {
+    "description": "Localized Name min length text displayed in the interface."
+  },
+  "cureLinkId": "CureLink ID",
+  "@cureLinkId": {
+    "description": "Localized Cure link id text displayed in the interface."
+  },
+  "caregiverConnectionIdHint": "Use this ID when connecting with caregivers",
+  "@caregiverConnectionIdHint": {
+    "description": "Localized Caregiver connection id hint text displayed in the interface."
+  },
+  "emergencyContact": "Emergency contact",
+  "@emergencyContact": {
+    "description": "Localized Emergency contact text displayed in the interface."
+  },
+  "emergencyContactHint": "Someone we can contact in an emergency",
+  "@emergencyContactHint": {
+    "description": "Localized Emergency contact hint text displayed in the interface."
+  },
+  "contactName": "Contact name",
+  "@contactName": {
+    "description": "Localized Contact name text displayed in the interface."
+  },
+  "enterFullName": "Enter full name",
+  "@enterFullName": {
+    "description": "Localized Enter full name text displayed in the interface."
+  },
+  "pleaseEnterEmergencyContactName": "Please enter the emergency contact name",
+  "@pleaseEnterEmergencyContactName": {
+    "description": "Localized Please enter emergency contact name text displayed in the interface."
+  },
+  "phoneNumber": "Phone number",
+  "@phoneNumber": {
+    "description": "Localized Phone number text displayed in the interface."
+  },
+  "enterPhoneNumber": "Enter phone number",
+  "@enterPhoneNumber": {
+    "description": "Localized Enter phone number text displayed in the interface."
+  },
+  "pleaseEnterEmergencyPhone": "Please enter the emergency phone",
+  "@pleaseEnterEmergencyPhone": {
+    "description": "Localized Please enter emergency phone text displayed in the interface."
+  },
+  "validPhoneNumber": "Enter a valid phone number",
+  "@validPhoneNumber": {
+    "description": "Localized Valid phone number text displayed in the interface."
+  },
+  "pleaseWaitGeneratingId": "Please wait while we generate your unique CureLink ID.",
+  "@pleaseWaitGeneratingId": {
+    "description": "Localized Please wait generating id text displayed in the interface."
+  },
+  "choosePhotoMethod": "Choose how you want to add your photo",
+  "@choosePhotoMethod": {
+    "description": "Localized Choose photo method text displayed in the interface."
+  },
+  "chooseFromGallery": "Choose from gallery",
+  "@chooseFromGallery": {
+    "description": "Localized Choose from gallery text displayed in the interface."
+  },
+  "selectPhotoFromDevice": "Select a photo from your device",
+  "@selectPhotoFromDevice": {
+    "description": "Localized Select photo from device text displayed in the interface."
+  },
+  "useCamera": "Use camera",
+  "@useCamera": {
+    "description": "Localized Use camera text displayed in the interface."
+  },
+  "takeNewProfilePhoto": "Take a new profile photo",
+  "@takeNewProfilePhoto": {
+    "description": "Localized Take new profile photo text displayed in the interface."
+  },
+  "unableToSelectImage": "Unable to select the image.",
+  "@unableToSelectImage": {
+    "description": "Localized Unable to select image text displayed in the interface."
+  },
+  "pleaseWaitIdGenerated": "Please wait until your CureLink ID is generated.",
+  "@pleaseWaitIdGenerated": {
+    "description": "Localized Please wait id generated text displayed in the interface."
+  },
+  "profileCompleted": "Profile completed",
+  "@profileCompleted": {
+    "description": "Localized Profile completed text displayed in the interface."
+  },
+  "profileCreatedSuccessfully": "Your CureLink profile has been created successfully.",
+  "@profileCreatedSuccessfully": {
+    "description": "Localized Profile created successfully text displayed in the interface."
+  },
+  "yourCureLinkId": "Your CureLink ID",
+  "@yourCureLinkId": {
+    "description": "Localized Your cure link id text displayed in the interface."
+  },
+  "firebasePermissionDenied": "Firebase permission denied while generating CureLink ID.",
+  "@firebasePermissionDenied": {
+    "description": "Localized Firebase permission denied text displayed in the interface."
+  },
+  "noAuthenticatedUser": "No authenticated user found. Please login first.",
+  "@noAuthenticatedUser": {
+    "description": "Localized No authenticated user text displayed in the interface."
+  },
+  "networkError": "Network error. Please check your internet connection.",
+  "@networkError": {
+    "description": "Localized Network error text displayed in the interface."
+  },
+  "unableToGenerateId": "Unable to generate a unique CureLink ID.",
+  "@unableToGenerateId": {
+    "description": "Localized Unable to generate id text displayed in the interface."
+  },
+  "profilePermissionDenied": "You do not have permission to save this profile.",
+  "@profilePermissionDenied": {
+    "description": "Localized Profile permission denied text displayed in the interface."
+  },
+  "sessionExpired": "Your session has expired. Please sign in again.",
+  "@sessionExpired": {
+    "description": "Localized Session expired text displayed in the interface."
+  },
+  "idNotAvailable": "Not available",
+  "@idNotAvailable": {
+    "description": "Localized Id not available text displayed in the interface."
+  },
   "invalidEmail": "This email address is not valid.",
-  "onboardingTitle2": "Track your medication journey",
-"onboardingSubtitle2": "See schedules, history, and progress",
-"onboardingTitle3": "Stay connected with caregivers",
-"onboardingSubtitle3": "Share only what you approve",
-"forgotPasswordSubtitle": "Enter your email and we'll send you a link to reset your password",
-"sendResetLink": "Send Reset Link",
-"backToLogin": "Back to Login",
-"passwordResetEmailSent": "Password reset email sent. Check your inbox.",
-"userNotFound": "No account was found with this email",
-"passwordResetFailed": "Could not send password reset email",
+  "@invalidEmail": {
+    "description": "Localized Invalid email text displayed in the interface."
+  },
+  "forgotPasswordSubtitle": "Enter your email and we'll send you a link to reset your password",
+  "@forgotPasswordSubtitle": {
+    "description": "Localized Forgot password subtitle text displayed in the interface."
+  },
+  "sendResetLink": "Send Reset Link",
+  "@sendResetLink": {
+    "description": "Localized Send reset link text displayed in the interface."
+  },
+  "backToLogin": "Back to Login",
+  "@backToLogin": {
+    "description": "Localized Back to login text displayed in the interface."
+  },
+  "passwordResetEmailSent": "Password reset email sent. Check your inbox.",
+  "@passwordResetEmailSent": {
+    "description": "Localized Password reset email sent text displayed in the interface."
+  },
+  "userNotFound": "No account was found with this email",
+  "@userNotFound": {
+    "description": "Localized User not found text displayed in the interface."
+  },
+  "passwordResetFailed": "Could not send password reset email",
+  "@passwordResetFailed": {
+    "description": "Localized Password reset failed text displayed in the interface."
+  },
   "weakPassword": "Password is too weak. Use at least 8 characters.",
+  "@weakPassword": {
+    "description": "Localized Weak password text displayed in the interface."
+  },
   "noInternetConnection": "No internet connection. Check your network and try again.",
-"emailSignupDisabled": "Email sign-up is not enabled in Firebase yet.",
-"tooManyAttempts": "Too many attempts. Please wait a moment and try again.",
-"couldNotCreateAccount": "Could not create the account. Please try again.",
-"profileSaveFailed": "Account created, but we could not save your profile. Please try again.",
-"pageNotFound": "Page not found",
-"noRouteDefined": "No route defined for {route}",
-"@noRouteDefined": {
-  "placeholders": {
-    "route": {
-      "type": "String"
+  "@noInternetConnection": {
+    "description": "Localized No internet connection text displayed in the interface."
+  },
+  "emailSignupDisabled": "Email sign-up is not enabled in Firebase yet.",
+  "@emailSignupDisabled": {
+    "description": "Localized Email signup disabled text displayed in the interface."
+  },
+  "tooManyAttempts": "Too many attempts. Please wait a moment and try again.",
+  "@tooManyAttempts": {
+    "description": "Localized Too many attempts text displayed in the interface."
+  },
+  "couldNotCreateAccount": "Could not create the account. Please try again.",
+  "@couldNotCreateAccount": {
+    "description": "Localized Could not create account text displayed in the interface."
+  },
+  "profileSaveFailed": "Account created, but we could not save your profile. Please try again.",
+  "@profileSaveFailed": {
+    "description": "Localized Profile save failed text displayed in the interface."
+  },
+  "pageNotFound": "Page not found",
+  "@pageNotFound": {
+    "description": "Localized Page not found text displayed in the interface."
+  },
+  "noRouteDefined": "No route defined for {route}",
+  "@noRouteDefined": {
+    "placeholders": {
+      "route": {
+        "type": "String"
+      }
     }
-  }
-},
-   
+  },
   "enterDetails": "Enter details",
+  "@enterDetails": {
+    "description": "Localized Enter details text displayed in the interface."
+  },
   "password": "Password",
+  "@password": {
+    "description": "Localized Password text displayed in the interface."
+  },
   "confirmPassword": "Confirm Password",
+  "@confirmPassword": {
+    "description": "Localized Confirm password text displayed in the interface."
+  },
   "forgotPassword": "Forgot password?",
+  "@forgotPassword": {
+    "description": "Localized Forgot password text displayed in the interface."
+  },
   "createAccount": "Create account",
+  "@createAccount": {
+    "description": "Localized Create account text displayed in the interface."
+  },
   "name": "Name",
+  "@name": {
+    "description": "Localized Name text displayed in the interface."
+  },
   "phone": "Phone",
+  "@phone": {
+    "description": "Localized Phone text displayed in the interface."
+  },
   "email": "Email",
+  "@email": {
+    "description": "Localized Email text displayed in the interface."
+  },
   "fieldError": "Check this field and try again.",
+  "@fieldError": {
+    "description": "Localized Field error text displayed in the interface."
+  },
   "fieldStates": "Field states",
+  "@fieldStates": {
+    "description": "Localized Field states text displayed in the interface."
+  },
   "stateDefault": "Default",
+  "@stateDefault": {
+    "description": "Localized State default text displayed in the interface."
+  },
   "stateFocus": "Focus",
+  "@stateFocus": {
+    "description": "Localized State focus text displayed in the interface."
+  },
   "stateFilled": "Filled",
+  "@stateFilled": {
+    "description": "Localized State filled text displayed in the interface."
+  },
   "stateError": "Error",
+  "@stateError": {
+    "description": "Localized State error text displayed in the interface."
+  },
   "stateDisabled": "Disabled",
-
+  "@stateDisabled": {
+    "description": "Localized State disabled text displayed in the interface."
+  },
   "chooseYourRole": "Choose your role",
+  "@chooseYourRole": {
+    "description": "Localized Choose your role text displayed in the interface."
+  },
   "personaFirst": "Persona first",
+  "@personaFirst": {
+    "description": "Localized Persona first text displayed in the interface."
+  },
   "ageGroupSubtitle": "Choose the age group that fits you.",
+  "@ageGroupSubtitle": {
+    "description": "Localized Age group subtitle text displayed in the interface."
+  },
   "roleChild": "Child",
+  "@roleChild": {
+    "description": "Localized Role child text displayed in the interface."
+  },
   "roleTeenAdult": "Teen / Adult",
+  "@roleTeenAdult": {
+    "description": "Localized Role teen adult text displayed in the interface."
+  },
   "roleOlderAdult": "Older Adult",
+  "@roleOlderAdult": {
+    "description": "Localized Role older adult text displayed in the interface."
+  },
   "childRoleHint": "Child is Patient only; invalid roles are not shown.",
+  "@childRoleHint": {
+    "description": "Localized Child role hint text displayed in the interface."
+  },
   "teenAdultRoleHint": "Choose Patient, Caregiver, or Both. Both starts in Patient Mode.",
+  "@teenAdultRoleHint": {
+    "description": "Localized Teen adult role hint text displayed in the interface."
+  },
   "olderAdultRoleHint": "Older Adult is Patient only; invalid roles are not shown.",
+  "@olderAdultRoleHint": {
+    "description": "Localized Older adult role hint text displayed in the interface."
+  },
   "rolePatient": "Patient",
+  "@rolePatient": {
+    "description": "Localized Role patient text displayed in the interface."
+  },
   "roleCaregiver": "Caregiver",
+  "@roleCaregiver": {
+    "description": "Localized Role caregiver text displayed in the interface."
+  },
   "roleBoth": "Both",
+  "@roleBoth": {
+    "description": "Localized Role both text displayed in the interface."
+  },
   "usePatientHint": "Use CureLink as a patient.",
+  "@usePatientHint": {
+    "description": "Localized Use patient hint text displayed in the interface."
+  },
   "useCaregiverHint": "Use CureLink as a caregiver.",
+  "@useCaregiverHint": {
+    "description": "Localized Use caregiver hint text displayed in the interface."
+  },
   "switchModesHint": "Switch modes when needed.",
+  "@switchModesHint": {
+    "description": "Localized Switch modes hint text displayed in the interface."
+  },
   "completeProfile": "Complete profile",
+  "@completeProfile": {
+    "description": "Localized Complete profile text displayed in the interface."
+  },
   "profilePhoto": "Profile photo",
+  "@profilePhoto": {
+    "description": "Localized Profile photo text displayed in the interface."
+  },
   "selectedRole": "Selected role",
+  "@selectedRole": {
+    "description": "Localized Selected role text displayed in the interface."
+  },
   "ageGroup": "Age group",
+  "@ageGroup": {
+    "description": "Localized Age group text displayed in the interface."
+  },
   "userIdPlaceholder": "User ID - placeholder",
+  "@userIdPlaceholder": {
+    "description": "Localized User id placeholder text displayed in the interface."
+  },
   "generatedAfterSetup": "Generated after setup",
+  "@generatedAfterSetup": {
+    "description": "Localized Generated after setup text displayed in the interface."
+  },
   "patientMode": "Patient Mode",
+  "@patientMode": {
+    "description": "Localized Patient mode text displayed in the interface."
+  },
   "caregiverMode": "Caregiver Mode",
+  "@caregiverMode": {
+    "description": "Localized Caregiver mode text displayed in the interface."
+  },
   "saveProfile": "Save profile",
-
+  "@saveProfile": {
+    "description": "Localized Save profile text displayed in the interface."
+  },
   "navHome": "Home",
+  "@navHome": {
+    "description": "Localized Nav home text displayed in the interface."
+  },
   "navSchedule": "Schedule",
+  "@navSchedule": {
+    "description": "Localized Nav schedule text displayed in the interface."
+  },
   "navCalendar": "Calendar",
+  "@navCalendar": {
+    "description": "Localized Nav calendar text displayed in the interface."
+  },
   "navNotifications": "Notifications",
+  "@navNotifications": {
+    "description": "Localized Nav notifications text displayed in the interface."
+  },
   "navProfile": "Profile",
-
+  "@navProfile": {
+    "description": "Localized Nav profile text displayed in the interface."
+  },
   "today": "Today",
+  "@today": {
+    "description": "Localized Today text displayed in the interface."
+  },
   "tomorrow": "Tomorrow",
+  "@tomorrow": {
+    "description": "Localized Tomorrow text displayed in the interface."
+  },
   "all": "All",
+  "@all": {
+    "description": "Localized All text displayed in the interface."
+  },
   "morning": "Morning",
+  "@morning": {
+    "description": "Localized Morning text displayed in the interface."
+  },
   "evening": "Evening",
+  "@evening": {
+    "description": "Localized Evening text displayed in the interface."
+  },
   "goodMorning": "Good morning",
+  "@goodMorning": {
+    "description": "Localized Good morning text displayed in the interface."
+  },
   "medicationPlanToday": "Here is your medication plan for today.",
+  "@medicationPlanToday": {
+    "description": "Localized Medication plan today text displayed in the interface."
+  },
   "nextDose": "Next dose",
+  "@nextDose": {
+    "description": "Localized Next dose text displayed in the interface."
+  },
   "inDuration": "In {time}",
   "@inDuration": {
-    "placeholders": { "time": { "type": "String" } }
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
   },
   "scheduledTime": "Scheduled time · {time}",
   "@scheduledTime": {
-    "placeholders": { "time": { "type": "String" } }
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
   },
   "statusUpcoming": "Upcoming",
+  "@statusUpcoming": {
+    "description": "Localized Status upcoming text displayed in the interface."
+  },
   "statusDueNow": "Due now",
+  "@statusDueNow": {
+    "description": "Localized Status due now text displayed in the interface."
+  },
   "statusTaken": "Taken",
+  "@statusTaken": {
+    "description": "Localized Status taken text displayed in the interface."
+  },
   "statusMissed": "Missed",
+  "@statusMissed": {
+    "description": "Localized Status missed text displayed in the interface."
+  },
   "statusPending": "Pending",
+  "@statusPending": {
+    "description": "Localized Status pending text displayed in the interface."
+  },
   "todaysProgress": "Today's progress",
+  "@todaysProgress": {
+    "description": "Localized Todays progress text displayed in the interface."
+  },
   "progressCount": "{done} of {total}",
   "@progressCount": {
     "placeholders": {
-      "done": { "type": "int" },
-      "total": { "type": "int" }
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
     }
   },
   "emergencySos": "Emergency / SOS",
-
+  "@emergencySos": {
+    "description": "Localized Emergency sos text displayed in the interface."
+  },
   "olderHomeTitle": "Your day, clearly planned",
+  "@olderHomeTitle": {
+    "description": "Localized Older home title text displayed in the interface."
+  },
   "olderHomeSubtitle": "Every next step is simple and visible.",
+  "@olderHomeSubtitle": {
+    "description": "Localized Older home subtitle text displayed in the interface."
+  },
   "confirmDose": "Confirm Dose",
+  "@confirmDose": {
+    "description": "Localized Confirm dose text displayed in the interface."
+  },
   "medicationReminder": "Medication reminder",
+  "@medicationReminder": {
+    "description": "Localized Medication reminder text displayed in the interface."
+  },
   "timeForYourMedication": "It's time for your medication",
+  "@timeForYourMedication": {
+    "description": "Localized Time for your medication text displayed in the interface."
+  },
   "remindMeLater": "Remind me later",
+  "@remindMeLater": {
+    "description": "Localized Remind me later text displayed in the interface."
+  },
   "doseRecorded": "Dose recorded",
+  "@doseRecorded": {
+    "description": "Localized Dose recorded text displayed in the interface."
+  },
   "doseComplete": "Dose complete",
+  "@doseComplete": {
+    "description": "Localized Dose complete text displayed in the interface."
+  },
   "progressUpdated": "Progress has been updated.",
-
+  "@progressUpdated": {
+    "description": "Localized Progress updated text displayed in the interface."
+  },
   "childHomeTitle": "Ready for today's mission?",
+  "@childHomeTitle": {
+    "description": "Localized Child home title text displayed in the interface."
+  },
   "childHomeSubtitle": "One small step at a time. You've got this!",
+  "@childHomeSubtitle": {
+    "description": "Localized Child home subtitle text displayed in the interface."
+  },
   "starsNextBadge": "{stars} stars · next badge at {target}",
   "@starsNextBadge": {
     "placeholders": {
-      "stars": { "type": "int" },
-      "target": { "type": "int" }
+      "stars": {
+        "type": "int"
+      },
+      "target": {
+        "type": "int"
+      }
     }
   },
   "missionProgress": "Mission progress",
+  "@missionProgress": {
+    "description": "Localized Mission progress text displayed in the interface."
+  },
   "myMission": "My mission",
+  "@myMission": {
+    "description": "Localized My mission text displayed in the interface."
+  },
   "markAsTaken": "Mark as taken",
+  "@markAsTaken": {
+    "description": "Localized Mark as taken text displayed in the interface."
+  },
   "starEarned": "Star earned!",
+  "@starEarned": {
+    "description": "Localized Star earned text displayed in the interface."
+  },
   "braveRoutineBadge": "Brave Routine badge",
-
+  "@braveRoutineBadge": {
+    "description": "Localized Brave routine badge text displayed in the interface."
+  },
   "addMedicine": "Add medicine",
+  "@addMedicine": {
+    "description": "Localized Add medicine text displayed in the interface."
+  },
   "editMedicine": "Edit medicine",
+  "@editMedicine": {
+    "description": "Localized Edit medicine text displayed in the interface."
+  },
   "deleteMedicine": "Delete medicine",
+  "@deleteMedicine": {
+    "description": "Localized Delete medicine text displayed in the interface."
+  },
   "medicineDetails": "Medicine details",
+  "@medicineDetails": {
+    "description": "Localized Medicine details text displayed in the interface."
+  },
   "medicationName": "Medication name",
+  "@medicationName": {
+    "description": "Localized Medication name text displayed in the interface."
+  },
   "descriptionPlaceholder": "Description placeholder.",
+  "@descriptionPlaceholder": {
+    "description": "Localized Description placeholder text displayed in the interface."
+  },
   "dose": "Dose",
+  "@dose": {
+    "description": "Localized Dose text displayed in the interface."
+  },
   "quantity": "Quantity",
+  "@quantity": {
+    "description": "Localized Quantity text displayed in the interface."
+  },
   "time": "Time",
+  "@time": {
+    "description": "Localized Time text displayed in the interface."
+  },
   "frequency": "Frequency",
+  "@frequency": {
+    "description": "Localized Frequency text displayed in the interface."
+  },
   "duration": "Duration",
+  "@duration": {
+    "description": "Localized Duration text displayed in the interface."
+  },
   "conditions": "Conditions",
+  "@conditions": {
+    "description": "Localized Conditions text displayed in the interface."
+  },
   "timing": "Timing",
+  "@timing": {
+    "description": "Localized Timing text displayed in the interface."
+  },
   "instructions": "Instructions",
+  "@instructions": {
+    "description": "Localized Instructions text displayed in the interface."
+  },
   "notes": "Notes",
-
+  "@notes": {
+    "description": "Localized Notes text displayed in the interface."
+  },
   "profile": "Profile",
+  "@profile": {
+    "description": "Localized Profile text displayed in the interface."
+  },
   "patientName": "Patient name",
+  "@patientName": {
+    "description": "Localized Patient name text displayed in the interface."
+  },
   "settings": "Settings",
+  "@settings": {
+    "description": "Localized Settings text displayed in the interface."
+  },
   "theme": "Theme",
+  "@theme": {
+    "description": "Localized Theme text displayed in the interface."
+  },
   "permissions": "Permissions",
+  "@permissions": {
+    "description": "Localized Permissions text displayed in the interface."
+  },
   "helpAndSupport": "Help and support",
+  "@helpAndSupport": {
+    "description": "Localized Help and support text displayed in the interface."
+  },
   "logOut": "Log out",
-
+  "@logOut": {
+    "description": "Localized Log out text displayed in the interface."
+  },
   "caregiverDashboard": "Caregiver dashboard",
+  "@caregiverDashboard": {
+    "description": "Localized Caregiver dashboard text displayed in the interface."
+  },
   "careOverview": "Care overview",
+  "@careOverview": {
+    "description": "Localized Care overview text displayed in the interface."
+  },
   "careOverviewSubtitle": "Review connected patients and attention items.",
+  "@careOverviewSubtitle": {
+    "description": "Localized Care overview subtitle text displayed in the interface."
+  },
   "addPatient": "Add Patient",
+  "@addPatient": {
+    "description": "Localized Add patient text displayed in the interface."
+  },
   "connectedPatients": "Connected patients",
+  "@connectedPatients": {
+    "description": "Localized Connected patients text displayed in the interface."
+  },
   "needsAttention": "Needs attention",
+  "@needsAttention": {
+    "description": "Localized Needs attention text displayed in the interface."
+  },
   "onTrack": "On track",
+  "@onTrack": {
+    "description": "Localized On track text displayed in the interface."
+  },
   "latestMedicationMissed": "Latest: Medication missed",
+  "@latestMedicationMissed": {
+    "description": "Localized Latest medication missed text displayed in the interface."
+  },
   "latestDoseTaken": "Latest: Dose taken",
+  "@latestDoseTaken": {
+    "description": "Localized Latest dose taken text displayed in the interface."
+  },
   "dosesSummary": "Taken {taken} · Missed {missed} · Pending {pending}",
   "@dosesSummary": {
     "placeholders": {
-      "taken": { "type": "int" },
-      "missed": { "type": "int" },
-      "pending": { "type": "int" }
+      "taken": {
+        "type": "int"
+      },
+      "missed": {
+        "type": "int"
+      },
+      "pending": {
+        "type": "int"
+      }
     }
   },
   "recentAlerts": "Recent alerts",
+  "@recentAlerts": {
+    "description": "Localized Recent alerts text displayed in the interface."
+  },
   "missedDose": "Missed dose",
+  "@missedDose": {
+    "description": "Localized Missed dose text displayed in the interface."
+  },
   "patientDetails": "Patient details",
+  "@patientDetails": {
+    "description": "Localized Patient details text displayed in the interface."
+  },
   "careManage": "Care manage",
+  "@careManage": {
+    "description": "Localized Care manage text displayed in the interface."
+  },
   "todaysMedications": "Today's medications",
+  "@todaysMedications": {
+    "description": "Localized Todays medications text displayed in the interface."
+  },
   "adherence": "Adherence",
+  "@adherence": {
+    "description": "Localized Adherence text displayed in the interface."
+  },
   "historyAndAlerts": "History and alerts",
+  "@historyAndAlerts": {
+    "description": "Localized History and alerts text displayed in the interface."
+  },
   "careAlerts": "Care alerts",
+  "@careAlerts": {
+    "description": "Localized Care alerts text displayed in the interface."
+  },
   "noNewAlerts": "No new alerts",
+  "@noNewAlerts": {
+    "description": "Localized No new alerts text displayed in the interface."
+  },
   "attentionItemsAppearHere": "Attention items appear here.",
-
+  "@attentionItemsAppearHere": {
+    "description": "Localized Attention items appear here text displayed in the interface."
+  },
   "caregiverConnection": "Caregiver connection",
+  "@caregiverConnection": {
+    "description": "Localized Caregiver connection text displayed in the interface."
+  },
   "connectionState": "Connection state",
+  "@connectionState": {
+    "description": "Localized Connection state text displayed in the interface."
+  },
   "noLinkedPatients": "No linked patients",
+  "@noLinkedPatients": {
+    "description": "Localized No linked patients text displayed in the interface."
+  },
   "reviewPatientAndPermission": "Review the patient and requested permission.",
+  "@reviewPatientAndPermission": {
+    "description": "Localized Review patient and permission text displayed in the interface."
+  },
   "patientId": "Patient ID",
+  "@patientId": {
+    "description": "Localized Patient id text displayed in the interface."
+  },
   "placeholderUserId": "Placeholder user ID",
+  "@placeholderUserId": {
+    "description": "Localized Placeholder user id text displayed in the interface."
+  },
   "requestAccess": "Request Access",
+  "@requestAccess": {
+    "description": "Localized Request access text displayed in the interface."
+  },
   "patient": "Patient",
+  "@patient": {
+    "description": "Localized Patient text displayed in the interface."
+  },
   "readOnly": "Read-only",
+  "@readOnly": {
+    "description": "Localized Read only text displayed in the interface."
+  },
   "manageMedications": "Manage medications",
+  "@manageMedications": {
+    "description": "Localized Manage medications text displayed in the interface."
+  },
   "pending": "Pending",
+  "@pending": {
+    "description": "Localized Pending text displayed in the interface."
+  },
   "waitingForApproval": "Waiting for approval. No access is available yet.",
+  "@waitingForApproval": {
+    "description": "Localized Waiting for approval text displayed in the interface."
+  },
   "waitingForPatient": "Waiting for patient",
+  "@waitingForPatient": {
+    "description": "Localized Waiting for patient text displayed in the interface."
+  },
   "approved": "Approved",
+  "@approved": {
+    "description": "Localized Approved text displayed in the interface."
+  },
   "shownAfterApproval": "Shown only after the approval checkpoint.",
-  "connectedAppearsAfterApproval": "Connected appears only after approval."
+  "@shownAfterApproval": {
+    "description": "Localized Shown after approval text displayed in the interface."
+  },
+  "connectedAppearsAfterApproval": "Connected appears only after approval.",
+  "@connectedAppearsAfterApproval": {
+    "description": "Localized Connected appears after approval text displayed in the interface."
+  },
+  "goodAfternoon": "Good afternoon",
+  "@goodAfternoon": {
+    "description": "Localized Good afternoon text displayed in the interface."
+  },
+  "goodEvening": "Good evening",
+  "@goodEvening": {
+    "description": "Localized Good evening text displayed in the interface."
+  },
+  "greetingWithName": "{greeting}, {name}",
+  "@greetingWithName": {
+    "placeholders": {
+      "greeting": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "emptyMedicationsTitle": "No medicines for today",
+  "@emptyMedicationsTitle": {
+    "description": "Localized Empty medications title text displayed in the interface."
+  },
+  "emptyMedicationsMessage": "Add a medicine to see your plan here.",
+  "@emptyMedicationsMessage": {
+    "description": "Localized Empty medications message text displayed in the interface."
+  },
+  "allDosesDone": "All done for today",
+  "@allDosesDone": {
+    "description": "Localized All doses done text displayed in the interface."
+  },
+  "allDosesDoneMessage": "You have no more doses scheduled today.",
+  "@allDosesDoneMessage": {
+    "description": "Localized All doses done message text displayed in the interface."
+  },
+  "retry": "Try again",
+  "@retry": {
+    "description": "Localized Retry text displayed in the interface."
+  }
 }

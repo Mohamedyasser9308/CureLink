@@ -1,4 +1,3 @@
-
 class RoutesNames {
   RoutesNames._();
 
@@ -14,4 +13,8 @@ class RoutesNames {
 
   /// Home screen of each persona.
   static const String personaHome = "/persona-home";
+
+  static const String addMedicine = "/add-medicine";
+  static const String medicineDetails = "/medicine-details";
+  static const String emergency = "/emergency";
 }

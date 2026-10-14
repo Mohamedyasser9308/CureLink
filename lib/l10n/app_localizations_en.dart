@@ -726,4 +726,30 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get connectedAppearsAfterApproval =>
       'Connected appears only after approval.';
+
+  @override
+  String get goodAfternoon => 'Good afternoon';
+
+  @override
+  String get goodEvening => 'Good evening';
+
+  @override
+  String greetingWithName(String greeting, String name) {
+    return '$greeting, $name';
+  }
+
+  @override
+  String get emptyMedicationsTitle => 'No medicines for today';
+
+  @override
+  String get emptyMedicationsMessage => 'Add a medicine to see your plan here.';
+
+  @override
+  String get allDosesDone => 'All done for today';
+
+  @override
+  String get allDosesDoneMessage => 'You have no more doses scheduled today.';
+
+  @override
+  String get retry => 'Try again';
 }

@@ -1,13 +1,13 @@
+import 'package:curelink/core/router/app_navigation.dart';
 import 'package:curelink/core/router/routes_names.dart';
 import 'package:curelink/core/theme/app_theme.dart';
 import 'package:curelink/core/widgets/app_button.dart';
 import 'package:curelink/core/widgets/app_scaffold.dart';
 import 'package:curelink/core/widgets/app_text_field.dart';
-import 'package:curelink/features/home/presentation/home_page.dart';
-import 'package:curelink/features/login/cubit/login_cubit.dart';
-import 'package:curelink/features/login/cubit/login_states.dart';
+import 'package:curelink/features/auth/validators/auth_validators.dart';
+import 'package:curelink/features/auth/login/cubit/login_cubit.dart';
+import 'package:curelink/features/auth/login/cubit/login_states.dart';
 import 'package:curelink/l10n/app_localizations.dart';
-import 'package:emails_validator/emails_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -86,9 +86,7 @@ class _LoginScreenState extends State<LoginScreen> {
         ? AppTheme.navy
         : theme.colorScheme.onSurface;
 
-    return BlocProvider(
-      create: (_) => LoginCubit(),
-      child: AppScaffold(
+    return AppScaffold(
         showAppBar: false,
         scrollable: true,
         padding: const EdgeInsets.fromLTRB(24, 32, 24, 28),
@@ -97,11 +95,9 @@ class _LoginScreenState extends State<LoginScreen> {
             if (state is LoginError) {
               _showSnackbar(context, state.message);
             } else if (state is LoginSuccess) {
-              Navigator.pushReplacement(
+              AppNavigator.pushAndClear(
                 context,
-                MaterialPageRoute(
-                  builder: (_) => const HomePage(),
-                ),
+                RoutesNames.homePage,
               );
             }
           },
@@ -141,14 +137,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   keyboardType: TextInputType.emailAddress,
                   textInputAction: TextInputAction.next,
                   hint: l10n.loginEmailHint,
-                  validator: (value) {
-                    if (value == null ||
-                        !EmailsValidator.validate(value.trim())) {
-                      return l10n.invalidEmail;
-                    }
-
-                    return null;
-                  },
+                  validator: (value) => AuthValidators.email(value, l10n),
                 ),
 
                 const SizedBox(height: 18),
@@ -245,7 +234,6 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
         ),
-      ),
     );
   }
 }

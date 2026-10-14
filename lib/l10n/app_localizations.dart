@@ -98,7 +98,7 @@ abstract class AppLocalizations {
     Locale('en'),
   ];
 
-  /// No description provided for @appTitle.
+  /// Localized App title text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'CureLink'**
@@ -110,43 +110,43 @@ abstract class AppLocalizations {
   /// **'Welcome, {name}!'**
   String welcome(String name);
 
-  /// No description provided for @login.
+  /// Localized Login text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Log in'**
   String get login;
 
-  /// No description provided for @tagline.
+  /// Localized Tagline text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Care that stays connected'**
   String get tagline;
 
-  /// No description provided for @skip.
+  /// Localized Skip text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Skip'**
   String get skip;
 
-  /// No description provided for @next.
+  /// Localized Next text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Next'**
   String get next;
 
-  /// No description provided for @getStarted.
+  /// Localized Get started text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Get started'**
   String get getStarted;
 
-  /// No description provided for @continueButton.
+  /// Localized Continue button text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Continue'**
   String get continueButton;
 
-  /// No description provided for @done.
+  /// Localized Done text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Done'**
@@ -158,463 +158,463 @@ abstract class AppLocalizations {
   /// **'Step {current} of {total}'**
   String stepOfTotal(int current, int total);
 
-  /// No description provided for @onboardingTitle1.
+  /// Localized Onboarding title 1 text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Never miss medication'**
   String get onboardingTitle1;
 
-  /// No description provided for @onboardingSubtitle1.
+  /// Localized Onboarding subtitle 1 text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Gentle reminders keep each dose visible'**
   String get onboardingSubtitle1;
 
-  /// No description provided for @onboardingTitle2.
+  /// Localized Onboarding title 2 text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Track your medication journey'**
   String get onboardingTitle2;
 
-  /// No description provided for @onboardingSubtitle2.
+  /// Localized Onboarding subtitle 2 text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'See schedules, history, and progress'**
   String get onboardingSubtitle2;
 
-  /// No description provided for @onboardingTitle3.
+  /// Localized Onboarding title 3 text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Stay connected with caregivers'**
   String get onboardingTitle3;
 
-  /// No description provided for @onboardingSubtitle3.
+  /// Localized Onboarding subtitle 3 text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Share only what you approve'**
   String get onboardingSubtitle3;
 
-  /// No description provided for @welcomeBack.
+  /// Localized Welcome back text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Welcome back'**
   String get welcomeBack;
 
-  /// No description provided for @signInToContinue.
+  /// Localized Sign in to continue text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Sign in to continue.'**
   String get signInToContinue;
 
-  /// No description provided for @emailOrPhone.
+  /// Localized Email or phone text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Email or phone'**
   String get emailOrPhone;
 
-  /// No description provided for @createAccountSubtitle.
+  /// Localized Create account subtitle text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Create your CureLink account to stay connected.'**
   String get createAccountSubtitle;
 
-  /// No description provided for @enterYourName.
+  /// Localized Enter your name text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Enter your name'**
   String get enterYourName;
 
-  /// No description provided for @enterYourPhone.
+  /// Localized Enter your phone text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Enter your phone number'**
   String get enterYourPhone;
 
-  /// No description provided for @enterYourEmail.
+  /// Localized Enter your email text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Enter your email address'**
   String get enterYourEmail;
 
-  /// No description provided for @createPassword.
+  /// Localized Create password text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Create a password'**
   String get createPassword;
 
-  /// No description provided for @reEnterPassword.
+  /// Localized Re enter password text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Re-enter your password'**
   String get reEnterPassword;
 
-  /// No description provided for @alreadyHaveAccount.
+  /// Localized Already have account text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Already have an account?'**
   String get alreadyHaveAccount;
 
-  /// No description provided for @somethingWentWrong.
+  /// Localized Something went wrong text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Something went wrong. Please try again.'**
   String get somethingWentWrong;
 
-  /// No description provided for @userSessionNotFound.
+  /// Localized User session not found text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'User session not found. Please login again.'**
   String get userSessionNotFound;
 
-  /// No description provided for @couldNotSaveAgeGroup.
+  /// Localized Could not save age group text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Could not save age group. Please try again.'**
   String get couldNotSaveAgeGroup;
 
-  /// No description provided for @emailAlreadyRegistered.
+  /// Localized Email already registered text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'This email is already registered.'**
   String get emailAlreadyRegistered;
 
-  /// No description provided for @passwordsDoNotMatch.
+  /// Localized Passwords do not match text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Passwords do not match.'**
   String get passwordsDoNotMatch;
 
-  /// No description provided for @loginEmailHint.
+  /// Localized Login email hint text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Enter your email address'**
   String get loginEmailHint;
 
-  /// No description provided for @loginPasswordHint.
+  /// Localized Login password hint text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Enter your password'**
   String get loginPasswordHint;
 
-  /// No description provided for @enterPassword.
+  /// Localized Enter password text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Enter your password'**
   String get enterPassword;
 
-  /// No description provided for @dontHaveAccount.
+  /// Localized Dont have account text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Don\'t have an account?'**
   String get dontHaveAccount;
 
-  /// No description provided for @signUp.
+  /// Localized Sign up text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Sign up'**
   String get signUp;
 
-  /// No description provided for @invalidCredentials.
+  /// Localized Invalid credentials text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Email or password is incorrect.'**
   String get invalidCredentials;
 
-  /// No description provided for @authenticationFailed.
+  /// Localized Authentication failed text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Authentication failed. Please try again.'**
   String get authenticationFailed;
 
-  /// No description provided for @completeProfileSubtitle.
+  /// Localized Complete profile subtitle text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Add your information so CureLink can provide a better care experience.'**
   String get completeProfileSubtitle;
 
-  /// No description provided for @tapToAddPhoto.
+  /// Localized Tap to add photo text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Tap to add a profile photo'**
   String get tapToAddPhoto;
 
-  /// No description provided for @personalInformation.
+  /// Localized Personal information text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Personal information'**
   String get personalInformation;
 
-  /// No description provided for @basicProfileDetails.
+  /// Localized Basic profile details text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Your basic profile details'**
   String get basicProfileDetails;
 
-  /// No description provided for @pleaseEnterName.
+  /// Localized Please enter name text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Please enter your name'**
   String get pleaseEnterName;
 
-  /// No description provided for @nameMinLength.
+  /// Localized Name min length text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Name must contain at least 2 characters'**
   String get nameMinLength;
 
-  /// No description provided for @cureLinkId.
+  /// Localized Cure link id text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'CureLink ID'**
   String get cureLinkId;
 
-  /// No description provided for @caregiverConnectionIdHint.
+  /// Localized Caregiver connection id hint text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Use this ID when connecting with caregivers'**
   String get caregiverConnectionIdHint;
 
-  /// No description provided for @emergencyContact.
+  /// Localized Emergency contact text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Emergency contact'**
   String get emergencyContact;
 
-  /// No description provided for @emergencyContactHint.
+  /// Localized Emergency contact hint text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Someone we can contact in an emergency'**
   String get emergencyContactHint;
 
-  /// No description provided for @contactName.
+  /// Localized Contact name text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Contact name'**
   String get contactName;
 
-  /// No description provided for @enterFullName.
+  /// Localized Enter full name text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Enter full name'**
   String get enterFullName;
 
-  /// No description provided for @pleaseEnterEmergencyContactName.
+  /// Localized Please enter emergency contact name text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Please enter the emergency contact name'**
   String get pleaseEnterEmergencyContactName;
 
-  /// No description provided for @phoneNumber.
+  /// Localized Phone number text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Phone number'**
   String get phoneNumber;
 
-  /// No description provided for @enterPhoneNumber.
+  /// Localized Enter phone number text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Enter phone number'**
   String get enterPhoneNumber;
 
-  /// No description provided for @pleaseEnterEmergencyPhone.
+  /// Localized Please enter emergency phone text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Please enter the emergency phone'**
   String get pleaseEnterEmergencyPhone;
 
-  /// No description provided for @validPhoneNumber.
+  /// Localized Valid phone number text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Enter a valid phone number'**
   String get validPhoneNumber;
 
-  /// No description provided for @pleaseWaitGeneratingId.
+  /// Localized Please wait generating id text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Please wait while we generate your unique CureLink ID.'**
   String get pleaseWaitGeneratingId;
 
-  /// No description provided for @choosePhotoMethod.
+  /// Localized Choose photo method text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Choose how you want to add your photo'**
   String get choosePhotoMethod;
 
-  /// No description provided for @chooseFromGallery.
+  /// Localized Choose from gallery text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Choose from gallery'**
   String get chooseFromGallery;
 
-  /// No description provided for @selectPhotoFromDevice.
+  /// Localized Select photo from device text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Select a photo from your device'**
   String get selectPhotoFromDevice;
 
-  /// No description provided for @useCamera.
+  /// Localized Use camera text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Use camera'**
   String get useCamera;
 
-  /// No description provided for @takeNewProfilePhoto.
+  /// Localized Take new profile photo text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Take a new profile photo'**
   String get takeNewProfilePhoto;
 
-  /// No description provided for @unableToSelectImage.
+  /// Localized Unable to select image text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Unable to select the image.'**
   String get unableToSelectImage;
 
-  /// No description provided for @pleaseWaitIdGenerated.
+  /// Localized Please wait id generated text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Please wait until your CureLink ID is generated.'**
   String get pleaseWaitIdGenerated;
 
-  /// No description provided for @profileCompleted.
+  /// Localized Profile completed text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Profile completed'**
   String get profileCompleted;
 
-  /// No description provided for @profileCreatedSuccessfully.
+  /// Localized Profile created successfully text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Your CureLink profile has been created successfully.'**
   String get profileCreatedSuccessfully;
 
-  /// No description provided for @yourCureLinkId.
+  /// Localized Your cure link id text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Your CureLink ID'**
   String get yourCureLinkId;
 
-  /// No description provided for @firebasePermissionDenied.
+  /// Localized Firebase permission denied text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Firebase permission denied while generating CureLink ID.'**
   String get firebasePermissionDenied;
 
-  /// No description provided for @noAuthenticatedUser.
+  /// Localized No authenticated user text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'No authenticated user found. Please login first.'**
   String get noAuthenticatedUser;
 
-  /// No description provided for @networkError.
+  /// Localized Network error text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Network error. Please check your internet connection.'**
   String get networkError;
 
-  /// No description provided for @unableToGenerateId.
+  /// Localized Unable to generate id text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Unable to generate a unique CureLink ID.'**
   String get unableToGenerateId;
 
-  /// No description provided for @profilePermissionDenied.
+  /// Localized Profile permission denied text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'You do not have permission to save this profile.'**
   String get profilePermissionDenied;
 
-  /// No description provided for @sessionExpired.
+  /// Localized Session expired text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Your session has expired. Please sign in again.'**
   String get sessionExpired;
 
-  /// No description provided for @idNotAvailable.
+  /// Localized Id not available text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Not available'**
   String get idNotAvailable;
 
-  /// No description provided for @invalidEmail.
+  /// Localized Invalid email text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'This email address is not valid.'**
   String get invalidEmail;
 
-  /// No description provided for @forgotPasswordSubtitle.
+  /// Localized Forgot password subtitle text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Enter your email and we\'ll send you a link to reset your password'**
   String get forgotPasswordSubtitle;
 
-  /// No description provided for @sendResetLink.
+  /// Localized Send reset link text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Send Reset Link'**
   String get sendResetLink;
 
-  /// No description provided for @backToLogin.
+  /// Localized Back to login text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Back to Login'**
   String get backToLogin;
 
-  /// No description provided for @passwordResetEmailSent.
+  /// Localized Password reset email sent text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Password reset email sent. Check your inbox.'**
   String get passwordResetEmailSent;
 
-  /// No description provided for @userNotFound.
+  /// Localized User not found text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'No account was found with this email'**
   String get userNotFound;
 
-  /// No description provided for @passwordResetFailed.
+  /// Localized Password reset failed text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Could not send password reset email'**
   String get passwordResetFailed;
 
-  /// No description provided for @weakPassword.
+  /// Localized Weak password text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Password is too weak. Use at least 8 characters.'**
   String get weakPassword;
 
-  /// No description provided for @noInternetConnection.
+  /// Localized No internet connection text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'No internet connection. Check your network and try again.'**
   String get noInternetConnection;
 
-  /// No description provided for @emailSignupDisabled.
+  /// Localized Email signup disabled text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Email sign-up is not enabled in Firebase yet.'**
   String get emailSignupDisabled;
 
-  /// No description provided for @tooManyAttempts.
+  /// Localized Too many attempts text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Too many attempts. Please wait a moment and try again.'**
   String get tooManyAttempts;
 
-  /// No description provided for @couldNotCreateAccount.
+  /// Localized Could not create account text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Could not create the account. Please try again.'**
   String get couldNotCreateAccount;
 
-  /// No description provided for @profileSaveFailed.
+  /// Localized Profile save failed text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Account created, but we could not save your profile. Please try again.'**
   String get profileSaveFailed;
 
-  /// No description provided for @pageNotFound.
+  /// Localized Page not found text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Page not found'**
@@ -626,313 +626,313 @@ abstract class AppLocalizations {
   /// **'No route defined for {route}'**
   String noRouteDefined(String route);
 
-  /// No description provided for @enterDetails.
+  /// Localized Enter details text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Enter details'**
   String get enterDetails;
 
-  /// No description provided for @password.
+  /// Localized Password text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Password'**
   String get password;
 
-  /// No description provided for @confirmPassword.
+  /// Localized Confirm password text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Confirm Password'**
   String get confirmPassword;
 
-  /// No description provided for @forgotPassword.
+  /// Localized Forgot password text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Forgot password?'**
   String get forgotPassword;
 
-  /// No description provided for @createAccount.
+  /// Localized Create account text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Create account'**
   String get createAccount;
 
-  /// No description provided for @name.
+  /// Localized Name text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Name'**
   String get name;
 
-  /// No description provided for @phone.
+  /// Localized Phone text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Phone'**
   String get phone;
 
-  /// No description provided for @email.
+  /// Localized Email text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Email'**
   String get email;
 
-  /// No description provided for @fieldError.
+  /// Localized Field error text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Check this field and try again.'**
   String get fieldError;
 
-  /// No description provided for @fieldStates.
+  /// Localized Field states text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Field states'**
   String get fieldStates;
 
-  /// No description provided for @stateDefault.
+  /// Localized State default text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Default'**
   String get stateDefault;
 
-  /// No description provided for @stateFocus.
+  /// Localized State focus text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Focus'**
   String get stateFocus;
 
-  /// No description provided for @stateFilled.
+  /// Localized State filled text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Filled'**
   String get stateFilled;
 
-  /// No description provided for @stateError.
+  /// Localized State error text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Error'**
   String get stateError;
 
-  /// No description provided for @stateDisabled.
+  /// Localized State disabled text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Disabled'**
   String get stateDisabled;
 
-  /// No description provided for @chooseYourRole.
+  /// Localized Choose your role text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Choose your role'**
   String get chooseYourRole;
 
-  /// No description provided for @personaFirst.
+  /// Localized Persona first text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Persona first'**
   String get personaFirst;
 
-  /// No description provided for @ageGroupSubtitle.
+  /// Localized Age group subtitle text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Choose the age group that fits you.'**
   String get ageGroupSubtitle;
 
-  /// No description provided for @roleChild.
+  /// Localized Role child text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Child'**
   String get roleChild;
 
-  /// No description provided for @roleTeenAdult.
+  /// Localized Role teen adult text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Teen / Adult'**
   String get roleTeenAdult;
 
-  /// No description provided for @roleOlderAdult.
+  /// Localized Role older adult text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Older Adult'**
   String get roleOlderAdult;
 
-  /// No description provided for @childRoleHint.
+  /// Localized Child role hint text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Child is Patient only; invalid roles are not shown.'**
   String get childRoleHint;
 
-  /// No description provided for @teenAdultRoleHint.
+  /// Localized Teen adult role hint text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Choose Patient, Caregiver, or Both. Both starts in Patient Mode.'**
   String get teenAdultRoleHint;
 
-  /// No description provided for @olderAdultRoleHint.
+  /// Localized Older adult role hint text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Older Adult is Patient only; invalid roles are not shown.'**
   String get olderAdultRoleHint;
 
-  /// No description provided for @rolePatient.
+  /// Localized Role patient text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Patient'**
   String get rolePatient;
 
-  /// No description provided for @roleCaregiver.
+  /// Localized Role caregiver text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Caregiver'**
   String get roleCaregiver;
 
-  /// No description provided for @roleBoth.
+  /// Localized Role both text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Both'**
   String get roleBoth;
 
-  /// No description provided for @usePatientHint.
+  /// Localized Use patient hint text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Use CureLink as a patient.'**
   String get usePatientHint;
 
-  /// No description provided for @useCaregiverHint.
+  /// Localized Use caregiver hint text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Use CureLink as a caregiver.'**
   String get useCaregiverHint;
 
-  /// No description provided for @switchModesHint.
+  /// Localized Switch modes hint text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Switch modes when needed.'**
   String get switchModesHint;
 
-  /// No description provided for @completeProfile.
+  /// Localized Complete profile text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Complete profile'**
   String get completeProfile;
 
-  /// No description provided for @profilePhoto.
+  /// Localized Profile photo text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Profile photo'**
   String get profilePhoto;
 
-  /// No description provided for @selectedRole.
+  /// Localized Selected role text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Selected role'**
   String get selectedRole;
 
-  /// No description provided for @ageGroup.
+  /// Localized Age group text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Age group'**
   String get ageGroup;
 
-  /// No description provided for @userIdPlaceholder.
+  /// Localized User id placeholder text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'User ID - placeholder'**
   String get userIdPlaceholder;
 
-  /// No description provided for @generatedAfterSetup.
+  /// Localized Generated after setup text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Generated after setup'**
   String get generatedAfterSetup;
 
-  /// No description provided for @patientMode.
+  /// Localized Patient mode text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Patient Mode'**
   String get patientMode;
 
-  /// No description provided for @caregiverMode.
+  /// Localized Caregiver mode text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Caregiver Mode'**
   String get caregiverMode;
 
-  /// No description provided for @saveProfile.
+  /// Localized Save profile text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Save profile'**
   String get saveProfile;
 
-  /// No description provided for @navHome.
+  /// Localized Nav home text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Home'**
   String get navHome;
 
-  /// No description provided for @navSchedule.
+  /// Localized Nav schedule text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Schedule'**
   String get navSchedule;
 
-  /// No description provided for @navCalendar.
+  /// Localized Nav calendar text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Calendar'**
   String get navCalendar;
 
-  /// No description provided for @navNotifications.
+  /// Localized Nav notifications text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Notifications'**
   String get navNotifications;
 
-  /// No description provided for @navProfile.
+  /// Localized Nav profile text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Profile'**
   String get navProfile;
 
-  /// No description provided for @today.
+  /// Localized Today text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Today'**
   String get today;
 
-  /// No description provided for @tomorrow.
+  /// Localized Tomorrow text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Tomorrow'**
   String get tomorrow;
 
-  /// No description provided for @all.
+  /// Localized All text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'All'**
   String get all;
 
-  /// No description provided for @morning.
+  /// Localized Morning text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Morning'**
   String get morning;
 
-  /// No description provided for @evening.
+  /// Localized Evening text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Evening'**
   String get evening;
 
-  /// No description provided for @goodMorning.
+  /// Localized Good morning text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Good morning'**
   String get goodMorning;
 
-  /// No description provided for @medicationPlanToday.
+  /// Localized Medication plan today text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Here is your medication plan for today.'**
   String get medicationPlanToday;
 
-  /// No description provided for @nextDose.
+  /// Localized Next dose text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Next dose'**
@@ -950,37 +950,37 @@ abstract class AppLocalizations {
   /// **'Scheduled time · {time}'**
   String scheduledTime(String time);
 
-  /// No description provided for @statusUpcoming.
+  /// Localized Status upcoming text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Upcoming'**
   String get statusUpcoming;
 
-  /// No description provided for @statusDueNow.
+  /// Localized Status due now text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Due now'**
   String get statusDueNow;
 
-  /// No description provided for @statusTaken.
+  /// Localized Status taken text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Taken'**
   String get statusTaken;
 
-  /// No description provided for @statusMissed.
+  /// Localized Status missed text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Missed'**
   String get statusMissed;
 
-  /// No description provided for @statusPending.
+  /// Localized Status pending text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Pending'**
   String get statusPending;
 
-  /// No description provided for @todaysProgress.
+  /// Localized Todays progress text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Today\'s progress'**
@@ -992,73 +992,73 @@ abstract class AppLocalizations {
   /// **'{done} of {total}'**
   String progressCount(int done, int total);
 
-  /// No description provided for @emergencySos.
+  /// Localized Emergency sos text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Emergency / SOS'**
   String get emergencySos;
 
-  /// No description provided for @olderHomeTitle.
+  /// Localized Older home title text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Your day, clearly planned'**
   String get olderHomeTitle;
 
-  /// No description provided for @olderHomeSubtitle.
+  /// Localized Older home subtitle text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Every next step is simple and visible.'**
   String get olderHomeSubtitle;
 
-  /// No description provided for @confirmDose.
+  /// Localized Confirm dose text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Confirm Dose'**
   String get confirmDose;
 
-  /// No description provided for @medicationReminder.
+  /// Localized Medication reminder text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Medication reminder'**
   String get medicationReminder;
 
-  /// No description provided for @timeForYourMedication.
+  /// Localized Time for your medication text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'It\'s time for your medication'**
   String get timeForYourMedication;
 
-  /// No description provided for @remindMeLater.
+  /// Localized Remind me later text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Remind me later'**
   String get remindMeLater;
 
-  /// No description provided for @doseRecorded.
+  /// Localized Dose recorded text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Dose recorded'**
   String get doseRecorded;
 
-  /// No description provided for @doseComplete.
+  /// Localized Dose complete text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Dose complete'**
   String get doseComplete;
 
-  /// No description provided for @progressUpdated.
+  /// Localized Progress updated text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Progress has been updated.'**
   String get progressUpdated;
 
-  /// No description provided for @childHomeTitle.
+  /// Localized Child home title text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Ready for today\'s mission?'**
   String get childHomeTitle;
 
-  /// No description provided for @childHomeSubtitle.
+  /// Localized Child home subtitle text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'One small step at a time. You\'ve got this!'**
@@ -1070,217 +1070,217 @@ abstract class AppLocalizations {
   /// **'{stars} stars · next badge at {target}'**
   String starsNextBadge(int stars, int target);
 
-  /// No description provided for @missionProgress.
+  /// Localized Mission progress text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Mission progress'**
   String get missionProgress;
 
-  /// No description provided for @myMission.
+  /// Localized My mission text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'My mission'**
   String get myMission;
 
-  /// No description provided for @markAsTaken.
+  /// Localized Mark as taken text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Mark as taken'**
   String get markAsTaken;
 
-  /// No description provided for @starEarned.
+  /// Localized Star earned text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Star earned!'**
   String get starEarned;
 
-  /// No description provided for @braveRoutineBadge.
+  /// Localized Brave routine badge text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Brave Routine badge'**
   String get braveRoutineBadge;
 
-  /// No description provided for @addMedicine.
+  /// Localized Add medicine text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Add medicine'**
   String get addMedicine;
 
-  /// No description provided for @editMedicine.
+  /// Localized Edit medicine text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Edit medicine'**
   String get editMedicine;
 
-  /// No description provided for @deleteMedicine.
+  /// Localized Delete medicine text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Delete medicine'**
   String get deleteMedicine;
 
-  /// No description provided for @medicineDetails.
+  /// Localized Medicine details text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Medicine details'**
   String get medicineDetails;
 
-  /// No description provided for @medicationName.
+  /// Localized Medication name text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Medication name'**
   String get medicationName;
 
-  /// No description provided for @descriptionPlaceholder.
+  /// Localized Description placeholder text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Description placeholder.'**
   String get descriptionPlaceholder;
 
-  /// No description provided for @dose.
+  /// Localized Dose text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Dose'**
   String get dose;
 
-  /// No description provided for @quantity.
+  /// Localized Quantity text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Quantity'**
   String get quantity;
 
-  /// No description provided for @time.
+  /// Localized Time text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Time'**
   String get time;
 
-  /// No description provided for @frequency.
+  /// Localized Frequency text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Frequency'**
   String get frequency;
 
-  /// No description provided for @duration.
+  /// Localized Duration text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Duration'**
   String get duration;
 
-  /// No description provided for @conditions.
+  /// Localized Conditions text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Conditions'**
   String get conditions;
 
-  /// No description provided for @timing.
+  /// Localized Timing text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Timing'**
   String get timing;
 
-  /// No description provided for @instructions.
+  /// Localized Instructions text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Instructions'**
   String get instructions;
 
-  /// No description provided for @notes.
+  /// Localized Notes text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Notes'**
   String get notes;
 
-  /// No description provided for @profile.
+  /// Localized Profile text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Profile'**
   String get profile;
 
-  /// No description provided for @patientName.
+  /// Localized Patient name text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Patient name'**
   String get patientName;
 
-  /// No description provided for @settings.
+  /// Localized Settings text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Settings'**
   String get settings;
 
-  /// No description provided for @theme.
+  /// Localized Theme text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Theme'**
   String get theme;
 
-  /// No description provided for @permissions.
+  /// Localized Permissions text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Permissions'**
   String get permissions;
 
-  /// No description provided for @helpAndSupport.
+  /// Localized Help and support text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Help and support'**
   String get helpAndSupport;
 
-  /// No description provided for @logOut.
+  /// Localized Log out text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Log out'**
   String get logOut;
 
-  /// No description provided for @caregiverDashboard.
+  /// Localized Caregiver dashboard text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Caregiver dashboard'**
   String get caregiverDashboard;
 
-  /// No description provided for @careOverview.
+  /// Localized Care overview text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Care overview'**
   String get careOverview;
 
-  /// No description provided for @careOverviewSubtitle.
+  /// Localized Care overview subtitle text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Review connected patients and attention items.'**
   String get careOverviewSubtitle;
 
-  /// No description provided for @addPatient.
+  /// Localized Add patient text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Add Patient'**
   String get addPatient;
 
-  /// No description provided for @connectedPatients.
+  /// Localized Connected patients text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Connected patients'**
   String get connectedPatients;
 
-  /// No description provided for @needsAttention.
+  /// Localized Needs attention text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Needs attention'**
   String get needsAttention;
 
-  /// No description provided for @onTrack.
+  /// Localized On track text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'On track'**
   String get onTrack;
 
-  /// No description provided for @latestMedicationMissed.
+  /// Localized Latest medication missed text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Latest: Medication missed'**
   String get latestMedicationMissed;
 
-  /// No description provided for @latestDoseTaken.
+  /// Localized Latest dose taken text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Latest: Dose taken'**
@@ -1292,161 +1292,209 @@ abstract class AppLocalizations {
   /// **'Taken {taken} · Missed {missed} · Pending {pending}'**
   String dosesSummary(int taken, int missed, int pending);
 
-  /// No description provided for @recentAlerts.
+  /// Localized Recent alerts text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Recent alerts'**
   String get recentAlerts;
 
-  /// No description provided for @missedDose.
+  /// Localized Missed dose text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Missed dose'**
   String get missedDose;
 
-  /// No description provided for @patientDetails.
+  /// Localized Patient details text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Patient details'**
   String get patientDetails;
 
-  /// No description provided for @careManage.
+  /// Localized Care manage text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Care manage'**
   String get careManage;
 
-  /// No description provided for @todaysMedications.
+  /// Localized Todays medications text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Today\'s medications'**
   String get todaysMedications;
 
-  /// No description provided for @adherence.
+  /// Localized Adherence text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Adherence'**
   String get adherence;
 
-  /// No description provided for @historyAndAlerts.
+  /// Localized History and alerts text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'History and alerts'**
   String get historyAndAlerts;
 
-  /// No description provided for @careAlerts.
+  /// Localized Care alerts text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Care alerts'**
   String get careAlerts;
 
-  /// No description provided for @noNewAlerts.
+  /// Localized No new alerts text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'No new alerts'**
   String get noNewAlerts;
 
-  /// No description provided for @attentionItemsAppearHere.
+  /// Localized Attention items appear here text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Attention items appear here.'**
   String get attentionItemsAppearHere;
 
-  /// No description provided for @caregiverConnection.
+  /// Localized Caregiver connection text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Caregiver connection'**
   String get caregiverConnection;
 
-  /// No description provided for @connectionState.
+  /// Localized Connection state text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Connection state'**
   String get connectionState;
 
-  /// No description provided for @noLinkedPatients.
+  /// Localized No linked patients text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'No linked patients'**
   String get noLinkedPatients;
 
-  /// No description provided for @reviewPatientAndPermission.
+  /// Localized Review patient and permission text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Review the patient and requested permission.'**
   String get reviewPatientAndPermission;
 
-  /// No description provided for @patientId.
+  /// Localized Patient id text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Patient ID'**
   String get patientId;
 
-  /// No description provided for @placeholderUserId.
+  /// Localized Placeholder user id text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Placeholder user ID'**
   String get placeholderUserId;
 
-  /// No description provided for @requestAccess.
+  /// Localized Request access text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Request Access'**
   String get requestAccess;
 
-  /// No description provided for @patient.
+  /// Localized Patient text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Patient'**
   String get patient;
 
-  /// No description provided for @readOnly.
+  /// Localized Read only text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Read-only'**
   String get readOnly;
 
-  /// No description provided for @manageMedications.
+  /// Localized Manage medications text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Manage medications'**
   String get manageMedications;
 
-  /// No description provided for @pending.
+  /// Localized Pending text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Pending'**
   String get pending;
 
-  /// No description provided for @waitingForApproval.
+  /// Localized Waiting for approval text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Waiting for approval. No access is available yet.'**
   String get waitingForApproval;
 
-  /// No description provided for @waitingForPatient.
+  /// Localized Waiting for patient text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Waiting for patient'**
   String get waitingForPatient;
 
-  /// No description provided for @approved.
+  /// Localized Approved text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Approved'**
   String get approved;
 
-  /// No description provided for @shownAfterApproval.
+  /// Localized Shown after approval text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Shown only after the approval checkpoint.'**
   String get shownAfterApproval;
 
-  /// No description provided for @connectedAppearsAfterApproval.
+  /// Localized Connected appears after approval text displayed in the interface.
   ///
   /// In en, this message translates to:
   /// **'Connected appears only after approval.'**
   String get connectedAppearsAfterApproval;
+
+  /// Localized Good afternoon text displayed in the interface.
+  ///
+  /// In en, this message translates to:
+  /// **'Good afternoon'**
+  String get goodAfternoon;
+
+  /// Localized Good evening text displayed in the interface.
+  ///
+  /// In en, this message translates to:
+  /// **'Good evening'**
+  String get goodEvening;
+
+  /// No description provided for @greetingWithName.
+  ///
+  /// In en, this message translates to:
+  /// **'{greeting}, {name}'**
+  String greetingWithName(String greeting, String name);
+
+  /// Localized Empty medications title text displayed in the interface.
+  ///
+  /// In en, this message translates to:
+  /// **'No medicines for today'**
+  String get emptyMedicationsTitle;
+
+  /// Localized Empty medications message text displayed in the interface.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a medicine to see your plan here.'**
+  String get emptyMedicationsMessage;
+
+  /// Localized All doses done text displayed in the interface.
+  ///
+  /// In en, this message translates to:
+  /// **'All done for today'**
+  String get allDosesDone;
+
+  /// Localized All doses done message text displayed in the interface.
+  ///
+  /// In en, this message translates to:
+  /// **'You have no more doses scheduled today.'**
+  String get allDosesDoneMessage;
+
+  /// Localized Retry text displayed in the interface.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get retry;
 }
 
 class _AppLocalizationsDelegate
