@@ -1645,6 +1645,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Medicine image'**
   String get medMedicineImage;
+
+  /// No description provided for @medicineInformation.
+  ///
+  /// In en, this message translates to:
+  /// **'Medicine information'**
+  String get medicineInformation;
+
+  /// No description provided for @ongoing.
+  ///
+  /// In en, this message translates to:
+  /// **'Ongoing'**
+  String get ongoing;
+
+  /// No description provided for @startDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Start date'**
+  String get startDate;
+
+  /// No description provided for @schedule.
+  ///
+  /// In en, this message translates to:
+  /// **'Schedule'**
+  String get schedule;
+
+  /// No description provided for @noScheduleAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No schedule available'**
+  String get noScheduleAvailable;
+
+  /// No description provided for @description.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get description;
+
+  /// No description provided for @deleteMedicineConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this medicine?'**
+  String get deleteMedicineConfirmation;
+
+  /// No description provided for @cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
+
+  /// No description provided for @delete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get delete;
 }
 
 class _AppLocalizationsDelegate

@@ -825,4 +825,32 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get medMedicineImage => 'Medicine image';
+
+  @override
+  String get medicineInformation => 'Medicine information';
+
+  @override
+  String get ongoing => 'Ongoing';
+
+  @override
+  String get startDate => 'Start date';
+
+  @override
+  String get schedule => 'Schedule';
+
+  @override
+  String get noScheduleAvailable => 'No schedule available';
+
+  @override
+  String get description => 'Description';
+
+  @override
+  String get deleteMedicineConfirmation =>
+      'Are you sure you want to delete this medicine?';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get delete => 'Delete';
 }

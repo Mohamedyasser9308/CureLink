@@ -827,4 +827,32 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get medMedicineImage => 'صورة الدواء';
+
+  @override
+  String get medicineInformation => 'معلومات الدواء';
+
+  @override
+  String get ongoing => 'مستمرة';
+
+  @override
+  String get startDate => 'تاريخ البدء';
+
+  @override
+  String get schedule => 'المواعيد';
+
+  @override
+  String get noScheduleAvailable => 'لا توجد مواعيد متاحة';
+
+  @override
+  String get description => 'الوصف';
+
+  @override
+  String get deleteMedicineConfirmation =>
+      'هل أنت متأكد أنك تريد حذف هذا الدواء؟';
+
+  @override
+  String get cancel => 'إلغاء';
+
+  @override
+  String get delete => 'حذف';
 }
