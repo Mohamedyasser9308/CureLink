@@ -1,7 +1,6 @@
 
 import 'dart:io';
 
-import 'package:curelink/core/theme/app_theme.dart';
 import 'package:curelink/features/medication/data/models/medication_model.dart';
 import 'package:curelink/features/medication/data/repositries/medication_repository.dart';
 import 'package:curelink/features/medication/presentation/cubit/medication_cubit.dart';
@@ -85,9 +84,10 @@ class _AddMedicinePageState extends State<AddMedicinePage> {
   }
 
   String get resolvedPatientId {
-    return widget.patientId ??
-        FirebaseAuth.instance.currentUser?.uid ??
-        '';
+    return (widget.patientId ??
+            FirebaseAuth.instance.currentUser?.uid ??
+            '')
+        .trim();
   }
 
   void loadMedicine() {
@@ -105,7 +105,6 @@ class _AddMedicinePageState extends State<AddMedicinePage> {
         ? medication.times.first
         : '';
 
-    // Keep canonical values separate from localized display labels.
     selectedFrequencyValue = medication.frequency;
     selectedDurationValue = medication.durationDays == null
         ? 'Ongoing'
@@ -125,7 +124,20 @@ class _AddMedicinePageState extends State<AddMedicinePage> {
     formRevision++;
   }
 
-  void saveMedicine() {
+  void _showMessage(String message) {
+    if (!mounted) return;
+
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
+        SnackBar(
+          content: Text(message),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+  }
+
+  Future<void> saveMedicine() async {
     if (isInitializing ||
         medicationCubit.state is MedicationLoading) {
       return;
@@ -136,26 +148,29 @@ class _AddMedicinePageState extends State<AddMedicinePage> {
     }
 
     final l10n = AppLocalizations.of(context)!;
-    final patientId = resolvedPatientId.trim();
+    final patientId = resolvedPatientId;
+
+    if (FirebaseAuth.instance.currentUser == null) {
+      _showMessage(l10n.noAuthenticatedUser);
+      return;
+    }
 
     if (patientId.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(l10n.medPatientUnavailable),
-        ),
-      );
+      _showMessage(l10n.medPatientUnavailable);
       return;
     }
 
     final frequency = selectedFrequencyValue;
 
     if (frequency == null || frequency.isEmpty) {
+      _showMessage(l10n.medFrequencyRequired);
       return;
     }
 
     final duration = selectedDurationValue;
 
     if (duration == null || duration.isEmpty) {
+      _showMessage(l10n.medDurationRequired);
       return;
     }
 
@@ -175,20 +190,17 @@ class _AddMedicinePageState extends State<AddMedicinePage> {
         durationDays = null;
         break;
       default:
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Please select a valid duration.'),
-          ),
-        );
+        _showMessage(l10n.medDurationRequired);
         return;
     }
 
     if (frequency == 'Specific days' &&
         selectedWeekdays.isEmpty) {
+      _showMessage(l10n.medSelectDays);
       return;
     }
 
-    medicationCubit.saveMedication(
+    await medicationCubit.saveMedication(
       patientId: patientId,
       name: nameController.text.trim(),
       dosage: doseController.text.trim(),
@@ -205,11 +217,14 @@ class _AddMedicinePageState extends State<AddMedicinePage> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+    final colors = theme.colorScheme;
 
     return Scaffold(
-      backgroundColor: AppTheme.background,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: AppTheme.background,
+        backgroundColor: theme.scaffoldBackgroundColor,
+        foregroundColor: colors.onSurface,
         elevation: 0,
         automaticallyImplyLeading: false,
         title: Text(
@@ -217,7 +232,7 @@ class _AddMedicinePageState extends State<AddMedicinePage> {
           style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.w400,
-            color: AppTheme.navy,
+            color: colors.onSurface,
           ),
         ),
       ),
@@ -234,23 +249,19 @@ class _AddMedicinePageState extends State<AddMedicinePage> {
               isEditMode = false;
               isInitializing = false;
             });
+          } else if (state is MedicationLoadFailure) {
+            setState(() {
+              isInitializing = false;
+            });
+            _showMessage(state.message);
           } else if (state is MedicationSuccess) {
             if (Navigator.of(context).canPop()) {
               Navigator.of(context).pop(true);
             } else {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(l10n.medSavedSuccessfully),
-                ),
-              );
+              _showMessage(l10n.medSavedSuccessfully);
             }
           } else if (state is MedicationError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.message),
-                backgroundColor: Colors.red,
-              ),
-            );
+            _showMessage(state.message);
           }
         },
         builder: (context, state) {
@@ -265,15 +276,20 @@ class _AddMedicinePageState extends State<AddMedicinePage> {
                       state.message,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        color: AppTheme.navy,
+                        color: colors.onSurface,
                         fontSize: 16,
                       ),
                     ),
                     const SizedBox(height: 12),
                     ElevatedButton.icon(
-                      onPressed: loadMedicine,
+                      onPressed: () {
+                        setState(() {
+                          isInitializing = true;
+                        });
+                        loadMedicine();
+                      },
                       icon: const Icon(Icons.refresh),
-                      label: const Text('Retry'),
+                      label: Text(l10n.retry),
                     ),
                   ],
                 ),
@@ -281,7 +297,8 @@ class _AddMedicinePageState extends State<AddMedicinePage> {
             );
           }
 
-          if (isInitializing) {
+          if (isInitializing ||
+              state is MedicationInitial) {
             return const Center(
               child: CircularProgressIndicator(),
             );
@@ -289,72 +306,76 @@ class _AddMedicinePageState extends State<AddMedicinePage> {
 
           final isLoading = state is MedicationLoading;
 
-          return Form(
-            key: formKey,
-            child: ListView(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 20,
-              ),
-              children: [
-                MedicineForm(
-                  key: ValueKey(formRevision),
-                  nameController: nameController,
-                  doseController: doseController,
-                  timeController: timeController,
-                  frequencyController: frequencyController,
-                  durationController: durationController,
-                  descriptionController: descriptionController,
-                  notesController: notesController,
-                  initialImageUrl: existingImageUrl,
-                  initialWeekdays: selectedWeekdays,
-                  initialFrequency: selectedFrequencyValue,
-                  initialDuration: selectedDurationValue,
-                  onImageSelected: (image) {
-                    selectedMedicineImage = image;
-                  },
-                  onWeekdaysChanged: (days) {
-                    selectedWeekdays = List<int>.from(days);
-                  },
-                  onFrequencyChanged: (frequency) {
-                    selectedFrequencyValue = frequency;
-                  },
-                  onDurationChanged: (duration) {
-                    selectedDurationValue = duration;
-                  },
+          return SafeArea(
+            child: Form(
+              key: formKey,
+              child: ListView(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 20,
                 ),
-                const SizedBox(height: 30),
-                SizedBox(
-                  width: double.infinity,
-                  height: 55,
-                  child: ElevatedButton(
-                    onPressed: isLoading ? null : saveMedicine,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppTheme.navy,
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                    ),
-                    child: isLoading
-                        ? const SizedBox(
-                            height: 24,
-                            width: 24,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              color: Colors.white,
-                            ),
-                          )
-                        : Text(
-                            l10n.medSaveMedicine,
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                children: [
+                  MedicineForm(
+                    key: ValueKey(formRevision),
+                    nameController: nameController,
+                    doseController: doseController,
+                    timeController: timeController,
+                    frequencyController: frequencyController,
+                    durationController: durationController,
+                    descriptionController: descriptionController,
+                    notesController: notesController,
+                    initialImageUrl: existingImageUrl,
+                    initialWeekdays: selectedWeekdays,
+                    initialFrequency: selectedFrequencyValue,
+                    initialDuration: selectedDurationValue,
+                    onImageSelected: (image) {
+                      selectedMedicineImage = image;
+                    },
+                    onWeekdaysChanged: (days) {
+                      selectedWeekdays = List<int>.from(days);
+                    },
+                    onFrequencyChanged: (frequency) {
+                      selectedFrequencyValue = frequency;
+                    },
+                    onDurationChanged: (duration) {
+                      selectedDurationValue = duration;
+                    },
                   ),
-                ),
-              ],
+                  const SizedBox(height: 30),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 55,
+                    child: ElevatedButton(
+                      onPressed: isLoading ? null : saveMedicine,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: colors.primary,
+                        foregroundColor: colors.onPrimary,
+                        disabledBackgroundColor:
+                            colors.primary.withValues(alpha: 0.5),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                      ),
+                      child: isLoading
+                          ? SizedBox(
+                              height: 24,
+                              width: 24,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: colors.onPrimary,
+                              ),
+                            )
+                          : Text(
+                              l10n.medSaveMedicine,
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           );
         },

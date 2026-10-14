@@ -1,7 +1,6 @@
 
 import 'dart:io';
 
-import 'package:curelink/core/theme/app_theme.dart';
 import 'package:curelink/features/medication/presentation/widgets/medicine_image_picker.dart';
 import 'package:curelink/features/medication/presentation/widgets/medicine_textfield.dart';
 import 'package:curelink/l10n/app_localizations.dart';
@@ -209,7 +208,6 @@ class _MedicineFormState extends State<MedicineForm> {
       }
     }
 
-    // Supports previously saved Arabic duration values such as "7 أيام".
     final number = int.tryParse(normalized.split(' ').first);
 
     switch (number) {
@@ -239,6 +237,7 @@ class _MedicineFormState extends State<MedicineForm> {
 
   Future<List<int>?> selectDays() async {
     final l10n = AppLocalizations.of(context)!;
+    final colors = Theme.of(context).colorScheme;
     final selectedDays = selectedWeekdays.toSet();
     final names = dayNames(l10n);
 
@@ -248,7 +247,11 @@ class _MedicineFormState extends State<MedicineForm> {
         return StatefulBuilder(
           builder: (context, setDialogState) {
             return AlertDialog(
-              title: Text(l10n.medSelectDays),
+              backgroundColor: colors.surface,
+              title: Text(
+                l10n.medSelectDays,
+                style: TextStyle(color: colors.onSurface),
+              ),
               content: Wrap(
                 spacing: 8,
                 runSpacing: 8,
@@ -258,6 +261,15 @@ class _MedicineFormState extends State<MedicineForm> {
                   return FilterChip(
                     label: Text(names[index]),
                     selected: selectedDays.contains(day),
+                    selectedColor: colors.primary.withValues(alpha: 0.22),
+                    backgroundColor: colors.surface,
+                    side: BorderSide(color: colors.outline),
+                    labelStyle: TextStyle(
+                      color: selectedDays.contains(day)
+                          ? colors.primary
+                          : colors.onSurface,
+                    ),
+                    checkmarkColor: colors.primary,
                     onSelected: (selected) {
                       setDialogState(() {
                         if (selected) {
@@ -294,19 +306,28 @@ class _MedicineFormState extends State<MedicineForm> {
 
   Future<void> selectFrequency() async {
     final l10n = AppLocalizations.of(context)!;
+    final colors = Theme.of(context).colorScheme;
     final labels = frequencyLabels(l10n);
 
     final selectedIndex = await showModalBottomSheet<int>(
       context: context,
+      backgroundColor: colors.surface,
+      showDragHandle: true,
       builder: (sheetContext) {
         return SafeArea(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: List.generate(frequencyOptions.length, (index) {
+              final isSelected =
+                  selectedFrequency == frequencyOptions[index];
+
               return ListTile(
-                title: Text(labels[index]),
-                trailing: selectedFrequency == frequencyOptions[index]
-                    ? const Icon(Icons.check, color: AppTheme.primary)
+                title: Text(
+                  labels[index],
+                  style: TextStyle(color: colors.onSurface),
+                ),
+                trailing: isSelected
+                    ? Icon(Icons.check, color: colors.primary)
                     : null,
                 onTap: () => Navigator.pop(sheetContext, index),
               );
@@ -341,19 +362,28 @@ class _MedicineFormState extends State<MedicineForm> {
 
   Future<void> selectDuration() async {
     final l10n = AppLocalizations.of(context)!;
+    final colors = Theme.of(context).colorScheme;
     final labels = durationLabels(l10n);
 
     final selectedIndex = await showModalBottomSheet<int>(
       context: context,
+      backgroundColor: colors.surface,
+      showDragHandle: true,
       builder: (sheetContext) {
         return SafeArea(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: List.generate(durationOptions.length, (index) {
+              final isSelected =
+                  selectedDuration == durationOptions[index];
+
               return ListTile(
-                title: Text(labels[index]),
-                trailing: selectedDuration == durationOptions[index]
-                    ? const Icon(Icons.check, color: AppTheme.primary)
+                title: Text(
+                  labels[index],
+                  style: TextStyle(color: colors.onSurface),
+                ),
+                trailing: isSelected
+                    ? Icon(Icons.check, color: colors.primary)
                     : null,
                 onTap: () => Navigator.pop(sheetContext, index),
               );
@@ -378,7 +408,17 @@ class _MedicineFormState extends State<MedicineForm> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+    final colors = theme.colorScheme;
     final names = dayNames(l10n);
+
+    final sectionLabelStyle = TextStyle(
+      color: colors.onSurface,
+      fontSize: 16,
+      fontWeight: FontWeight.bold,
+    );
+
+    final iconColor = colors.primary;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -413,14 +453,7 @@ class _MedicineFormState extends State<MedicineForm> {
         ),
         const SizedBox(height: 20),
 
-        Text(
-          l10n.time,
-          style: const TextStyle(
-            color: AppTheme.navy,
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+        Text(l10n.time, style: sectionLabelStyle),
         const SizedBox(height: 8),
 
         TextFormField(
@@ -435,22 +468,15 @@ class _MedicineFormState extends State<MedicineForm> {
           },
           decoration: medicineDecoration(
             context,
-            suffixIcon: const Icon(
+            suffixIcon: Icon(
               Icons.access_time_outlined,
-              color: AppTheme.primary,
+              color: iconColor,
             ),
           ).copyWith(hintText: l10n.medSelectTime),
         ),
         const SizedBox(height: 20),
 
-        Text(
-          l10n.medFrequencyDuration,
-          style: const TextStyle(
-            color: AppTheme.navy,
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+        Text(l10n.medFrequencyDuration, style: sectionLabelStyle),
         const SizedBox(height: 8),
 
         TextFormField(
@@ -471,9 +497,9 @@ class _MedicineFormState extends State<MedicineForm> {
           },
           decoration: medicineDecoration(
             context,
-            suffixIcon: const Icon(
+            suffixIcon: Icon(
               Icons.keyboard_arrow_down,
-              color: AppTheme.primary,
+              color: iconColor,
             ),
           ).copyWith(hintText: l10n.medSelectFrequency),
         ),
@@ -485,8 +511,14 @@ class _MedicineFormState extends State<MedicineForm> {
             runSpacing: 6,
             children: selectedWeekdays.map((day) {
               return Chip(
-                label: Text(names[day - 1]),
-                backgroundColor: AppTheme.primary.withValues(alpha: 0.1),
+                label: Text(
+                  names[day - 1],
+                  style: TextStyle(color: colors.onSurface),
+                ),
+                backgroundColor: colors.primary.withValues(
+                  alpha: theme.brightness == Brightness.dark ? 0.24 : 0.1,
+                ),
+                side: BorderSide(color: colors.outline),
               );
             }).toList(),
           ),
@@ -506,9 +538,9 @@ class _MedicineFormState extends State<MedicineForm> {
           },
           decoration: medicineDecoration(
             context,
-            suffixIcon: const Icon(
+            suffixIcon: Icon(
               Icons.calendar_month_outlined,
-              color: AppTheme.primary,
+              color: iconColor,
             ),
           ).copyWith(hintText: l10n.medSelectDuration),
         ),

@@ -1,5 +1,4 @@
 
-import 'package:curelink/core/theme/app_theme.dart';
 import 'package:curelink/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
@@ -29,13 +28,15 @@ class MedicineTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           label,
-          style: const TextStyle(
-            color: AppTheme.navy,
+          style: TextStyle(
+            color: colors.onSurface,
             fontSize: 16,
             fontWeight: FontWeight.bold,
           ),
@@ -48,6 +49,10 @@ class MedicineTextField extends StatelessWidget {
           maxLines: maxLines,
           keyboardType: keyboardType,
           onChanged: onChanged,
+          style: TextStyle(
+            color: colors.onSurface,
+            fontSize: 16,
+          ),
           decoration: medicineDecoration(
             context,
             hintText: hintText,
@@ -65,15 +70,16 @@ InputDecoration medicineDecoration(
   Widget? suffixIcon,
 }) {
   final l10n = AppLocalizations.of(context)!;
+  final colors = Theme.of(context).colorScheme;
 
   return InputDecoration(
     hintText: hintText ?? l10n.enterDetails,
-    hintStyle: const TextStyle(
-      color: Color(0xff587494),
+    hintStyle: TextStyle(
+      color: colors.onSurfaceVariant,
       fontSize: 16,
     ),
     filled: true,
-    fillColor: AppTheme.background,
+    fillColor: colors.surface,
     suffixIcon: suffixIcon,
     contentPadding: const EdgeInsets.symmetric(
       horizontal: 16,
@@ -81,29 +87,29 @@ InputDecoration medicineDecoration(
     ),
     enabledBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(17),
-      borderSide: const BorderSide(
-        color: AppTheme.primary,
-      ),
+      borderSide: BorderSide(color: colors.outline),
     ),
     focusedBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(17),
-      borderSide: const BorderSide(
-        color: Color(0xff09CDCD),
+      borderSide: BorderSide(
+        color: colors.tertiary,
         width: 2,
       ),
     ),
     errorBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(17),
-      borderSide: const BorderSide(
-        color: Colors.red,
-      ),
+      borderSide: BorderSide(color: colors.error),
     ),
     focusedErrorBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(17),
-      borderSide: const BorderSide(
-        color: Colors.red,
+      borderSide: BorderSide(
+        color: colors.error,
         width: 2,
       ),
+    ),
+    disabledBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(17),
+      borderSide: BorderSide(color: colors.outlineVariant),
     ),
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(17),

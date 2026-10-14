@@ -1,7 +1,6 @@
 
 import 'dart:io';
 
-import 'package:curelink/core/theme/app_theme.dart';
 import 'package:curelink/features/medication/data/models/medication_model.dart';
 import 'package:curelink/features/medication/data/repositries/medication_repository.dart';
 import 'package:curelink/features/medication/presentation/cubit/medication_cubit.dart';
@@ -50,7 +49,8 @@ class _AddMedicinePageState extends State<AddMedicinePage> {
   int formRevision = 0;
 
   bool get isEditMode =>
-      widget.medicineId != null && widget.medicineId!.trim().isNotEmpty;
+      widget.medicineId != null &&
+      widget.medicineId!.trim().isNotEmpty;
 
   @override
   void initState() {
@@ -105,7 +105,7 @@ class _AddMedicinePageState extends State<AddMedicinePage> {
     selectedWeekdays = List<int>.from(medication.weekdays);
     existingImageUrl = medication.imageUrl;
 
-    // Clear any newly selected local image when loading an existing medicine.
+    // Clear any newly selected local image when loading a medicine.
     selectedImage = null;
 
     formRevision++;
@@ -210,21 +210,23 @@ class _AddMedicinePageState extends State<AddMedicinePage> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+    final colors = theme.colorScheme;
 
     return BlocProvider.value(
       value: medicationCubit,
       child: Scaffold(
-        backgroundColor: AppTheme.background,
+        backgroundColor: theme.scaffoldBackgroundColor,
         appBar: AppBar(
-          backgroundColor: AppTheme.background,
-          foregroundColor: AppTheme.navy,
+          backgroundColor: theme.scaffoldBackgroundColor,
+          foregroundColor: colors.onSurface,
           elevation: 0,
           title: Text(
             isEditMode ? l10n.editMedicine : l10n.addMedicine,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.w400,
-              color: AppTheme.navy,
+              color: colors.onSurface,
             ),
           ),
         ),
@@ -265,8 +267,8 @@ class _AddMedicinePageState extends State<AddMedicinePage> {
                       Text(
                         state.message,
                         textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          color: AppTheme.navy,
+                        style: TextStyle(
+                          color: colors.onSurface,
                           fontSize: 16,
                         ),
                       ),
@@ -333,10 +335,10 @@ class _AddMedicinePageState extends State<AddMedicinePage> {
                       child: ElevatedButton(
                         onPressed: isLoading ? null : saveMedicine,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: AppTheme.primary,
-                          foregroundColor: Colors.white,
+                          backgroundColor: colors.primary,
+                          foregroundColor: colors.onPrimary,
                           disabledBackgroundColor:
-                              AppTheme.primary.withValues(alpha: 0.5),
+                              colors.primary.withValues(alpha: 0.5),
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(14),

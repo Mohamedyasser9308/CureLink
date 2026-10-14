@@ -1,7 +1,6 @@
 
 import 'dart:io';
 
-import 'package:curelink/core/theme/app_theme.dart';
 import 'package:curelink/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -23,7 +22,6 @@ class MedicineImagePicker extends StatefulWidget {
 
 class _MedicineImagePickerState extends State<MedicineImagePicker> {
   final ImagePicker picker = ImagePicker();
-
   File? selectedImage;
 
   Future<void> pickImage() async {
@@ -65,14 +63,14 @@ class _MedicineImagePickerState extends State<MedicineImagePicker> {
       selectedImage = null;
     });
 
-    // This clears the newly selected local image only.
-    // The existing Cloudinary image remains saved.
     widget.onImageSelected(null);
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+    final colors = theme.colorScheme;
 
     final imageUrl = widget.initialImageUrl?.trim() ?? '';
     final hasLocalImage = selectedImage != null;
@@ -83,8 +81,8 @@ class _MedicineImagePickerState extends State<MedicineImagePicker> {
       children: [
         Text(
           l10n.medMedicineImage,
-          style: const TextStyle(
-            color: AppTheme.navy,
+          style: TextStyle(
+            color: colors.onSurface,
             fontSize: 16,
             fontWeight: FontWeight.bold,
           ),
@@ -98,9 +96,9 @@ class _MedicineImagePickerState extends State<MedicineImagePicker> {
             width: double.infinity,
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: AppTheme.background,
+              color: colors.surface,
               borderRadius: BorderRadius.circular(17),
-              border: Border.all(color: AppTheme.primary),
+              border: Border.all(color: colors.outline),
             ),
             child: Stack(
               children: [
@@ -115,26 +113,24 @@ class _MedicineImagePickerState extends State<MedicineImagePicker> {
                     ),
                   ),
                 ),
-
                 if (hasLocalImage)
                   Positioned(
                     top: 0,
                     right: 0,
                     child: Material(
-                      color: Colors.white,
+                      color: colors.surface,
                       shape: const CircleBorder(),
                       child: IconButton(
                         onPressed: removeImage,
                         tooltip: MaterialLocalizations.of(context)
                             .deleteButtonTooltip,
-                        icon: const Icon(
+                        icon: Icon(
                           Icons.delete_outline,
-                          color: Colors.red,
+                          color: colors.error,
                         ),
                       ),
                     ),
                   ),
-
                 if (hasRemoteImage && !hasLocalImage)
                   Positioned(
                     bottom: 4,
@@ -142,12 +138,16 @@ class _MedicineImagePickerState extends State<MedicineImagePicker> {
                     child: Container(
                       padding: const EdgeInsets.all(6),
                       decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.9),
+                        color: colors.surface.withValues(
+                          alpha: theme.brightness == Brightness.dark
+                              ? 0.95
+                              : 0.9,
+                        ),
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: const Icon(
+                      child: Icon(
                         Icons.edit_outlined,
-                        color: AppTheme.primary,
+                        color: colors.primary,
                         size: 20,
                       ),
                     ),
@@ -166,13 +166,13 @@ class _MedicineImagePickerState extends State<MedicineImagePicker> {
     required String imageUrl,
     required AppLocalizations l10n,
   }) {
+    final colors = Theme.of(context).colorScheme;
+
     if (hasLocalImage) {
       return Image.file(
         selectedImage!,
         fit: BoxFit.contain,
-        errorBuilder: (context, error, stackTrace) {
-          return _buildImageError();
-        },
+        errorBuilder: (_, __, ___) => _buildImageError(),
       );
     }
 
@@ -183,13 +183,16 @@ class _MedicineImagePickerState extends State<MedicineImagePicker> {
         loadingBuilder: (context, child, progress) {
           if (progress == null) return child;
 
-          return const Center(
-            child: CircularProgressIndicator(),
+          return Center(
+            child: CircularProgressIndicator(
+              value: progress.expectedTotalBytes != null
+                  ? progress.cumulativeBytesLoaded /
+                      progress.expectedTotalBytes!
+                  : null,
+            ),
           );
         },
-        errorBuilder: (context, error, stackTrace) {
-          return _buildImageError();
-        },
+        errorBuilder: (_, __, ___) => _buildImageError(),
       );
     }
 
@@ -197,17 +200,17 @@ class _MedicineImagePickerState extends State<MedicineImagePicker> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(
+          Icon(
             Icons.add_photo_alternate_outlined,
-            color: AppTheme.primary,
+            color: colors.primary,
             size: 28,
           ),
           const SizedBox(width: 10),
           Flexible(
             child: Text(
-              l10n.enterDetails,
-              style: const TextStyle(
-                color: Color(0xff587494),
+              l10n.medMedicineImage,
+              style: TextStyle(
+                color: colors.onSurfaceVariant,
                 fontSize: 15,
               ),
             ),
@@ -218,10 +221,12 @@ class _MedicineImagePickerState extends State<MedicineImagePicker> {
   }
 
   Widget _buildImageError() {
-    return const Center(
+    final colors = Theme.of(context).colorScheme;
+
+    return Center(
       child: Icon(
         Icons.broken_image_outlined,
-        color: AppTheme.primary,
+        color: colors.primary,
         size: 36,
       ),
     );
