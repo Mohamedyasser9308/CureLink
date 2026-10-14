@@ -1495,6 +1495,234 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Try again'**
   String get retry;
+
+  /// No description provided for @medSaveMedicine.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Medicine'**
+  String get medSaveMedicine;
+
+  /// No description provided for @medSavedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Medicine saved successfully!'**
+  String get medSavedSuccessfully;
+
+  /// No description provided for @medPatientUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Patient account is not available'**
+  String get medPatientUnavailable;
+
+  /// No description provided for @medNameRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter medicine name'**
+  String get medNameRequired;
+
+  /// No description provided for @medDoseQuantity.
+  ///
+  /// In en, this message translates to:
+  /// **'Dose & quantity'**
+  String get medDoseQuantity;
+
+  /// No description provided for @medDoseRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter dose and quantity'**
+  String get medDoseRequired;
+
+  /// No description provided for @medTimeRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select a time'**
+  String get medTimeRequired;
+
+  /// No description provided for @medSelectTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Select time'**
+  String get medSelectTime;
+
+  /// No description provided for @medFrequencyDuration.
+  ///
+  /// In en, this message translates to:
+  /// **'Frequency & duration'**
+  String get medFrequencyDuration;
+
+  /// No description provided for @medFrequencyRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select frequency'**
+  String get medFrequencyRequired;
+
+  /// No description provided for @medSelectFrequency.
+  ///
+  /// In en, this message translates to:
+  /// **'Select frequency'**
+  String get medSelectFrequency;
+
+  /// No description provided for @medDurationRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select duration'**
+  String get medDurationRequired;
+
+  /// No description provided for @medSelectDuration.
+  ///
+  /// In en, this message translates to:
+  /// **'Select duration'**
+  String get medSelectDuration;
+
+  /// No description provided for @medDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get medDescription;
+
+  /// No description provided for @medNotesInstructions.
+  ///
+  /// In en, this message translates to:
+  /// **'Notes, conditions & instructions'**
+  String get medNotesInstructions;
+
+  /// No description provided for @medSelectDays.
+  ///
+  /// In en, this message translates to:
+  /// **'Select days'**
+  String get medSelectDays;
+
+  /// No description provided for @medCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get medCancel;
+
+  /// No description provided for @medEveryDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Every day'**
+  String get medEveryDay;
+
+  /// No description provided for @medEveryOtherDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Every other day'**
+  String get medEveryOtherDay;
+
+  /// No description provided for @medSpecificDays.
+  ///
+  /// In en, this message translates to:
+  /// **'Specific days'**
+  String get medSpecificDays;
+
+  /// No description provided for @medAsNeeded.
+  ///
+  /// In en, this message translates to:
+  /// **'As needed'**
+  String get medAsNeeded;
+
+  /// No description provided for @medSevenDays.
+  ///
+  /// In en, this message translates to:
+  /// **'7 days'**
+  String get medSevenDays;
+
+  /// No description provided for @medFourteenDays.
+  ///
+  /// In en, this message translates to:
+  /// **'14 days'**
+  String get medFourteenDays;
+
+  /// No description provided for @medThirtyDays.
+  ///
+  /// In en, this message translates to:
+  /// **'30 days'**
+  String get medThirtyDays;
+
+  /// No description provided for @medOngoing.
+  ///
+  /// In en, this message translates to:
+  /// **'Ongoing'**
+  String get medOngoing;
+
+  /// No description provided for @medMonday.
+  ///
+  /// In en, this message translates to:
+  /// **'Mon'**
+  String get medMonday;
+
+  /// No description provided for @medTuesday.
+  ///
+  /// In en, this message translates to:
+  /// **'Tue'**
+  String get medTuesday;
+
+  /// No description provided for @medWednesday.
+  ///
+  /// In en, this message translates to:
+  /// **'Wed'**
+  String get medWednesday;
+
+  /// No description provided for @medThursday.
+  ///
+  /// In en, this message translates to:
+  /// **'Thu'**
+  String get medThursday;
+
+  /// No description provided for @medFriday.
+  ///
+  /// In en, this message translates to:
+  /// **'Fri'**
+  String get medFriday;
+
+  /// No description provided for @medSaturday.
+  ///
+  /// In en, this message translates to:
+  /// **'Sat'**
+  String get medSaturday;
+
+  /// No description provided for @medSunday.
+  ///
+  /// In en, this message translates to:
+  /// **'Sun'**
+  String get medSunday;
+
+  /// No description provided for @medMedicineImage.
+  ///
+  /// In en, this message translates to:
+  /// **'Medicine image'**
+  String get medMedicineImage;
+
+  /// No description provided for @medTreatmentDuration.
+  ///
+  /// In en, this message translates to:
+  /// **'Treatment duration'**
+  String get medTreatmentDuration;
+
+  /// No description provided for @medStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Medication status'**
+  String get medStatus;
+
+  /// No description provided for @medActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get medActive;
+
+  /// No description provided for @medInactive.
+  ///
+  /// In en, this message translates to:
+  /// **'Inactive'**
+  String get medInactive;
+
+  /// No description provided for @days.
+  ///
+  /// In en, this message translates to:
+  /// **'days'**
+  String get days;
 }
 
 class _AppLocalizationsDelegate

@@ -1,21 +1,22 @@
+
+import 'package:curelink/core/router/app_navigation.dart';
+import 'package:curelink/core/router/routes_names.dart';
 import 'package:curelink/core/widgets/app_empty_state.dart';
 import 'package:curelink/core/widgets/app_error.dart';
 import 'package:curelink/core/widgets/app_loading.dart';
 import 'package:curelink/core/widgets/app_scaffold.dart';
 import 'package:curelink/core/widgets/mode_switcher.dart';
+import 'package:curelink/features/home/data/services/medication_service.dart';
+import 'package:curelink/features/home/presentation/cubit/home_cubit.dart';
+import 'package:curelink/features/home/presentation/cubit/home_state.dart';
+import 'package:curelink/features/home/presentation/widgets/home_header.dart';
+import 'package:curelink/features/home/presentation/widgets/medication_card.dart';
+import 'package:curelink/features/home/presentation/widgets/next_dose_card.dart';
+import 'package:curelink/features/home/presentation/widgets/progress_card.dart';
+import 'package:curelink/features/home/presentation/widgets/sos_button.dart';
 import 'package:curelink/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../core/router/app_navigation.dart';
-import '../../core/router/routes_names.dart';
-import 'data/services/medication_service.dart';
-import 'presentation/cubit/home_cubit.dart';
-import 'presentation/cubit/home_state.dart';
-import 'presentation/widgets/home_header.dart';
-import 'presentation/widgets/medication_card.dart';
-import 'presentation/widgets/next_dose_card.dart';
-import 'presentation/widgets/progress_card.dart';
-import 'presentation/widgets/sos_button.dart';
 
 class PatientHomeScreen extends StatelessWidget {
   const PatientHomeScreen({super.key});
@@ -32,11 +33,13 @@ class PatientHomeScreen extends StatelessWidget {
 class _PatientHomeView extends StatelessWidget {
   const _PatientHomeView();
 
-  void _openAddMedicine(BuildContext context) =>
-      AppNavigator.push(context, RoutesNames.addMedicine);
+  void _openAddMedicine(BuildContext context) {
+    AppNavigator.push(context, RoutesNames.addMedicine);
+  }
 
-  void _openEmergency(BuildContext context) =>
-      AppNavigator.push(context, RoutesNames.emergency);
+  void _openEmergency(BuildContext context) {
+    AppNavigator.push(context, RoutesNames.emergency);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +59,7 @@ class _PatientHomeView extends StatelessWidget {
               onSos: () => _openEmergency(context),
             );
           }
+
           if (state is HomeEmptyState) {
             return _EmptyBody(
               state: state,
@@ -63,6 +67,7 @@ class _PatientHomeView extends StatelessWidget {
               onSos: () => _openEmergency(context),
             );
           }
+
           if (state is HomeErrorState) {
             return AppError(
               title: l10n.somethingWentWrong,
@@ -73,6 +78,7 @@ class _PatientHomeView extends StatelessWidget {
               onRetry: () => context.read<HomeCubit>().start(),
             );
           }
+
           return const AppLoading();
         },
       ),
@@ -80,15 +86,20 @@ class _PatientHomeView extends StatelessWidget {
   }
 }
 
-/// Mode toggle shown only for users whose role is "Both".
+/// يظهر اختيار الوضع فقط للمستخدم الذي دوره Both.
+/// سيتم تفعيل الانتقال لوضع مقدم الرعاية بعد إنشاء شاشته.
 Widget _modeToggle(bool canSwitch) {
-  if (!canSwitch) return const SizedBox.shrink();
+  if (!canSwitch) {
+    return const SizedBox.shrink();
+  }
+
   return Padding(
     padding: const EdgeInsets.only(bottom: 16),
     child: ModeSwitcher(
       mode: AppMode.patient,
-      // TODO: navigate to the caregiver home once it exists.
-      onChanged: (_) {},
+      onChanged: (_) {
+        // TODO: Navigate to CaregiverHomeScreen when it is implemented.
+      },
     ),
   );
 }
@@ -110,16 +121,26 @@ class _SuccessBody extends StatelessWidget {
     final theme = Theme.of(context);
 
     return ListView(
-      padding: const EdgeInsets.only(top: 16, bottom: 24),
+      padding: const EdgeInsets.only(
+        top: 16,
+        bottom: 24,
+      ),
       children: [
         _modeToggle(state.canSwitchMode),
-        HomeHeader(userName: state.userName),
+
+        HomeHeader(
+          userName: state.userName,
+        ),
+
         const SizedBox(height: 20),
+
         NextDoseCard(
           dose: state.nextDose,
           onElapsed: () => context.read<HomeCubit>().refresh(),
         ),
+
         const SizedBox(height: 24),
+
         Row(
           children: [
             Expanded(
@@ -130,32 +151,50 @@ class _SuccessBody extends StatelessWidget {
             ),
             TextButton.icon(
               onPressed: onAdd,
-              icon: const Icon(Icons.add_rounded, size: 20),
+              icon: const Icon(
+                Icons.add_rounded,
+                size: 20,
+              ),
               label: Text(l10n.addMedicine),
             ),
           ],
         ),
+
         const SizedBox(height: 4),
+
         for (final dose in state.doses)
           Padding(
             key: ValueKey(
-              '${dose.medication.id}-${dose.time.toIso8601String()}',
+              '${dose.medication.id}-'
+              '${dose.time.toIso8601String()}',
             ),
             padding: const EdgeInsets.only(bottom: 12),
             child: MedicationCard(
               dose: dose,
-              onTap: () => AppNavigator.push(
-                context,
-                RoutesNames.medicineDetails,
-                arguments: dose.medication,
-              ),
+              onTap: () {
+                AppNavigator.push(
+                  context,
+                  RoutesNames.medicineDetails,
+                  arguments: dose.medication,
+                );
+              },
             ),
           ),
+
         const SizedBox(height: 8),
-        // Placeholder: "done" stays 0 until dose logs are added.
-        ProgressCard(done: 0, total: state.doses.length),
+
+        // مؤقتًا، عدد الجرعات المكتملة يظل صفرًا
+        // لحين تنفيذ تسجيل تناول الدواء.
+        ProgressCard(
+          done: 0,
+          total: state.doses.length,
+        ),
+
         const SizedBox(height: 12),
-        SosButton(onPressed: onSos),
+
+        SosButton(
+          onPressed: onSos,
+        ),
       ],
     );
   }
@@ -177,13 +216,16 @@ class _EmptyBody extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
 
     return Padding(
-      padding: EdgeInsetsGeometry.only(top: 40),
+      padding: const EdgeInsets.only(top: 40),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(height: 16),
+
           _modeToggle(state.canSwitchMode),
-          Spacer(),
+
+          const Spacer(),
+
           AppEmptyState(
             icon: Icons.medication_outlined,
             title: l10n.emptyMedicationsTitle,
@@ -191,8 +233,13 @@ class _EmptyBody extends StatelessWidget {
             actionLabel: l10n.addMedicine,
             onAction: onAdd,
           ),
-          Spacer(),
-          SosButton(onPressed: onSos),
+
+          const Spacer(),
+
+          SosButton(
+            onPressed: onSos,
+          ),
+
           const SizedBox(height: 24),
         ],
       ),
