@@ -1,19 +1,33 @@
-import 'package:curelink/features/onboarding/splashpage.dart';
+
 import 'package:curelink/core/router/app_router.dart';
+import 'package:curelink/core/settings/settings_cubit.dart';
+import 'package:curelink/core/theme/dark_theme.dart';
+import 'package:curelink/core/theme/light_theme.dart';
+import 'package:curelink/features/onboarding/splashpage.dart';
 import 'package:curelink/firebase_options.dart';
+import 'package:curelink/l10n/app_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'core/theme/dark_theme.dart';
-import 'core/theme/light_theme.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'l10n/app_localizations.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
-  runApp(const MyApp());
+  await initializeDateFormatting('ar');
+  await initializeDateFormatting('en');
+
+  runApp(
+    BlocProvider(
+      create: (_) => SettingsCubit()..loadSettings(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -21,28 +35,33 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'curelink',
+    return BlocBuilder<SettingsCubit, SettingsState>(
+      builder: (context, settings) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'CureLink',
 
-      theme: LightTheme.theme,
-      darkTheme: DarkTheme.theme,
-      themeMode: ThemeMode.system,
+          theme: LightTheme.theme,
+          darkTheme: DarkTheme.theme,
+          themeMode: settings.themeMode,
+          locale: settings.locale,
 
-      home: const Splashscreen(),
+          home: const Splashscreen(),
 
-      localizationsDelegates: const [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
 
-      supportedLocales: AppLocalizations.supportedLocales,
+          supportedLocales: AppLocalizations.supportedLocales,
 
-      routes: AppRouter.routes,
-      onGenerateRoute: AppRouter.onGenerateRoute,
-      onUnknownRoute: AppRouter.onUnknownRoute,
+          routes: AppRouter.routes,
+          onGenerateRoute: AppRouter.onGenerateRoute,
+          onUnknownRoute: AppRouter.onUnknownRoute,
+        );
+      },
     );
   }
 }

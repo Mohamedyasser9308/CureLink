@@ -147,9 +147,13 @@ class SessionGate extends StatelessWidget {
             ),
           );
         }
+        if (data['profileCompleted'] != true) {
+      
+        }
 
-        return const MainShell();
+        return MainShell(patientUid: user.uid);
       },
     );
   }
 }
+      

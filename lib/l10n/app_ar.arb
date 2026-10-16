@@ -974,7 +974,7 @@
       }
     }
   },
-  "emptyMedicationsTitle": "لا توجد أدوية لليوم",
+    "emptyMedicationsTitle": "لا توجد أدوية لليوم",
   "@emptyMedicationsTitle": {
     "description": "Localized Empty medications title text displayed in the interface."
   },
@@ -990,11 +990,51 @@
   "@allDosesDoneMessage": {
     "description": "Localized All doses done message text displayed in the interface."
   },
-  "retry": "حاول مرة أخرى",
+    "retry": "حاول مرة أخرى",
   "@retry": {
     "description": "Localized Retry text displayed in the interface."
   },
   
+
+  "calendarTitle": "التقويم",
+  "calendarDayDetails": "تفاصيل الجرعات",
+  "calendarDoseHistory": "سجل الجرعات",
+  "calendarRetry": "إعادة المحاولة",
+  "calendarPatientUidMissing": "معرّف المريض غير متاح.",
+  "calendarLoadError": "تعذر تحميل بيانات التقويم. حاول مرة أخرى.",
+  "calendarNoDoses": "لا توجد جرعات مسجلة في هذا اليوم.",
+  "calendarStatusUpcoming": "قادمة",
+  "calendarStatusDue": "موعدها الآن",
+  "calendarStatusTaken": "تم تناولها",
+  "calendarStatusSnoozed": "مؤجلة",
+  "calendarStatusMissed": "فائتة",
+  
+  "profileTitle": "الملف الشخصي",
+  "profileSignInAgain": "من فضلك سجّل الدخول مرة أخرى.",
+  "profileLoadError": "تعذر تحميل الملف الشخصي.",
+  "profileDefaultName": "مستخدم CureLink",
+  "profileId": "رقم العضوية",
+  "profilePersonalInfo": "المعلومات الشخصية",
+  "profileEmail": "البريد الإلكتروني",
+  "profilePhone": "رقم الهاتف",
+  "profileRole": "دور الحساب",
+  "profileNotSet": "غير محدد",
+  "profileActiveMode": "الوضع النشط",
+  "profilePatient": "مريض",
+  "profileCaregiver": "مقدم رعاية",
+  "profileModeUpdated": "تم تغيير الوضع النشط.",
+  "profileModeUpdateError": "تعذر تغيير الوضع النشط.",
+  "appPreferences": "تفضيلات التطبيق",
+  "profileSettingsSubtitle": "اللغة والمظهر والإعدادات",
+  "settingsTitle": "الإعدادات",
+  "appearance": "المظهر",
+  "darkMode": "الوضع الداكن",
+  "darkModeSubtitle": "التبديل بين الوضع الفاتح والداكن",
+  "useSystemTheme": "استخدام مظهر الجهاز",
+  "language": "اللغة",
+  "english": "English",
+  "arabic": "العربية",
+
   "medSaveMedicine": "حفظ الدواء",
   "medSavedSuccessfully": "تم حفظ الدواء بنجاح!",
   "medPatientUnavailable": "حساب المريض غير متاح",
@@ -1027,7 +1067,6 @@
   "medFriday": "الجمعة",
   "medSaturday": "السبت",
   "medSunday": "الأحد",
-  
   "medMedicineImage": "صورة الدواء",
   "medicineInformation": "معلومات الدواء",
   "ongoing": "مستمر",
@@ -1042,5 +1081,43 @@
   "medStatus": "حالة الدواء",
   "medActive": "نشط",
   "medInactive": "غير نشط",
-  "days": "أيام"
+  "days": "أيام",
+  "scheduleTitle": "جدول الجرعات",
+  "scheduleYesterday": "أمس",
+  "scheduleToday": "اليوم",
+  "scheduleAll": "الكل",
+  "scheduleLoadError": "تعذر تحميل جدول الجرعات.",
+  "scheduleRetry": "إعادة المحاولة",
+  "scheduleEmpty": "لا توجد جرعات في هذا الجدول",
+  "scheduleUpcoming": "قادمة",
+  "scheduleDue": "موعدها الآن",
+  "scheduleTaken": "تم تناولها",
+  "scheduleSnoozed": "مؤجلة",
+  "scheduleMissed": "فات موعدها",
+  "scheduleMarkTaken": "أخدت الدواء",
+  "scheduleSnooze": "تأجيل 10 دقائق",
+  "scheduleTakenAt": "وقت التناول: {time}",
+  "scheduleSnoozedUntil": "مؤجلة حتى {time}",
+  "scheduleNextReminder": "التذكير التالي: {time}",
+  "@scheduleTakenAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "@scheduleSnoozedUntil": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "@scheduleNextReminder": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  }
 }

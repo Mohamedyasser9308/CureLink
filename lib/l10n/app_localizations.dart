@@ -1496,6 +1496,228 @@ abstract class AppLocalizations {
   /// **'Try again'**
   String get retry;
 
+  /// No description provided for @profileTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'My Profile'**
+  String get profileTitle;
+
+  /// No description provided for @profileSignInAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Please sign in again.'**
+  String get profileSignInAgain;
+
+  /// No description provided for @profileLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load your profile.'**
+  String get profileLoadError;
+
+  /// No description provided for @profileDefaultName.
+  ///
+  /// In en, this message translates to:
+  /// **'CureLink User'**
+  String get profileDefaultName;
+
+  /// No description provided for @profileId.
+  ///
+  /// In en, this message translates to:
+  /// **'Member ID'**
+  String get profileId;
+
+  /// No description provided for @profilePersonalInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Personal Information'**
+  String get profilePersonalInfo;
+
+  /// No description provided for @profileEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Email Address'**
+  String get profileEmail;
+
+  /// No description provided for @profilePhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone Number'**
+  String get profilePhone;
+
+  /// No description provided for @profileRole.
+  ///
+  /// In en, this message translates to:
+  /// **'Account Role'**
+  String get profileRole;
+
+  /// No description provided for @profileNotSet.
+  ///
+  /// In en, this message translates to:
+  /// **'Not set'**
+  String get profileNotSet;
+
+  /// No description provided for @profileActiveMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Active Mode'**
+  String get profileActiveMode;
+
+  /// No description provided for @profilePatient.
+  ///
+  /// In en, this message translates to:
+  /// **'Patient'**
+  String get profilePatient;
+
+  /// No description provided for @profileCaregiver.
+  ///
+  /// In en, this message translates to:
+  /// **'Caregiver'**
+  String get profileCaregiver;
+
+  /// No description provided for @profileModeUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Active mode updated.'**
+  String get profileModeUpdated;
+
+  /// No description provided for @profileModeUpdateError.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not update active mode.'**
+  String get profileModeUpdateError;
+
+  /// No description provided for @appPreferences.
+  ///
+  /// In en, this message translates to:
+  /// **'App Preferences'**
+  String get appPreferences;
+
+  /// No description provided for @profileSettingsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Language, appearance and preferences'**
+  String get profileSettingsSubtitle;
+
+  /// No description provided for @settingsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get settingsTitle;
+
+  /// No description provided for @appearance.
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get appearance;
+
+  /// No description provided for @darkMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark Mode'**
+  String get darkMode;
+
+  /// No description provided for @darkModeSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch between light and dark themes'**
+  String get darkModeSubtitle;
+
+  /// No description provided for @useSystemTheme.
+  ///
+  /// In en, this message translates to:
+  /// **'Use system theme'**
+  String get useSystemTheme;
+
+  /// No description provided for @language.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get language;
+
+  /// No description provided for @english.
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get english;
+
+  /// No description provided for @arabic.
+  ///
+  /// In en, this message translates to:
+  /// **'العربية'**
+  String get arabic;
+
+  /// No description provided for @calendarTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Calendar'**
+  String get calendarTitle;
+
+  /// No description provided for @calendarDayDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Dose details'**
+  String get calendarDayDetails;
+
+  /// No description provided for @calendarDoseHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Dose history'**
+  String get calendarDoseHistory;
+
+  /// No description provided for @calendarRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get calendarRetry;
+
+  /// No description provided for @calendarPatientUidMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'Patient ID is not available.'**
+  String get calendarPatientUidMissing;
+
+  /// No description provided for @calendarLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to load calendar data. Please try again.'**
+  String get calendarLoadError;
+
+  /// No description provided for @calendarNoDoses.
+  ///
+  /// In en, this message translates to:
+  /// **'No doses recorded for this day.'**
+  String get calendarNoDoses;
+
+  /// No description provided for @calendarStatusUpcoming.
+  ///
+  /// In en, this message translates to:
+  /// **'Upcoming'**
+  String get calendarStatusUpcoming;
+
+  /// No description provided for @calendarStatusDue.
+  ///
+  /// In en, this message translates to:
+  /// **'Due now'**
+  String get calendarStatusDue;
+
+  /// No description provided for @calendarStatusTaken.
+  ///
+  /// In en, this message translates to:
+  /// **'Taken'**
+  String get calendarStatusTaken;
+
+  /// No description provided for @calendarStatusSnoozed.
+  ///
+  /// In en, this message translates to:
+  /// **'Snoozed'**
+  String get calendarStatusSnoozed;
+
+  /// No description provided for @calendarStatusMissed.
+  ///
+  /// In en, this message translates to:
+  /// **'Missed'**
+  String get calendarStatusMissed;
+
   /// No description provided for @medSaveMedicine.
   ///
   /// In en, this message translates to:
@@ -1777,6 +1999,108 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Delete'**
   String get delete;
+
+  /// No description provided for @scheduleTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Schedule'**
+  String get scheduleTitle;
+
+  /// No description provided for @scheduleYesterday.
+  ///
+  /// In en, this message translates to:
+  /// **'Yesterday'**
+  String get scheduleYesterday;
+
+  /// No description provided for @scheduleToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get scheduleToday;
+
+  /// No description provided for @scheduleAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get scheduleAll;
+
+  /// No description provided for @scheduleLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load your schedule.'**
+  String get scheduleLoadError;
+
+  /// No description provided for @scheduleRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get scheduleRetry;
+
+  /// No description provided for @scheduleEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No doses scheduled here'**
+  String get scheduleEmpty;
+
+  /// No description provided for @scheduleUpcoming.
+  ///
+  /// In en, this message translates to:
+  /// **'Upcoming'**
+  String get scheduleUpcoming;
+
+  /// No description provided for @scheduleDue.
+  ///
+  /// In en, this message translates to:
+  /// **'Due now'**
+  String get scheduleDue;
+
+  /// No description provided for @scheduleTaken.
+  ///
+  /// In en, this message translates to:
+  /// **'Taken'**
+  String get scheduleTaken;
+
+  /// No description provided for @scheduleSnoozed.
+  ///
+  /// In en, this message translates to:
+  /// **'Snoozed'**
+  String get scheduleSnoozed;
+
+  /// No description provided for @scheduleMissed.
+  ///
+  /// In en, this message translates to:
+  /// **'Missed'**
+  String get scheduleMissed;
+
+  /// No description provided for @scheduleMarkTaken.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark as Taken'**
+  String get scheduleMarkTaken;
+
+  /// No description provided for @scheduleSnooze.
+  ///
+  /// In en, this message translates to:
+  /// **'Snooze 10m'**
+  String get scheduleSnooze;
+
+  /// No description provided for @scheduleTakenAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Taken at {time}'**
+  String scheduleTakenAt(String time);
+
+  /// No description provided for @scheduleSnoozedUntil.
+  ///
+  /// In en, this message translates to:
+  /// **'Snoozed until {time}'**
+  String scheduleSnoozedUntil(String time);
+
+  /// No description provided for @scheduleNextReminder.
+  ///
+  /// In en, this message translates to:
+  /// **'Next reminder: {time}'**
+  String scheduleNextReminder(String time);
 }
 
 class _AppLocalizationsDelegate

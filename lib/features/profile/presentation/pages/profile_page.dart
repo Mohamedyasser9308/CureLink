@@ -3,6 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import 'package:curelink/core/theme/app_theme.dart';
+import 'package:curelink/l10n/app_localizations.dart';
 import 'settings_page.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -21,26 +23,28 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
+    final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
 
     if (user == null) {
-      return const Center(child: Text('Please sign in again.'));
+      return Scaffold(
+        body: Center(child: Text(l10n.profileSignInAgain)),
+      );
     }
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Profile'),
+        title: Text(l10n.profileTitle),
         actions: [
           IconButton(
-            tooltip: 'Settings',
+            tooltip: l10n.settingsTitle,
             icon: const Icon(Icons.settings_outlined),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => const SettingsPage(),
-                ),
-              );
-            },
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const SettingsPage(),
+              ),
+            ),
           ),
         ],
       ),
@@ -51,76 +55,168 @@ class ProfilePage extends StatelessWidget {
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return const Center(
-              child: Text('Could not load your profile.'),
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: Text(
+                  l10n.profileLoadError,
+                  textAlign: TextAlign.center,
+                ),
+              ),
             );
           }
 
           if (!snapshot.hasData) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return const Center(child: CircularProgressIndicator());
           }
 
           final data = snapshot.data!.data() ?? {};
-          final name = data['name'] as String? ?? user.displayName ?? '';
+          final name = data['name'] as String? ??
+              user.displayName ??
+              '';
           final email = data['email'] as String? ?? user.email ?? '';
           final phone = data['phone'] as String? ?? '';
           final role = (data['role'] as String? ?? '').toLowerCase();
           final activeMode =
               (data['activeMode'] as String? ?? 'patient').toLowerCase();
 
+          final photoUrl =
+              (data['profileImageUrl'] as String?) ??
+              (data['photoUrl'] as String?) ??
+              user.photoURL;
+
+          final uniqueId = data['uniqueId'] as String? ?? '';
+
           return ListView(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.fromLTRB(20, 12, 20, 28),
             children: [
-              const SizedBox(height: 16),
-              CircleAvatar(
-                radius: 45,
-                backgroundImage: user.photoURL != null
-                    ? NetworkImage(user.photoURL!)
-                    : null,
-                child: user.photoURL == null
-                    ? const Icon(Icons.person_outline, size: 48)
-                    : null,
-              ),
-              const SizedBox(height: 16),
-              Center(
-                child: Text(
-                  name.isEmpty ? 'CureLink User' : name,
-                  style: Theme.of(context).textTheme.titleLarge,
+              Container(
+                padding: const EdgeInsets.all(24),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      AppTheme.primary,
+                      AppTheme.primary.withValues(alpha: 0.78),
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  borderRadius: BorderRadius.circular(24),
+                ),
+                child: Column(
+                  children: [
+                    CircleAvatar(
+                      radius: 43,
+                      backgroundColor: Colors.white,
+                      backgroundImage:
+                          photoUrl != null && photoUrl.isNotEmpty
+                              ? NetworkImage(photoUrl)
+                              : null,
+                      child: photoUrl == null || photoUrl.isEmpty
+                          ? const Icon(
+                              Icons.person_outline,
+                              size: 46,
+                              color: AppTheme.primary,
+                            )
+                          : null,
+                    ),
+                    const SizedBox(height: 14),
+                    Text(
+                      name.isEmpty ? l10n.profileDefaultName : name,
+                      textAlign: TextAlign.center,
+                      style: theme.textTheme.titleLarge?.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      email,
+                      textAlign: TextAlign.center,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: Colors.white.withValues(alpha: 0.9),
+                      ),
+                    ),
+                    if (uniqueId.isNotEmpty) ...[
+                      const SizedBox(height: 12),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 14,
+                          vertical: 7,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.16),
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: Text(
+                          '${l10n.profileId}: $uniqueId',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ],
                 ),
               ),
-              const SizedBox(height: 8),
-              Center(child: Text(email)),
-              if (phone.isNotEmpty) ...[
-                const SizedBox(height: 8),
-                Center(child: Text(phone)),
-              ],
-              const SizedBox(height: 28),
-              const Divider(),
-              ListTile(
-                leading: const Icon(Icons.badge_outlined),
-                title: const Text('Account role'),
-                subtitle: Text(role.isEmpty ? 'Not set' : role),
+              const SizedBox(height: 24),
+              Text(
+                l10n.profilePersonalInfo,
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 10),
+              Card(
+                child: Column(
+                  children: [
+                    ListTile(
+                      leading: const Icon(Icons.email_outlined),
+                      title: Text(l10n.profileEmail),
+                      subtitle: Text(
+                        email.isEmpty ? l10n.profileNotSet : email,
+                      ),
+                    ),
+                    const Divider(height: 1, indent: 16, endIndent: 16),
+                    ListTile(
+                      leading: const Icon(Icons.phone_outlined),
+                      title: Text(l10n.profilePhone),
+                      subtitle: Text(
+                        phone.isEmpty ? l10n.profileNotSet : phone,
+                      ),
+                    ),
+                    const Divider(height: 1, indent: 16, endIndent: 16),
+                    ListTile(
+                      leading: const Icon(Icons.badge_outlined),
+                      title: Text(l10n.profileRole),
+                      subtitle: Text(
+                        role.isEmpty ? l10n.profileNotSet : role,
+                      ),
+                    ),
+                  ],
+                ),
               ),
               if (role == 'both') ...[
-                const SizedBox(height: 12),
+                const SizedBox(height: 24),
                 Text(
-                  'Active mode',
-                  style: Theme.of(context).textTheme.titleMedium,
+                  l10n.profileActiveMode,
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 10),
                 SegmentedButton<String>(
-                  segments: const [
+                  segments: [
                     ButtonSegment(
                       value: 'patient',
-                      label: Text('Patient'),
-                      icon: Icon(Icons.person_outline),
+                      label: Text(l10n.profilePatient),
+                      icon: const Icon(Icons.person_outline),
                     ),
                     ButtonSegment(
                       value: 'caregiver',
-                      label: Text('Caregiver'),
-                      icon: Icon(Icons.health_and_safety_outlined),
+                      label: Text(l10n.profileCaregiver),
+                      icon: const Icon(Icons.health_and_safety_outlined),
                     ),
                   ],
                   selected: {
@@ -130,35 +226,45 @@ class ProfilePage extends StatelessWidget {
                     try {
                       await _switchMode(selection.first);
                       if (!context.mounted) return;
+
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Active mode updated.'),
+                        SnackBar(
+                          content: Text(l10n.profileModeUpdated),
                         ),
                       );
                     } catch (_) {
                       if (!context.mounted) return;
+
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Could not update active mode.'),
+                        SnackBar(
+                          content: Text(l10n.profileModeUpdateError),
                         ),
                       );
                     }
                   },
                 ),
               ],
-              const SizedBox(height: 20),
-              ListTile(
-                leading: const Icon(Icons.settings_outlined),
-                title: const Text('Settings'),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () {
-                  Navigator.push(
+              const SizedBox(height: 24),
+              Text(
+                l10n.appPreferences,
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 10),
+              Card(
+                child: ListTile(
+                  leading: const Icon(Icons.tune_rounded),
+                  title: Text(l10n.settingsTitle),
+                  subtitle: Text(l10n.profileSettingsSubtitle),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (_) => const SettingsPage(),
                     ),
-                  );
-                },
+                  ),
+                ),
               ),
             ],
           );

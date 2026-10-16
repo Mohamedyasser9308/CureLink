@@ -2,6 +2,8 @@
 import 'package:curelink/core/widgets/app_bottom_nav_bar.dart';
 import 'package:curelink/core/widgets/app_empty_state.dart';
 import 'package:curelink/core/widgets/app_scaffold.dart';
+import 'package:curelink/features/calendar/presentation/pages/calendar_page.dart';
+import 'package:curelink/features/schedule/presentation/pages/schedule_page.dart';
 import 'package:curelink/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
@@ -9,7 +11,12 @@ import '../../home/patient_home_screen.dart';
 import '../../profile/presentation/pages/profile_page.dart';
 
 class MainShell extends StatefulWidget {
-  const MainShell({super.key});
+  const MainShell({
+    super.key,
+    required this.patientUid,
+  });
+
+  final String patientUid;
 
   @override
   State<MainShell> createState() => _MainShellState();
@@ -27,24 +34,28 @@ class _MainShellState extends State<MainShell> {
         index: _index,
         children: [
           const PatientHomeScreen(),
-          _TabPlaceholder(
-            title: l10n.navSchedule,
-            icon: Icons.event_note_outlined,
-          ),
-          _TabPlaceholder(
-            title: l10n.navCalendar,
-            icon: Icons.calendar_month_outlined,
-          ),
+
+          // Schedule
+          const SchedulePage(),
+
+          // Calendar
+          CalendarPage(patientUid: widget.patientUid),
+
+          // Notifications
           _TabPlaceholder(
             title: l10n.navNotifications,
             icon: Icons.notifications_none_rounded,
           ),
+
+          // Profile
           const ProfilePage(),
         ],
       ),
       bottomNavigationBar: AppBottomNavBar(
         currentIndex: _index,
-        onTap: (index) => setState(() => _index = index),
+        onTap: (index) {
+          setState(() => _index = index);
+        },
       ),
     );
   }

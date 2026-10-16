@@ -1,40 +1,33 @@
+
 import 'package:flutter/material.dart';
 import 'app_theme.dart';
 
 class DarkTheme {
   DarkTheme._();
 
-  // ألوان خاصة بالديزاين (حدود وتراكات زرقاء خفيفة)
   static const Color _border = Color(0xFF223C63);
   static const Color _borderDisabled = Color(0xFF182A47);
   static const Color _divider = Color(0xFF1A3050);
-  // التراك في التصميم فاتح (أبيض/رمادي) والـ fill سيان
   static const Color _progressTrack = Color(0xFFE3E8EE);
 
   static ThemeData get theme {
     final colorScheme = ColorScheme.dark(
       primary: AppTheme.primary,
       onPrimary: Colors.white,
-
       secondary: AppTheme.mint,
       onSecondary: AppTheme.navy,
-
       tertiary: AppTheme.cyan,
       onTertiary: AppTheme.navy,
-
       error: AppTheme.destructive,
       onError: Colors.white,
-
       surface: AppTheme.darkSurface,
       onSurface: AppTheme.darkTextPrimary,
-
       surfaceContainerLowest: AppTheme.darkBackground,
       surfaceContainerLow: AppTheme.darkSurface,
       surfaceContainer: AppTheme.darkSurface,
       surfaceContainerHigh: AppTheme.darkSurfaceVariant,
       surfaceContainerHighest: AppTheme.darkSurfaceVariant,
       onSurfaceVariant: AppTheme.darkTextSecondary,
-
       outline: _border,
       outlineVariant: _borderDisabled,
     );
@@ -45,15 +38,11 @@ class DarkTheme {
       colorScheme: colorScheme,
       scaffoldBackgroundColor: AppTheme.darkBackground,
       fontFamily: AppTheme.fontFamily,
-
       textTheme: AppTheme.textTheme.apply(
         bodyColor: AppTheme.darkTextPrimary,
         displayColor: AppTheme.darkTextPrimary,
       ),
 
-      // ========================================================
-      // App Bar
-      // ========================================================
       appBarTheme: const AppBarTheme(
         backgroundColor: AppTheme.darkBackground,
         foregroundColor: AppTheme.darkTextPrimary,
@@ -63,9 +52,6 @@ class DarkTheme {
         surfaceTintColor: Colors.transparent,
       ),
 
-      // ========================================================
-      // Cards
-      // ========================================================
       cardTheme: CardThemeData(
         color: AppTheme.darkSurface,
         elevation: 0,
@@ -77,9 +63,24 @@ class DarkTheme {
         surfaceTintColor: Colors.transparent,
       ),
 
-      // ========================================================
-      // Elevated Button (بنفسجي زي Continue / Confirm Dose / Add Patient)
-      // ========================================================
+      listTileTheme: ListTileThemeData(
+        tileColor: AppTheme.darkSurface,
+        iconColor: AppTheme.cyan,
+        textColor: AppTheme.darkTextPrimary,
+        titleTextStyle: AppTheme.textTheme.titleMedium!.copyWith(
+          color: AppTheme.darkTextPrimary,
+          inherit: true,
+        ),
+        subtitleTextStyle: AppTheme.textTheme.bodySmall!.copyWith(
+          color: AppTheme.darkTextSecondary,
+          inherit: true,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
+          side: const BorderSide(color: _border),
+        ),
+      ),
+
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           minimumSize: const Size(double.infinity, AppTheme.buttonHeight),
@@ -92,6 +93,7 @@ class DarkTheme {
             borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
           ),
           textStyle: const TextStyle(
+            inherit: true,
             fontFamily: AppTheme.fontFamily,
             fontSize: 14,
             fontWeight: FontWeight.w600,
@@ -99,9 +101,6 @@ class DarkTheme {
         ),
       ),
 
-      // ========================================================
-      // Filled Button
-      // ========================================================
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
           minimumSize: const Size(double.infinity, AppTheme.buttonHeight),
@@ -111,6 +110,7 @@ class DarkTheme {
             borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
           ),
           textStyle: const TextStyle(
+            inherit: true,
             fontFamily: AppTheme.fontFamily,
             fontSize: 14,
             fontWeight: FontWeight.w600,
@@ -118,9 +118,6 @@ class DarkTheme {
         ),
       ),
 
-      // ========================================================
-      // Outlined Button
-      // ========================================================
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           minimumSize: const Size(double.infinity, AppTheme.buttonHeight),
@@ -130,6 +127,7 @@ class DarkTheme {
             borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
           ),
           textStyle: const TextStyle(
+            inherit: true,
             fontFamily: AppTheme.fontFamily,
             fontSize: 14,
             fontWeight: FontWeight.w600,
@@ -137,13 +135,11 @@ class DarkTheme {
         ),
       ),
 
-      // ========================================================
-      // Text Button
-      // ========================================================
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
           foregroundColor: AppTheme.cyan,
           textStyle: const TextStyle(
+            inherit: true,
             fontFamily: AppTheme.fontFamily,
             fontSize: 14,
             fontWeight: FontWeight.w600,
@@ -151,9 +147,6 @@ class DarkTheme {
         ),
       ),
 
-      // ========================================================
-      // Input Fields (Default / Focus / Filled / Error)
-      // ========================================================
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: AppTheme.darkSurface,
@@ -162,15 +155,25 @@ class DarkTheme {
           vertical: 16,
         ),
         hintStyle: const TextStyle(
+          inherit: true,
           color: AppTheme.darkTextSecondary,
           fontSize: 14,
         ),
         labelStyle: const TextStyle(
+          inherit: true,
           color: AppTheme.darkTextSecondary,
           fontSize: 14,
         ),
-        floatingLabelStyle: const TextStyle(color: AppTheme.cyan, fontSize: 14),
-        errorStyle: const TextStyle(color: AppTheme.destructive, fontSize: 12),
+        floatingLabelStyle: const TextStyle(
+          inherit: true,
+          color: AppTheme.cyan,
+          fontSize: 14,
+        ),
+        errorStyle: const TextStyle(
+          inherit: true,
+          color: AppTheme.destructive,
+          fontSize: 12,
+        ),
         prefixIconColor: AppTheme.darkTextSecondary,
         suffixIconColor: AppTheme.darkTextSecondary,
         border: OutlineInputBorder(
@@ -199,11 +202,10 @@ class DarkTheme {
         ),
       ),
 
-      // ========================================================
-      // Checkbox
-      // ========================================================
       checkboxTheme: CheckboxThemeData(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(4),
+        ),
         fillColor: WidgetStateProperty.resolveWith<Color?>((states) {
           if (states.contains(WidgetState.selected)) {
             return AppTheme.primary;
@@ -214,9 +216,6 @@ class DarkTheme {
         side: const BorderSide(color: AppTheme.cyan, width: 1.5),
       ),
 
-      // ========================================================
-      // Progress Indicator (Today's progress / Mission progress)
-      // ========================================================
       progressIndicatorTheme: const ProgressIndicatorThemeData(
         color: AppTheme.cyan,
         linearTrackColor: _progressTrack,
@@ -224,18 +223,12 @@ class DarkTheme {
         linearMinHeight: 6,
       ),
 
-      // ========================================================
-      // Divider
-      // ========================================================
       dividerTheme: const DividerThemeData(
         color: _divider,
         thickness: 1,
         space: 1,
       ),
 
-      // ========================================================
-      // Segmented Button (Today / Tomorrow / All)
-      // ========================================================
       segmentedButtonTheme: SegmentedButtonThemeData(
         style: ButtonStyle(
           backgroundColor: WidgetStateProperty.resolveWith<Color?>((states) {
@@ -258,6 +251,7 @@ class DarkTheme {
           ),
           textStyle: const WidgetStatePropertyAll(
             TextStyle(
+              inherit: true,
               fontFamily: AppTheme.fontFamily,
               fontSize: 13,
               fontWeight: FontWeight.w600,
@@ -266,13 +260,11 @@ class DarkTheme {
         ),
       ),
 
-      // ========================================================
-      // Chips / Badges (Upcoming, Due now, Taken, Missed)
-      // ========================================================
       chipTheme: ChipThemeData(
         backgroundColor: AppTheme.darkSurface,
         side: const BorderSide(color: _border),
         labelStyle: const TextStyle(
+          inherit: true,
           fontFamily: AppTheme.fontFamily,
           fontSize: 11,
           fontWeight: FontWeight.w600,
@@ -282,9 +274,6 @@ class DarkTheme {
         shape: const StadiumBorder(),
       ),
 
-      // ========================================================
-      // Date Picker (Calendar: اليوم المختار بنفسجي)
-      // ========================================================
       datePickerTheme: DatePickerThemeData(
         backgroundColor: AppTheme.darkSurface,
         surfaceTintColor: Colors.transparent,
@@ -309,9 +298,6 @@ class DarkTheme {
         todayBorder: const BorderSide(color: AppTheme.cyan),
       ),
 
-      // ========================================================
-      // Switch (Notifications settings)
-      // ========================================================
       switchTheme: SwitchThemeData(
         thumbColor: WidgetStateProperty.resolveWith<Color?>((states) {
           if (states.contains(WidgetState.selected)) return Colors.white;
@@ -324,30 +310,10 @@ class DarkTheme {
         trackOutlineColor: const WidgetStatePropertyAll(_border),
       ),
 
-      // ========================================================
-      // List Tile (Notifications / Medication rows)
-      // ========================================================
-      listTileTheme: ListTileThemeData(
-        tileColor: AppTheme.darkSurface,
-        iconColor: AppTheme.cyan,
-        textColor: AppTheme.darkTextPrimary,
-        subtitleTextStyle: const TextStyle(
-          fontFamily: AppTheme.fontFamily,
-          fontSize: 12,
-          color: AppTheme.darkTextSecondary,
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
-          side: const BorderSide(color: _border),
-        ),
-      ),
-
-      // ========================================================
-      // Snack Bar
-      // ========================================================
       snackBarTheme: SnackBarThemeData(
         backgroundColor: AppTheme.primaryDark,
         contentTextStyle: const TextStyle(
+          inherit: true,
           color: Colors.white,
           fontSize: 14,
           fontFamily: AppTheme.fontFamily,
@@ -358,14 +324,13 @@ class DarkTheme {
         behavior: SnackBarBehavior.floating,
       ),
 
-      // ========================================================
-      // Bottom Sheet / Dialog
-      // ========================================================
       bottomSheetTheme: const BottomSheetThemeData(
         backgroundColor: AppTheme.darkSurface,
         surfaceTintColor: Colors.transparent,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(20),
+          ),
         ),
       ),
 
@@ -378,9 +343,6 @@ class DarkTheme {
         ),
       ),
 
-      // ========================================================
-      // Bottom Navigation (الأيقونة والنص المختارين cyan بدون pill)
-      // ========================================================
       navigationBarTheme: NavigationBarThemeData(
         backgroundColor: AppTheme.darkBackground,
         surfaceTintColor: Colors.transparent,
@@ -399,6 +361,7 @@ class DarkTheme {
         labelTextStyle: WidgetStateProperty.resolveWith<TextStyle>((states) {
           if (states.contains(WidgetState.selected)) {
             return const TextStyle(
+              inherit: true,
               fontFamily: AppTheme.fontFamily,
               color: AppTheme.cyan,
               fontSize: 11,
@@ -406,6 +369,7 @@ class DarkTheme {
             );
           }
           return const TextStyle(
+            inherit: true,
             fontFamily: AppTheme.fontFamily,
             color: AppTheme.darkTextSecondary,
             fontSize: 11,

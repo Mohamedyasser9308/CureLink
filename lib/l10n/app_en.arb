@@ -987,7 +987,44 @@
     "description": "Localized Retry text displayed in the interface."
   },
   
-  
+
+  "profileTitle": "My Profile",
+  "profileSignInAgain": "Please sign in again.",
+  "profileLoadError": "Could not load your profile.",
+  "profileDefaultName": "CureLink User",
+  "profileId": "Member ID",
+  "profilePersonalInfo": "Personal Information",
+  "profileEmail": "Email Address",
+  "profilePhone": "Phone Number",
+  "profileRole": "Account Role",
+  "profileNotSet": "Not set",
+  "profileActiveMode": "Active Mode",
+  "profilePatient": "Patient",
+  "profileCaregiver": "Caregiver",
+  "profileModeUpdated": "Active mode updated.",
+  "profileModeUpdateError": "Could not update active mode.",
+  "appPreferences": "App Preferences",
+  "profileSettingsSubtitle": "Language, appearance and preferences",
+  "settingsTitle": "Settings",
+  "appearance": "Appearance",
+  "darkMode": "Dark Mode",
+  "darkModeSubtitle": "Switch between light and dark themes",
+  "useSystemTheme": "Use system theme",
+  "language": "Language",
+  "english": "English",
+  "arabic": "العربية",
+  "calendarTitle": "Calendar",
+  "calendarDayDetails": "Dose details",
+  "calendarDoseHistory": "Dose history",
+  "calendarRetry": "Try again",
+  "calendarPatientUidMissing": "Patient ID is not available.",
+  "calendarLoadError": "Unable to load calendar data. Please try again.",
+  "calendarNoDoses": "No doses recorded for this day.",
+  "calendarStatusUpcoming": "Upcoming",
+  "calendarStatusDue": "Due now",
+  "calendarStatusTaken": "Taken",
+  "calendarStatusSnoozed": "Snoozed",
+  "calendarStatusMissed": "Missed",
   "medSaveMedicine": "Save Medicine",
   "medSavedSuccessfully": "Medicine saved successfully!",
   "medPatientUnavailable": "Patient account is not available",
@@ -1034,5 +1071,43 @@
   "description": "Description",
   "deleteMedicineConfirmation": "Are you sure you want to delete this medicine?",
   "cancel": "Cancel",
-  "delete": "Delete"
+  "delete": "Delete",
+  "scheduleTitle": "Schedule",
+  "scheduleYesterday": "Yesterday",
+  "scheduleToday": "Today",
+  "scheduleAll": "All",
+  "scheduleLoadError": "Could not load your schedule.",
+  "scheduleRetry": "Retry",
+  "scheduleEmpty": "No doses scheduled here",
+  "scheduleUpcoming": "Upcoming",
+  "scheduleDue": "Due now",
+  "scheduleTaken": "Taken",
+  "scheduleSnoozed": "Snoozed",
+  "scheduleMissed": "Missed",
+  "scheduleMarkTaken": "Mark as Taken",
+  "scheduleSnooze": "Snooze 10m",
+  "scheduleTakenAt": "Taken at {time}",
+  "scheduleSnoozedUntil": "Snoozed until {time}",
+  "scheduleNextReminder": "Next reminder: {time}",
+  "@scheduleTakenAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "@scheduleSnoozedUntil": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "@scheduleNextReminder": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  }
 }

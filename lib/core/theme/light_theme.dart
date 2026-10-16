@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'app_theme.dart';
 
@@ -9,7 +10,6 @@ class LightTheme {
   static const Color _divider = Color(0xFFE4E0D2);
   static const Color _progressTrack = Color(0xFFE3E8EE);
 
-  // Bottom nav (حسب التصميم: خلفية كريمي + تاب مختار سيان/بنفسجي)
   static const Color _navBackground = Color(0xFFFFFCF4);
   static const Color _navUnselected = Color(0xFF5F6B7A);
 
@@ -36,7 +36,6 @@ class LightTheme {
       colorScheme: colorScheme,
       scaffoldBackgroundColor: AppTheme.background,
       fontFamily: AppTheme.fontFamily,
-
       textTheme: AppTheme.textTheme.apply(
         bodyColor: AppTheme.lightTextPrimary,
         displayColor: AppTheme.lightTextPrimary,
@@ -62,6 +61,24 @@ class LightTheme {
         surfaceTintColor: Colors.transparent,
       ),
 
+      listTileTheme: ListTileThemeData(
+        tileColor: AppTheme.lightSurface,
+        iconColor: AppTheme.primary,
+        textColor: AppTheme.lightTextPrimary,
+        titleTextStyle: AppTheme.textTheme.titleMedium!.copyWith(
+          color: AppTheme.lightTextPrimary,
+          inherit: true,
+        ),
+        subtitleTextStyle: AppTheme.textTheme.bodySmall!.copyWith(
+          color: AppTheme.lightTextSecondary,
+          inherit: true,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
+          side: const BorderSide(color: _border),
+        ),
+      ),
+
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           minimumSize: const Size(double.infinity, AppTheme.buttonHeight),
@@ -74,6 +91,7 @@ class LightTheme {
             borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
           ),
           textStyle: const TextStyle(
+            inherit: true,
             fontFamily: AppTheme.fontFamily,
             fontSize: 14,
             fontWeight: FontWeight.w600,
@@ -90,6 +108,7 @@ class LightTheme {
             borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
           ),
           textStyle: const TextStyle(
+            inherit: true,
             fontFamily: AppTheme.fontFamily,
             fontSize: 14,
             fontWeight: FontWeight.w600,
@@ -106,6 +125,7 @@ class LightTheme {
             borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
           ),
           textStyle: const TextStyle(
+            inherit: true,
             fontFamily: AppTheme.fontFamily,
             fontSize: 14,
             fontWeight: FontWeight.w600,
@@ -117,6 +137,7 @@ class LightTheme {
         style: TextButton.styleFrom(
           foregroundColor: AppTheme.primary,
           textStyle: const TextStyle(
+            inherit: true,
             fontFamily: AppTheme.fontFamily,
             fontSize: 14,
             fontWeight: FontWeight.w600,
@@ -132,18 +153,25 @@ class LightTheme {
           vertical: 16,
         ),
         hintStyle: const TextStyle(
+          inherit: true,
           color: AppTheme.lightTextSecondary,
           fontSize: 14,
         ),
         labelStyle: const TextStyle(
+          inherit: true,
           color: AppTheme.lightTextSecondary,
           fontSize: 14,
         ),
         floatingLabelStyle: const TextStyle(
+          inherit: true,
           color: AppTheme.primary,
           fontSize: 14,
         ),
-        errorStyle: const TextStyle(color: AppTheme.destructive, fontSize: 12),
+        errorStyle: const TextStyle(
+          inherit: true,
+          color: AppTheme.destructive,
+          fontSize: 12,
+        ),
         prefixIconColor: AppTheme.lightTextSecondary,
         suffixIconColor: AppTheme.lightTextSecondary,
         border: OutlineInputBorder(
@@ -173,7 +201,9 @@ class LightTheme {
       ),
 
       checkboxTheme: CheckboxThemeData(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(4),
+        ),
         fillColor: WidgetStateProperty.resolveWith<Color?>((states) {
           if (states.contains(WidgetState.selected)) {
             return AppTheme.primary;
@@ -219,6 +249,7 @@ class LightTheme {
           ),
           textStyle: const WidgetStatePropertyAll(
             TextStyle(
+              inherit: true,
               fontFamily: AppTheme.fontFamily,
               fontSize: 13,
               fontWeight: FontWeight.w600,
@@ -231,6 +262,7 @@ class LightTheme {
         backgroundColor: AppTheme.lightSurface,
         side: const BorderSide(color: _border),
         labelStyle: const TextStyle(
+          inherit: true,
           fontFamily: AppTheme.fontFamily,
           fontSize: 11,
           fontWeight: FontWeight.w600,
@@ -243,6 +275,7 @@ class LightTheme {
       snackBarTheme: SnackBarThemeData(
         backgroundColor: AppTheme.primaryDark,
         contentTextStyle: const TextStyle(
+          inherit: true,
           color: Colors.white,
           fontSize: 14,
           fontFamily: AppTheme.fontFamily,
@@ -257,7 +290,9 @@ class LightTheme {
         backgroundColor: AppTheme.lightSurface,
         surfaceTintColor: Colors.transparent,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(20),
+          ),
         ),
       ),
 
@@ -270,9 +305,6 @@ class LightTheme {
         ),
       ),
 
-      // ========================================================
-      // Bottom Navigation: أيقونة المختار cyan + label بنفسجي عريض
-      // ========================================================
       navigationBarTheme: NavigationBarThemeData(
         backgroundColor: _navBackground,
         surfaceTintColor: Colors.transparent,
@@ -289,6 +321,7 @@ class LightTheme {
         labelTextStyle: WidgetStateProperty.resolveWith<TextStyle>((states) {
           if (states.contains(WidgetState.selected)) {
             return const TextStyle(
+              inherit: true,
               fontFamily: AppTheme.fontFamily,
               color: AppTheme.primary,
               fontSize: 11,
@@ -296,6 +329,7 @@ class LightTheme {
             );
           }
           return const TextStyle(
+            inherit: true,
             fontFamily: AppTheme.fontFamily,
             color: _navUnselected,
             fontSize: 11,

@@ -756,6 +756,117 @@ class AppLocalizationsAr extends AppLocalizations {
   String get retry => 'حاول مرة أخرى';
 
   @override
+  String get profileTitle => 'الملف الشخصي';
+
+  @override
+  String get profileSignInAgain => 'من فضلك سجّل الدخول مرة أخرى.';
+
+  @override
+  String get profileLoadError => 'تعذر تحميل الملف الشخصي.';
+
+  @override
+  String get profileDefaultName => 'مستخدم CureLink';
+
+  @override
+  String get profileId => 'رقم العضوية';
+
+  @override
+  String get profilePersonalInfo => 'المعلومات الشخصية';
+
+  @override
+  String get profileEmail => 'البريد الإلكتروني';
+
+  @override
+  String get profilePhone => 'رقم الهاتف';
+
+  @override
+  String get profileRole => 'دور الحساب';
+
+  @override
+  String get profileNotSet => 'غير محدد';
+
+  @override
+  String get profileActiveMode => 'الوضع النشط';
+
+  @override
+  String get profilePatient => 'مريض';
+
+  @override
+  String get profileCaregiver => 'مقدم رعاية';
+
+  @override
+  String get profileModeUpdated => 'تم تغيير الوضع النشط.';
+
+  @override
+  String get profileModeUpdateError => 'تعذر تغيير الوضع النشط.';
+
+  @override
+  String get appPreferences => 'تفضيلات التطبيق';
+
+  @override
+  String get profileSettingsSubtitle => 'اللغة والمظهر والإعدادات';
+
+  @override
+  String get settingsTitle => 'الإعدادات';
+
+  @override
+  String get appearance => 'المظهر';
+
+  @override
+  String get darkMode => 'الوضع الداكن';
+
+  @override
+  String get darkModeSubtitle => 'التبديل بين الوضع الفاتح والداكن';
+
+  @override
+  String get useSystemTheme => 'استخدام مظهر الجهاز';
+
+  @override
+  String get language => 'اللغة';
+
+  @override
+  String get english => 'English';
+
+  @override
+  String get arabic => 'العربية';
+
+  @override
+  String get calendarTitle => 'التقويم';
+
+  @override
+  String get calendarDayDetails => 'تفاصيل الجرعات';
+
+  @override
+  String get calendarDoseHistory => 'سجل الجرعات';
+
+  @override
+  String get calendarRetry => 'إعادة المحاولة';
+
+  @override
+  String get calendarPatientUidMissing => 'معرّف المريض غير متاح.';
+
+  @override
+  String get calendarLoadError => 'تعذر تحميل بيانات التقويم. حاول مرة أخرى.';
+
+  @override
+  String get calendarNoDoses => 'لا توجد جرعات مسجلة في هذا اليوم.';
+
+  @override
+  String get calendarStatusUpcoming => 'قادمة';
+
+  @override
+  String get calendarStatusDue => 'موعدها الآن';
+
+  @override
+  String get calendarStatusTaken => 'تم تناولها';
+
+  @override
+  String get calendarStatusSnoozed => 'مؤجلة';
+
+  @override
+  String get calendarStatusMissed => 'فائتة';
+
+  @override
   String get medSaveMedicine => 'حفظ الدواء';
 
   @override
@@ -896,4 +1007,61 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get delete => 'حذف';
+
+  @override
+  String get scheduleTitle => 'جدول الجرعات';
+
+  @override
+  String get scheduleYesterday => 'أمس';
+
+  @override
+  String get scheduleToday => 'اليوم';
+
+  @override
+  String get scheduleAll => 'الكل';
+
+  @override
+  String get scheduleLoadError => 'تعذر تحميل جدول الجرعات.';
+
+  @override
+  String get scheduleRetry => 'إعادة المحاولة';
+
+  @override
+  String get scheduleEmpty => 'لا توجد جرعات في هذا الجدول';
+
+  @override
+  String get scheduleUpcoming => 'قادمة';
+
+  @override
+  String get scheduleDue => 'موعدها الآن';
+
+  @override
+  String get scheduleTaken => 'تم تناولها';
+
+  @override
+  String get scheduleSnoozed => 'مؤجلة';
+
+  @override
+  String get scheduleMissed => 'فات موعدها';
+
+  @override
+  String get scheduleMarkTaken => 'أخدت الدواء';
+
+  @override
+  String get scheduleSnooze => 'تأجيل 10 دقائق';
+
+  @override
+  String scheduleTakenAt(String time) {
+    return 'وقت التناول: $time';
+  }
+
+  @override
+  String scheduleSnoozedUntil(String time) {
+    return 'مؤجلة حتى $time';
+  }
+
+  @override
+  String scheduleNextReminder(String time) {
+    return 'التذكير التالي: $time';
+  }
 }

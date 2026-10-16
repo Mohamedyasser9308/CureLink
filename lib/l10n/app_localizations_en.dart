@@ -754,6 +754,118 @@ class AppLocalizationsEn extends AppLocalizations {
   String get retry => 'Try again';
 
   @override
+  String get profileTitle => 'My Profile';
+
+  @override
+  String get profileSignInAgain => 'Please sign in again.';
+
+  @override
+  String get profileLoadError => 'Could not load your profile.';
+
+  @override
+  String get profileDefaultName => 'CureLink User';
+
+  @override
+  String get profileId => 'Member ID';
+
+  @override
+  String get profilePersonalInfo => 'Personal Information';
+
+  @override
+  String get profileEmail => 'Email Address';
+
+  @override
+  String get profilePhone => 'Phone Number';
+
+  @override
+  String get profileRole => 'Account Role';
+
+  @override
+  String get profileNotSet => 'Not set';
+
+  @override
+  String get profileActiveMode => 'Active Mode';
+
+  @override
+  String get profilePatient => 'Patient';
+
+  @override
+  String get profileCaregiver => 'Caregiver';
+
+  @override
+  String get profileModeUpdated => 'Active mode updated.';
+
+  @override
+  String get profileModeUpdateError => 'Could not update active mode.';
+
+  @override
+  String get appPreferences => 'App Preferences';
+
+  @override
+  String get profileSettingsSubtitle => 'Language, appearance and preferences';
+
+  @override
+  String get settingsTitle => 'Settings';
+
+  @override
+  String get appearance => 'Appearance';
+
+  @override
+  String get darkMode => 'Dark Mode';
+
+  @override
+  String get darkModeSubtitle => 'Switch between light and dark themes';
+
+  @override
+  String get useSystemTheme => 'Use system theme';
+
+  @override
+  String get language => 'Language';
+
+  @override
+  String get english => 'English';
+
+  @override
+  String get arabic => 'العربية';
+
+  @override
+  String get calendarTitle => 'Calendar';
+
+  @override
+  String get calendarDayDetails => 'Dose details';
+
+  @override
+  String get calendarDoseHistory => 'Dose history';
+
+  @override
+  String get calendarRetry => 'Try again';
+
+  @override
+  String get calendarPatientUidMissing => 'Patient ID is not available.';
+
+  @override
+  String get calendarLoadError =>
+      'Unable to load calendar data. Please try again.';
+
+  @override
+  String get calendarNoDoses => 'No doses recorded for this day.';
+
+  @override
+  String get calendarStatusUpcoming => 'Upcoming';
+
+  @override
+  String get calendarStatusDue => 'Due now';
+
+  @override
+  String get calendarStatusTaken => 'Taken';
+
+  @override
+  String get calendarStatusSnoozed => 'Snoozed';
+
+  @override
+  String get calendarStatusMissed => 'Missed';
+
+  @override
   String get medSaveMedicine => 'Save Medicine';
 
   @override
@@ -894,4 +1006,61 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get delete => 'Delete';
+
+  @override
+  String get scheduleTitle => 'Schedule';
+
+  @override
+  String get scheduleYesterday => 'Yesterday';
+
+  @override
+  String get scheduleToday => 'Today';
+
+  @override
+  String get scheduleAll => 'All';
+
+  @override
+  String get scheduleLoadError => 'Could not load your schedule.';
+
+  @override
+  String get scheduleRetry => 'Retry';
+
+  @override
+  String get scheduleEmpty => 'No doses scheduled here';
+
+  @override
+  String get scheduleUpcoming => 'Upcoming';
+
+  @override
+  String get scheduleDue => 'Due now';
+
+  @override
+  String get scheduleTaken => 'Taken';
+
+  @override
+  String get scheduleSnoozed => 'Snoozed';
+
+  @override
+  String get scheduleMissed => 'Missed';
+
+  @override
+  String get scheduleMarkTaken => 'Mark as Taken';
+
+  @override
+  String get scheduleSnooze => 'Snooze 10m';
+
+  @override
+  String scheduleTakenAt(String time) {
+    return 'Taken at $time';
+  }
+
+  @override
+  String scheduleSnoozedUntil(String time) {
+    return 'Snoozed until $time';
+  }
+
+  @override
+  String scheduleNextReminder(String time) {
+    return 'Next reminder: $time';
+  }
 }
