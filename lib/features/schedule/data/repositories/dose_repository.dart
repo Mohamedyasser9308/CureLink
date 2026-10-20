@@ -1,26 +1,25 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:curelink/features/schedule/data/models/dose_model.dart';
 
+import '../../../add_medication/data/models/medication_model.dart';
+
 class DoseRepository {
+  static const int scheduleHorizonDays = 91;
+  static const Duration missedGracePeriod = Duration(minutes: 20);
+
   final FirebaseFirestore firestore;
 
   DoseRepository({FirebaseFirestore? firestore})
-      : firestore = firestore ?? FirebaseFirestore.instance;
+    : firestore = firestore ?? FirebaseFirestore.instance;
 
-  CollectionReference<Map<String, dynamic>> dosesRef(
-    String patientUid,
-  ) {
+  CollectionReference<Map<String, dynamic>> dosesRef(String patientUid) {
     final uid = patientUid.trim();
 
     if (uid.isEmpty) {
       throw ArgumentError('Patient UID cannot be empty.');
     }
 
-    return firestore
-        .collection('users')
-        .doc(uid)
-        .collection('doses');
+    return firestore.collection('users').doc(uid).collection('doses');
   }
 
   String createDoseId({
@@ -40,6 +39,84 @@ class DoseRepository {
 
     return '${safeMedicationId}_${year}${month}${day}_'
         '${hour}${minute}';
+  }
+
+  Stream<List<DoseModel>> watchDoses({
+    required String patientUid,
+    required DateTime from,
+    required DateTime to,
+  }) {
+    if (!from.isBefore(to)) return Stream.value(const []);
+
+    return dosesRef(patientUid)
+        .where('scheduledAt', isGreaterThanOrEqualTo: Timestamp.fromDate(from))
+        .where('scheduledAt', isLessThan: Timestamp.fromDate(to))
+        .snapshots()
+        .map(
+          (snapshot) => snapshot.docs
+              .map((doc) => DoseModel.fromMap(doc.data(), doc.id))
+              .toList(),
+        );
+  }
+
+  List<DoseModel> generateMedicationDoses({
+    required MedicationModel medication,
+    required DateTime from,
+    required DateTime to,
+    required DateTime now,
+  }) {
+    if (!medication.isActive || medication.times.isEmpty) return [];
+
+    final frequency = _normalizeFrequency(medication.frequency);
+    if (frequency == 'as needed') return [];
+
+    final start = _dateOnly(medication.startDate);
+    final duration = medication.durationDays;
+    if (duration != null && duration <= 0) return [];
+
+    final endExclusive = duration == null
+        ? null
+        : start.add(Duration(days: duration));
+    var day = from.isAfter(start) ? from : start;
+    if (endExclusive != null && !day.isBefore(endExclusive)) return [];
+
+    final doses = <DoseModel>[];
+    while (day.isBefore(to)) {
+      if (endExclusive != null && !day.isBefore(endExclusive)) break;
+
+      if (_isScheduledDay(
+        medication: medication,
+        frequency: frequency,
+        day: day,
+        start: start,
+      )) {
+        for (final time in medication.times) {
+          final scheduledAt = _parseScheduledTime(day, time);
+          if (scheduledAt == null) continue;
+
+          doses.add(
+            DoseModel(
+              id: createDoseId(
+                medicationId: medication.id,
+                scheduledAt: scheduledAt,
+              ),
+              medicationId: medication.id,
+              medicationName: medication.name,
+              dosage: medication.dosage,
+              imageUrl: medication.imageUrl,
+              scheduledAt: scheduledAt,
+              status: _statusForTime(scheduledAt, now),
+              createdAt: now,
+              updatedAt: now,
+            ),
+          );
+        }
+      }
+
+      day = day.add(const Duration(days: 1));
+    }
+
+    return doses;
   }
 
   /// Creates missing dose documents without overwriting existing records.
@@ -77,10 +154,7 @@ class DoseRepository {
         // Never overwrite an existing dose's status or timestamps.
         if (snapshots[i].exists) continue;
 
-        batch.set(
-          ref.doc(chunk[i].id),
-          chunk[i].toMap(),
-        );
+        batch.set(ref.doc(chunk[i].id), chunk[i].toMap());
         writes++;
       }
 
@@ -101,14 +175,8 @@ class DoseRepository {
     }
 
     final snapshot = await dosesRef(patientUid)
-        .where(
-          'scheduledAt',
-          isGreaterThanOrEqualTo: Timestamp.fromDate(from),
-        )
-        .where(
-          'scheduledAt',
-          isLessThan: Timestamp.fromDate(to),
-        )
+        .where('scheduledAt', isGreaterThanOrEqualTo: Timestamp.fromDate(from))
+        .where('scheduledAt', isLessThan: Timestamp.fromDate(to))
         .orderBy('scheduledAt')
         .get();
 
@@ -124,79 +192,146 @@ class DoseRepository {
     required String patientUid,
     required DoseModel dose,
   }) async {
-    await dosesRef(patientUid)
-        .doc(dose.id)
-        .update(dose.toMap());
+    await dosesRef(patientUid).doc(dose.id).update(dose.toMap());
   }
 
-  /// Synchronizes the medication details on existing future doses.
+  /// Reconciles future dose records with the medication's current schedule.
   ///
-  /// Only upcoming, due, and snoozed doses are eligible.
-  /// Taken and missed records are preserved as historical records.
-  ///
-  /// This method does not delete doses or change their scheduled times.
-  Future<void> syncFutureDoseDetails({
+  /// Matching doses keep their current status. Obsolete upcoming doses are
+  /// removed, while taken and missed records remain as history. New schedule
+  /// times are inserted using the same deterministic IDs as normal generation.
+  Future<void> reconcileMedicationDoses({
     required String patientUid,
-    required String medicationId,
-    required String medicationName,
-    required String dosage,
+    required Set<String> medicationIds,
+    required List<DoseModel> scheduledDoses,
     required DateTime from,
+    required DateTime to,
+    required DateTime now,
   }) async {
-    final snapshot = await dosesRef(patientUid)
-        .where('medicationId', isEqualTo: medicationId)
-        .where(
-          'scheduledAt',
-          isGreaterThanOrEqualTo: Timestamp.fromDate(from),
-        )
+    if (medicationIds.isEmpty) return;
+
+    final ref = dosesRef(patientUid);
+    final snapshot = await ref
+        .where('scheduledAt', isGreaterThanOrEqualTo: Timestamp.fromDate(from))
+        .where('scheduledAt', isLessThan: Timestamp.fromDate(to))
         .orderBy('scheduledAt')
         .get();
 
-    final eligibleStatuses = <String>{
-      DoseStatus.upcoming.name,
-      DoseStatus.due.name,
-      DoseStatus.snoozed.name,
+    final existingById = {
+      for (final doc in snapshot.docs)
+        if (medicationIds.contains(doc.data()['medicationId'])) doc.id: doc,
     };
+    final desiredById = {
+      for (final dose in scheduledDoses)
+        if (medicationIds.contains(dose.medicationId)) dose.id: dose,
+    };
+    final writes = <void Function(WriteBatch)>[];
 
-    final batchLimit = 400;
-    var batch = firestore.batch();
-    var writes = 0;
-
-    for (final doc in snapshot.docs) {
-      final dose = DoseModel.fromMap(doc.data(), doc.id);
-
-      if (!eligibleStatuses.contains(dose.status.name)) {
+    for (final dose in desiredById.values) {
+      final existingDoc = existingById.remove(dose.id);
+      if (existingDoc == null) {
+        writes.add((batch) => batch.set(ref.doc(dose.id), dose.toMap()));
         continue;
       }
 
-      if (dose.medicationName == medicationName &&
-          dose.dosage == dosage) {
+      final existing = DoseModel.fromMap(existingDoc.data(), existingDoc.id);
+      if (existing.status == DoseStatus.taken ||
+          existing.status == DoseStatus.missed) {
         continue;
       }
 
-      final updated = dose.copyWith(
-        updatedAt: DateTime.now(),
-      );
-
-      // Update only the medication details and updatedAt.
-      // Do not replace the complete dose map, because that could
-      // accidentally clear takenAt or snoozedUntil.
-      batch.update(doc.reference, {
-        'medicationName': medicationName,
-        'dosage': dosage,
-        'updatedAt': Timestamp.fromDate(updated.updatedAt),
-      });
-
-      writes++;
-
-      if (writes >= batchLimit) {
-        await batch.commit();
-        batch = firestore.batch();
-        writes = 0;
+      final updates = <String, dynamic>{};
+      if (existing.medicationName != dose.medicationName) {
+        updates['medicationName'] = dose.medicationName;
+      }
+      if (existing.dosage != dose.dosage) {
+        updates['dosage'] = dose.dosage;
+      }
+      if (existing.imageUrl != dose.imageUrl) {
+        updates['imageUrl'] = dose.imageUrl;
+      }
+      if (updates.isNotEmpty) {
+        updates['updatedAt'] = Timestamp.fromDate(now);
+        writes.add((batch) => batch.update(existingDoc.reference, updates));
       }
     }
 
-    if (writes > 0) {
+    for (final doc in existingById.values) {
+      final dose = DoseModel.fromMap(doc.data(), doc.id);
+      final isFutureUpcoming =
+          dose.status == DoseStatus.upcoming && dose.scheduledAt.isAfter(now);
+      final isActiveSnooze =
+          dose.status == DoseStatus.snoozed &&
+          dose.snoozedUntil != null &&
+          dose.snoozedUntil!.isAfter(now);
+      if (isFutureUpcoming || isActiveSnooze) {
+        writes.add((batch) => batch.delete(doc.reference));
+      }
+    }
+
+    const batchLimit = 400;
+    for (var start = 0; start < writes.length; start += batchLimit) {
+      final batch = firestore.batch();
+      for (final write in writes.skip(start).take(batchLimit)) {
+        write(batch);
+      }
       await batch.commit();
     }
+  }
+
+  String _normalizeFrequency(String value) => value
+      .toLowerCase()
+      .trim()
+      .replaceAll('_', ' ')
+      .replaceAll('-', ' ')
+      .replaceAll(RegExp(r'\s+'), ' ');
+
+  bool _isScheduledDay({
+    required MedicationModel medication,
+    required String frequency,
+    required DateTime day,
+    required DateTime start,
+  }) {
+    switch (frequency) {
+      case 'specific days':
+        return medication.weekdays.contains(day.weekday);
+      case 'every other day':
+        final daysSinceStart = _dateOnly(day).difference(start).inDays;
+        return daysSinceStart >= 0 && daysSinceStart.isEven;
+      case 'as needed':
+        return false;
+      case 'daily':
+      default:
+        return true;
+    }
+  }
+
+  DateTime? _parseScheduledTime(DateTime day, String value) {
+    final parts = value.trim().split(':');
+    if (parts.length != 2) return null;
+
+    final hour = int.tryParse(parts[0]);
+    final minute = int.tryParse(parts[1]);
+    if (hour == null ||
+        minute == null ||
+        hour < 0 ||
+        hour > 23 ||
+        minute < 0 ||
+        minute > 59) {
+      return null;
+    }
+
+    return DateTime(day.year, day.month, day.day, hour, minute);
+  }
+
+  DateTime _dateOnly(DateTime date) =>
+      DateTime(date.year, date.month, date.day);
+
+  DoseStatus _statusForTime(DateTime referenceTime, DateTime now) {
+    if (now.isBefore(referenceTime)) return DoseStatus.upcoming;
+    if (now.isBefore(referenceTime.add(missedGracePeriod))) {
+      return DoseStatus.due;
+    }
+    return DoseStatus.missed;
   }
 }

@@ -1,19 +1,13 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-enum DoseStatus {
-  upcoming,
-  due,
-  taken,
-  snoozed,
-  missed,
-}
+enum DoseStatus { upcoming, due, taken, snoozed, missed }
 
 class DoseModel {
   final String id;
   final String medicationId;
   final String medicationName;
   final String dosage;
+  final String? imageUrl;
   final DateTime scheduledAt;
   final DoseStatus status;
   final DateTime? takenAt;
@@ -32,6 +26,7 @@ class DoseModel {
     required this.updatedAt,
     this.takenAt,
     this.snoozedUntil,
+    this.imageUrl,
   });
 
   static DoseStatus statusFromString(String? value) {
@@ -41,10 +36,7 @@ class DoseModel {
     );
   }
 
-  factory DoseModel.fromMap(
-    Map<String, dynamic> map,
-    String documentId,
-  ) {
+  factory DoseModel.fromMap(Map<String, dynamic> map, String documentId) {
     DateTime readDate(dynamic value) {
       if (value is Timestamp) return value.toDate();
       if (value is DateTime) return value;
@@ -62,6 +54,7 @@ class DoseModel {
       medicationId: map['medicationId'] as String? ?? '',
       medicationName: map['medicationName'] as String? ?? '',
       dosage: map['dosage'] as String? ?? '',
+      imageUrl: map['imageUrl'] as String?,
       scheduledAt: readDate(map['scheduledAt']),
       status: statusFromString(map['status'] as String?),
       takenAt: readOptionalDate(map['takenAt']),
@@ -76,11 +69,10 @@ class DoseModel {
       'medicationId': medicationId,
       'medicationName': medicationName,
       'dosage': dosage,
+      'imageUrl': imageUrl,
       'scheduledAt': Timestamp.fromDate(scheduledAt),
       'status': status.name,
-      'takenAt': takenAt == null
-          ? null
-          : Timestamp.fromDate(takenAt!),
+      'takenAt': takenAt == null ? null : Timestamp.fromDate(takenAt!),
       'snoozedUntil': snoozedUntil == null
           ? null
           : Timestamp.fromDate(snoozedUntil!),
@@ -102,6 +94,7 @@ class DoseModel {
       medicationId: medicationId,
       medicationName: medicationName,
       dosage: dosage,
+      imageUrl: imageUrl,
       scheduledAt: scheduledAt,
       status: status ?? this.status,
       takenAt: clearTakenAt ? null : takenAt ?? this.takenAt,

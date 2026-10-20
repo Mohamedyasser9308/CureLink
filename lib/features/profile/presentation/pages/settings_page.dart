@@ -1,11 +1,33 @@
 
 import 'package:curelink/core/settings/settings_cubit.dart';
+import 'package:curelink/core/router/routes_names.dart';
 import 'package:curelink/l10n/app_localizations.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
+
+  Future<void> _logOut(BuildContext context) async {
+    final l10n = AppLocalizations.of(context)!;
+
+    try {
+      await FirebaseAuth.instance.signOut();
+      if (!context.mounted) return;
+      Navigator.of(context).pushNamedAndRemoveUntil(
+        RoutesNames.loginPage,
+        (_) => false,
+      );
+    } catch (_) {
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(content: Text(l10n.somethingWentWrong)),
+        );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -134,6 +156,31 @@ class SettingsPage extends StatelessWidget {
                       },
                     ),
                   ],
+                ),
+              ),
+
+              const SizedBox(height: 24),
+
+              Card(
+                clipBehavior: Clip.antiAlias,
+                child: ListTile(
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 6,
+                  ),
+                  leading: Icon(
+                    Icons.logout_rounded,
+                    color: colors.error,
+                    size: 26,
+                  ),
+                  title: Text(
+                    l10n.logOut,
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      color: colors.error,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  onTap: () => _logOut(context),
                 ),
               ),
             ],

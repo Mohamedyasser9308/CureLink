@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -20,8 +19,8 @@ class _ConnectionsPageState extends State<ConnectionsPage> {
   final _service = ConnectionService();
   final _patientIdController = TextEditingController();
   late final String? _uid;
-  late final Stream<List<PatientConnection>>? _caregiverConnections;
-  late final Stream<List<PatientConnection>>? _patientConnections;
+  late final Stream<List<PatientConnection>> _caregiverConnections;
+  late final Stream<List<PatientConnection>> _patientConnections;
   bool _sending = false;
   final Set<String> _responding = {};
 
@@ -36,11 +35,11 @@ class _ConnectionsPageState extends State<ConnectionsPage> {
     super.initState();
     _uid = FirebaseAuth.instance.currentUser?.uid;
     _caregiverConnections = _uid == null || !_canSend
-        ? null
-        : _service.watchCaregiverConnections(_uid!);
+        ? const Stream<List<PatientConnection>>.empty()
+        : _service.watchCaregiverConnections(_uid);
     _patientConnections = _uid == null || !_canReview
-        ? null
-        : _service.watchPatientConnections(_uid!);
+        ? const Stream<List<PatientConnection>>.empty()
+        : _service.watchPatientConnections(_uid);
   }
 
   @override
@@ -159,13 +158,13 @@ class _ConnectionsPageState extends State<ConnectionsPage> {
             const SizedBox(height: 24),
             _sectionTitle(context, l10n.yourConnectionRequests),
             const SizedBox(height: 8),
-            _connectionsList(stream: _caregiverConnections!, incoming: false),
+            _connectionsList(stream: _caregiverConnections, incoming: false),
           ],
           if (_canReview) ...[
             if (_canSend) const SizedBox(height: 24),
             _sectionTitle(context, l10n.incomingConnectionRequests),
             const SizedBox(height: 8),
-            _connectionsList(stream: _patientConnections!, incoming: true),
+            _connectionsList(stream: _patientConnections, incoming: true),
           ],
           const SizedBox(height: 24),
         ],

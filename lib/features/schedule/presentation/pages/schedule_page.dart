@@ -1,4 +1,3 @@
-
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -6,12 +5,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 import 'package:curelink/core/theme/app_theme.dart';
-import 'package:curelink/features/medication/data/repositries/medication_repository.dart';
 import 'package:curelink/features/schedule/data/models/dose_model.dart';
 import 'package:curelink/features/schedule/data/repositories/dose_repository.dart';
 import 'package:curelink/features/schedule/presentation/cubit/schedule_cubit.dart';
 import 'package:curelink/features/schedule/presentation/cubit/schedule_state.dart';
 import 'package:curelink/l10n/app_localizations.dart';
+
+import '../../../add_medication/data/repositries/medication_repository.dart';
 
 class SchedulePage extends StatelessWidget {
   const SchedulePage({super.key});
@@ -42,14 +42,11 @@ class _ScheduleViewState extends State<_ScheduleView> {
   void initState() {
     super.initState();
 
-    _timer = Timer.periodic(
-      const Duration(minutes: 1),
-      (_) {
-        if (mounted) {
-          context.read<ScheduleCubit>().refreshDoseStatuses();
-        }
-      },
-    );
+    _timer = Timer.periodic(const Duration(minutes: 1), (_) {
+      if (mounted) {
+        context.read<ScheduleCubit>().refreshDoseStatuses();
+      }
+    });
   }
 
   @override
@@ -61,29 +58,23 @@ class _ScheduleViewState extends State<_ScheduleView> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final isArabic =
-        Localizations.localeOf(context).languageCode == 'ar';
+    final isArabic = Localizations.localeOf(context).languageCode == 'ar';
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      appBar: AppBar(
-        title: Text(l10n.scheduleTitle),
-      ),
+      appBar: AppBar(title: Text(l10n.scheduleTitle)),
       body: SafeArea(
         child: BlocConsumer<ScheduleCubit, ScheduleState>(
           listenWhen: (previous, current) =>
-              previous.error != current.error &&
-              current.error != null,
+              previous.error != current.error && current.error != null,
           listener: (context, state) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.error!)),
-            );
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(state.error!)));
           },
           builder: (context, state) {
             if (state.isLoading && state.doses.isEmpty) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
+              return const Center(child: CircularProgressIndicator());
             }
 
             if (state.error != null && state.doses.isEmpty) {
@@ -160,10 +151,12 @@ class _ScheduleTab extends StatelessWidget {
       child: OutlinedButton(
         onPressed: () => context.read<ScheduleCubit>().selectTab(tab),
         style: OutlinedButton.styleFrom(
-          backgroundColor:
-              isSelected ? AppTheme.primary : theme.colorScheme.surface,
-          foregroundColor:
-              isSelected ? Colors.white : theme.colorScheme.onSurface,
+          backgroundColor: isSelected
+              ? AppTheme.primary
+              : theme.colorScheme.surface,
+          foregroundColor: isSelected
+              ? Colors.white
+              : theme.colorScheme.onSurface,
           side: BorderSide(
             color: isSelected ? AppTheme.primary : theme.dividerColor,
           ),
@@ -205,10 +198,7 @@ class _ErrorView extends StatelessWidget {
             const SizedBox(height: 12),
             Text(message, textAlign: TextAlign.center),
             const SizedBox(height: 12),
-            FilledButton(
-              onPressed: onRetry,
-              child: Text(retryLabel),
-            ),
+            FilledButton(onPressed: onRetry, child: Text(retryLabel)),
           ],
         ),
       ),
@@ -242,8 +232,7 @@ class _DoseList extends StatelessWidget {
         ScheduleTab.today => day == today,
         ScheduleTab.all => true,
       };
-    }).toList()
-      ..sort((a, b) => a.scheduledAt.compareTo(b.scheduledAt));
+    }).toList()..sort((a, b) => a.scheduledAt.compareTo(b.scheduledAt));
 
     if (filtered.isEmpty) {
       return ListView(
@@ -289,19 +278,15 @@ class _DoseList extends StatelessWidget {
                 'EEEE, d MMMM yyyy',
                 isArabic ? 'ar' : 'en',
               ).format(day),
-              style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
             ),
           ),
           for (final dose in groups[day]!)
             Padding(
               padding: const EdgeInsets.only(bottom: 12),
-              child: _DoseCard(
-                dose: dose,
-                isArabic: isArabic,
-                l10n: l10n,
-              ),
+              child: _DoseCard(dose: dose, isArabic: isArabic, l10n: l10n),
             ),
         ],
       ],
@@ -321,34 +306,27 @@ class _DoseCard extends StatelessWidget {
   final AppLocalizations l10n;
 
   String _statusLabel() => switch (dose.status) {
-        DoseStatus.upcoming => l10n.scheduleUpcoming,
-        DoseStatus.due => l10n.scheduleDue,
-        DoseStatus.taken => l10n.scheduleTaken,
-        DoseStatus.snoozed => l10n.scheduleSnoozed,
-        DoseStatus.missed => l10n.scheduleMissed,
-      };
+    DoseStatus.upcoming => l10n.scheduleUpcoming,
+    DoseStatus.due => l10n.scheduleDue,
+    DoseStatus.taken => l10n.scheduleTaken,
+    DoseStatus.snoozed => l10n.scheduleSnoozed,
+    DoseStatus.missed => l10n.scheduleMissed,
+  };
 
   Color _statusColor(BuildContext context) {
     final dark = Theme.of(context).brightness == Brightness.dark;
 
     return switch (dose.status) {
-      DoseStatus.upcoming =>
-        dark ? Colors.blue.shade200 : Colors.blue.shade700,
-      DoseStatus.due =>
-        dark ? Colors.orange.shade300 : Colors.orange.shade800,
-      DoseStatus.taken =>
-        dark ? Colors.green.shade300 : Colors.green.shade700,
-      DoseStatus.snoozed =>
-        dark ? Colors.purple.shade200 : AppTheme.primary,
-      DoseStatus.missed =>
-        dark ? Colors.red.shade300 : Colors.red.shade700,
+      DoseStatus.upcoming => dark ? Colors.blue.shade200 : Colors.blue.shade700,
+      DoseStatus.due => dark ? Colors.orange.shade300 : Colors.orange.shade800,
+      DoseStatus.taken => dark ? Colors.green.shade300 : Colors.green.shade700,
+      DoseStatus.snoozed => dark ? Colors.purple.shade200 : AppTheme.primary,
+      DoseStatus.missed => dark ? Colors.red.shade300 : Colors.red.shade700,
     };
   }
 
-  String _formatTime(DateTime date) => DateFormat(
-        'h:mm a',
-        isArabic ? 'ar' : 'en',
-      ).format(date);
+  String _formatTime(DateTime date) =>
+      DateFormat('h:mm a', isArabic ? 'ar' : 'en').format(date);
 
   @override
   Widget build(BuildContext context) {
@@ -385,9 +363,22 @@ class _DoseCard extends StatelessWidget {
                     ),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: const Icon(
-                    Icons.medication_outlined,
-                    color: AppTheme.primary,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: dose.imageUrl?.trim().isNotEmpty == true
+                        ? Image.network(
+                            dose.imageUrl!.trim(),
+                            width: 46,
+                            height: 46,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) =>
+                                const _ScheduleMedicationPlaceholder(),
+                            loadingBuilder: (context, child, progress) =>
+                                progress == null
+                                ? child
+                                : const _ScheduleMedicationPlaceholder(),
+                          )
+                        : const _ScheduleMedicationPlaceholder(),
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -447,10 +438,7 @@ class _DoseCard extends StatelessWidget {
                       onPressed: () {
                         context.read<ScheduleCubit>().markAsTaken(dose);
                       },
-                      icon: const Icon(
-                        Icons.check_circle_outline,
-                        size: 18,
-                      ),
+                      icon: const Icon(Icons.check_circle_outline, size: 18),
                       label: Text(
                         l10n.scheduleMarkTaken,
                         textAlign: TextAlign.center,
@@ -485,11 +473,8 @@ class _DoseCard extends StatelessWidget {
               ),
             ],
             if (dose.status == DoseStatus.taken && dose.takenAt != null)
-              _DoseNote(
-                text: l10n.scheduleTakenAt(_formatTime(dose.takenAt!)),
-              ),
-            if (dose.status == DoseStatus.snoozed &&
-                dose.snoozedUntil != null)
+              _DoseNote(text: l10n.scheduleTakenAt(_formatTime(dose.takenAt!))),
+            if (dose.status == DoseStatus.snoozed && dose.snoozedUntil != null)
               _DoseNote(
                 text: l10n.scheduleSnoozedUntil(
                   _formatTime(dose.snoozedUntil!),
@@ -502,6 +487,14 @@ class _DoseCard extends StatelessWidget {
   }
 }
 
+class _ScheduleMedicationPlaceholder extends StatelessWidget {
+  const _ScheduleMedicationPlaceholder();
+
+  @override
+  Widget build(BuildContext context) =>
+      const Icon(Icons.medication_outlined, color: AppTheme.primary);
+}
+
 class _DoseNote extends StatelessWidget {
   const _DoseNote({required this.text});
 
@@ -511,10 +504,7 @@ class _DoseNote extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 8),
-      child: Text(
-        text,
-        style: Theme.of(context).textTheme.bodySmall,
-      ),
+      child: Text(text, style: Theme.of(context).textTheme.bodySmall),
     );
   }
 }
