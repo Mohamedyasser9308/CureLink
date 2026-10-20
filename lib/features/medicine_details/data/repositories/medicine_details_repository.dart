@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:curelink/features/medication/data/models/medication_model.dart';
-
+import '../../../add_medication/data/models/medication_model.dart';
 
 abstract interface class MedicineDetailsDataSource {
   Future<MedicationModel?> getMedication({

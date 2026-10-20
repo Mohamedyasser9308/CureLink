@@ -730,6 +730,86 @@ class AppLocalizationsAr extends AppLocalizations {
       'تظهر حالة الارتباط فقط بعد الموافقة.';
 
   @override
+  String get connectionManagementTitle => 'ارتباطات المرضى';
+
+  @override
+  String get connectionManagementSubtitle =>
+      'يراجع المريض الطلب قبل منح صلاحية الوصول.';
+
+  @override
+  String get enterPatientId => 'أدخل معرّف CureLink الخاص بالمريض';
+
+  @override
+  String get sendConnectionRequest => 'إرسال الطلب';
+
+  @override
+  String get connectionRequestSent => 'تم إرسال الطلب. في انتظار رد المريض.';
+
+  @override
+  String get connectionAlreadyPending =>
+      'يوجد طلب بالفعل في انتظار رد هذا المريض.';
+
+  @override
+  String get connectionAlreadyAccepted => 'أنت مرتبط بهذا المريض بالفعل.';
+
+  @override
+  String get patientIdNotFound => 'لم نعثر على حساب بهذا المعرّف.';
+
+  @override
+  String get cannotConnectSelf => 'لا يمكنك إرسال طلب إلى حسابك.';
+
+  @override
+  String get connectionProfileNameMissing =>
+      'أكمل ملفك الشخصي قبل إرسال الطلب.';
+
+  @override
+  String get connectionRequestFailed =>
+      'تعذر إتمام الطلب. تحقق من الاتصال وحاول مرة أخرى.';
+
+  @override
+  String get incomingConnectionRequests => 'طلبات الارتباط الواردة';
+
+  @override
+  String get yourConnectionRequests => 'المرضى وحالة الطلبات';
+
+  @override
+  String get noConnectionRequests => 'لا توجد طلبات ارتباط حتى الآن.';
+
+  @override
+  String get acceptConnection => 'قبول';
+
+  @override
+  String get rejectConnection => 'رفض';
+
+  @override
+  String get connectionAccepted => 'تم قبول الطلب. أصبحت صلاحية الوصول مفعّلة.';
+
+  @override
+  String get connectionRejected => 'تم رفض الطلب.';
+
+  @override
+  String get connectionLoadFailed => 'تعذر تحميل طلبات الارتباط.';
+
+  @override
+  String get connectionPendingStatus => 'في انتظار ردك';
+
+  @override
+  String get connectionRejectedStatus => 'تم رفض الطلب';
+
+  @override
+  String get connectionAcceptedStatus => 'مرتبط';
+
+  @override
+  String get connectionPatientId => 'حساب المريض';
+
+  @override
+  String get connectionCaregiverLabel => 'مقدم الرعاية';
+
+  @override
+  String get connectionPermissionStatement =>
+      'بقبولك، تسمح لمقدم الرعاية بعرض مواعيد أدويتك وإضافتها وتعديلها.';
+
+  @override
   String get goodAfternoon => 'نهارك سعيد';
 
   @override

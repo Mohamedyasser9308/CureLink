@@ -1448,6 +1448,156 @@ abstract class AppLocalizations {
   /// **'Connected appears only after approval.'**
   String get connectedAppearsAfterApproval;
 
+  /// No description provided for @connectionManagementTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Patient connections'**
+  String get connectionManagementTitle;
+
+  /// No description provided for @connectionManagementSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Requests are reviewed by the patient before access is granted.'**
+  String get connectionManagementSubtitle;
+
+  /// No description provided for @enterPatientId.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the patient\'s CureLink ID'**
+  String get enterPatientId;
+
+  /// No description provided for @sendConnectionRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Send request'**
+  String get sendConnectionRequest;
+
+  /// No description provided for @connectionRequestSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Request sent. Waiting for the patient to respond.'**
+  String get connectionRequestSent;
+
+  /// No description provided for @connectionAlreadyPending.
+  ///
+  /// In en, this message translates to:
+  /// **'A request is already waiting for this patient.'**
+  String get connectionAlreadyPending;
+
+  /// No description provided for @connectionAlreadyAccepted.
+  ///
+  /// In en, this message translates to:
+  /// **'You are already connected to this patient.'**
+  String get connectionAlreadyAccepted;
+
+  /// No description provided for @patientIdNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No account was found for that CureLink ID.'**
+  String get patientIdNotFound;
+
+  /// No description provided for @cannotConnectSelf.
+  ///
+  /// In en, this message translates to:
+  /// **'You cannot send a request to your own account.'**
+  String get cannotConnectSelf;
+
+  /// No description provided for @connectionProfileNameMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete your profile before sending a request.'**
+  String get connectionProfileNameMissing;
+
+  /// No description provided for @connectionRequestFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'The request could not be completed. Check your connection and try again.'**
+  String get connectionRequestFailed;
+
+  /// No description provided for @incomingConnectionRequests.
+  ///
+  /// In en, this message translates to:
+  /// **'Requests for you'**
+  String get incomingConnectionRequests;
+
+  /// No description provided for @yourConnectionRequests.
+  ///
+  /// In en, this message translates to:
+  /// **'Patients and request status'**
+  String get yourConnectionRequests;
+
+  /// No description provided for @noConnectionRequests.
+  ///
+  /// In en, this message translates to:
+  /// **'There are no connection requests yet.'**
+  String get noConnectionRequests;
+
+  /// No description provided for @acceptConnection.
+  ///
+  /// In en, this message translates to:
+  /// **'Accept'**
+  String get acceptConnection;
+
+  /// No description provided for @rejectConnection.
+  ///
+  /// In en, this message translates to:
+  /// **'Reject'**
+  String get rejectConnection;
+
+  /// No description provided for @connectionAccepted.
+  ///
+  /// In en, this message translates to:
+  /// **'Request accepted. Access is now enabled.'**
+  String get connectionAccepted;
+
+  /// No description provided for @connectionRejected.
+  ///
+  /// In en, this message translates to:
+  /// **'Request rejected.'**
+  String get connectionRejected;
+
+  /// No description provided for @connectionLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load connection requests.'**
+  String get connectionLoadFailed;
+
+  /// No description provided for @connectionPendingStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for your response'**
+  String get connectionPendingStatus;
+
+  /// No description provided for @connectionRejectedStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Request rejected'**
+  String get connectionRejectedStatus;
+
+  /// No description provided for @connectionAcceptedStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Connected'**
+  String get connectionAcceptedStatus;
+
+  /// No description provided for @connectionPatientId.
+  ///
+  /// In en, this message translates to:
+  /// **'Patient account'**
+  String get connectionPatientId;
+
+  /// No description provided for @connectionCaregiverLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Caregiver'**
+  String get connectionCaregiverLabel;
+
+  /// No description provided for @connectionPermissionStatement.
+  ///
+  /// In en, this message translates to:
+  /// **'Accepting gives this caregiver permission to view, add, and edit your medication schedules.'**
+  String get connectionPermissionStatement;
+
   /// Localized Good afternoon text displayed in the interface.
   ///
   /// In en, this message translates to:

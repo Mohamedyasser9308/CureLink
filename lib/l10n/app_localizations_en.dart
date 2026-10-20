@@ -728,6 +728,89 @@ class AppLocalizationsEn extends AppLocalizations {
       'Connected appears only after approval.';
 
   @override
+  String get connectionManagementTitle => 'Patient connections';
+
+  @override
+  String get connectionManagementSubtitle =>
+      'Requests are reviewed by the patient before access is granted.';
+
+  @override
+  String get enterPatientId => 'Enter the patient\'s CureLink ID';
+
+  @override
+  String get sendConnectionRequest => 'Send request';
+
+  @override
+  String get connectionRequestSent =>
+      'Request sent. Waiting for the patient to respond.';
+
+  @override
+  String get connectionAlreadyPending =>
+      'A request is already waiting for this patient.';
+
+  @override
+  String get connectionAlreadyAccepted =>
+      'You are already connected to this patient.';
+
+  @override
+  String get patientIdNotFound => 'No account was found for that CureLink ID.';
+
+  @override
+  String get cannotConnectSelf =>
+      'You cannot send a request to your own account.';
+
+  @override
+  String get connectionProfileNameMissing =>
+      'Complete your profile before sending a request.';
+
+  @override
+  String get connectionRequestFailed =>
+      'The request could not be completed. Check your connection and try again.';
+
+  @override
+  String get incomingConnectionRequests => 'Requests for you';
+
+  @override
+  String get yourConnectionRequests => 'Patients and request status';
+
+  @override
+  String get noConnectionRequests => 'There are no connection requests yet.';
+
+  @override
+  String get acceptConnection => 'Accept';
+
+  @override
+  String get rejectConnection => 'Reject';
+
+  @override
+  String get connectionAccepted => 'Request accepted. Access is now enabled.';
+
+  @override
+  String get connectionRejected => 'Request rejected.';
+
+  @override
+  String get connectionLoadFailed => 'Could not load connection requests.';
+
+  @override
+  String get connectionPendingStatus => 'Waiting for your response';
+
+  @override
+  String get connectionRejectedStatus => 'Request rejected';
+
+  @override
+  String get connectionAcceptedStatus => 'Connected';
+
+  @override
+  String get connectionPatientId => 'Patient account';
+
+  @override
+  String get connectionCaregiverLabel => 'Caregiver';
+
+  @override
+  String get connectionPermissionStatement =>
+      'Accepting gives this caregiver permission to view, add, and edit your medication schedules.';
+
+  @override
   String get goodAfternoon => 'Good afternoon';
 
   @override

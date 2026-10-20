@@ -1,13 +1,14 @@
-import 'package:curelink/features/medication/presentation/add_medicine_page.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:curelink/core/theme/app_theme.dart';
 import 'package:curelink/core/widgets/app_button.dart';
 import 'package:curelink/core/widgets/app_scaffold.dart';
-import 'package:curelink/features/medication/data/models/medication_model.dart';
 import 'package:curelink/features/medicine_details/data/repositories/medicine_details_repository.dart';
 import 'package:curelink/l10n/app_localizations.dart';
+
+import '../../add_medication/data/models/medication_model.dart';
+import '../../add_medication/presentation/add_medicine_page.dart';
 
 class MedicineDetailsPage extends StatefulWidget {
   final String patientId;

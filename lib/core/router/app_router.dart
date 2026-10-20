@@ -7,8 +7,6 @@ import 'package:curelink/features/auth/login/ui/login_screen.dart';
 import 'package:curelink/features/auth/signup/presentation/cubit/signup_cubit.dart';
 import 'package:curelink/features/auth/signup/presentation/signup_page.dart';
 import 'package:curelink/features/emergency/presentation/emergency_page.dart';
-import 'package:curelink/features/medication/data/models/medication_model.dart';
-import 'package:curelink/features/medication/presentation/add_medicine_page.dart';
 import 'package:curelink/features/medicine_details/presentation/medicine_details_page.dart';
 import 'package:curelink/features/profile/presentation/pages/complete_profile_page.dart';
 import 'package:curelink/features/role_selction/age_group_page.dart';
@@ -18,6 +16,9 @@ import 'package:curelink/features/role_selction/signup_args_placeholder.dart';
 import 'package:curelink/core/auth/session_gate.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../features/add_medication/data/models/medication_model.dart';
+import '../../features/add_medication/presentation/add_medicine_page.dart';
 
 class AppRouter {
   AppRouter._();

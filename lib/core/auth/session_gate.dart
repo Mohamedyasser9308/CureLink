@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -16,15 +15,12 @@ class SessionGate extends StatelessWidget {
     if (user == null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!context.mounted) return;
-        Navigator.of(context).pushNamedAndRemoveUntil(
-          RoutesNames.loginPage,
-          (_) => false,
-        );
+        Navigator.of(
+          context,
+        ).pushNamedAndRemoveUntil(RoutesNames.loginPage, (_) => false);
       });
 
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
     return FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
@@ -54,9 +50,9 @@ class SessionGate extends StatelessWidget {
                     const SizedBox(height: 16),
                     FilledButton(
                       onPressed: () {
-                        Navigator.of(context).pushReplacementNamed(
-                          RoutesNames.homePage,
-                        );
+                        Navigator.of(
+                          context,
+                        ).pushReplacementNamed(RoutesNames.homePage);
                       },
                       child: const Text('Retry'),
                     ),
@@ -83,10 +79,9 @@ class SessionGate extends StatelessWidget {
         if (data == null) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (!context.mounted) return;
-            Navigator.of(context).pushNamedAndRemoveUntil(
-              RoutesNames.loginPage,
-              (_) => false,
-            );
+            Navigator.of(
+              context,
+            ).pushNamedAndRemoveUntil(RoutesNames.loginPage, (_) => false);
           });
 
           return const Scaffold(
@@ -105,11 +100,7 @@ class SessionGate extends StatelessWidget {
               Navigator.of(context).pushNamedAndRemoveUntil(
                 RoutesNames.completeProfilePage,
                 (_) => false,
-                arguments: {
-                  'name': name,
-                  'role': role,
-                  'ageGroup': ageGroup,
-                },
+                arguments: {'name': name, 'role': role, 'ageGroup': ageGroup},
               );
             });
 
@@ -147,13 +138,11 @@ class SessionGate extends StatelessWidget {
             ),
           );
         }
-        if (data['profileCompleted'] != true) {
-      
-        }
-
-        return MainShell(patientUid: user.uid);
+        return MainShell(
+          patientUid: user.uid,
+          role: (data['role'] as String? ?? '').toLowerCase(),
+        );
       },
     );
   }
 }
-      

@@ -1,10 +1,10 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:curelink/core/theme/app_theme.dart';
 import 'package:curelink/l10n/app_localizations.dart';
+import 'package:curelink/features/connections/presentation/pages/connections_page.dart';
 import 'settings_page.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -14,10 +14,9 @@ class ProfilePage extends StatelessWidget {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) return;
 
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(user.uid)
-        .update({'activeMode': mode});
+    await FirebaseFirestore.instance.collection('users').doc(user.uid).update({
+      'activeMode': mode,
+    });
   }
 
   @override
@@ -27,9 +26,7 @@ class ProfilePage extends StatelessWidget {
     final theme = Theme.of(context);
 
     if (user == null) {
-      return Scaffold(
-        body: Center(child: Text(l10n.profileSignInAgain)),
-      );
+      return Scaffold(body: Center(child: Text(l10n.profileSignInAgain)));
     }
 
     return Scaffold(
@@ -41,9 +38,7 @@ class ProfilePage extends StatelessWidget {
             icon: const Icon(Icons.settings_outlined),
             onPressed: () => Navigator.push(
               context,
-              MaterialPageRoute(
-                builder: (_) => const SettingsPage(),
-              ),
+              MaterialPageRoute(builder: (_) => const SettingsPage()),
             ),
           ),
         ],
@@ -58,10 +53,7 @@ class ProfilePage extends StatelessWidget {
             return Center(
               child: Padding(
                 padding: const EdgeInsets.all(24),
-                child: Text(
-                  l10n.profileLoadError,
-                  textAlign: TextAlign.center,
-                ),
+                child: Text(l10n.profileLoadError, textAlign: TextAlign.center),
               ),
             );
           }
@@ -71,14 +63,12 @@ class ProfilePage extends StatelessWidget {
           }
 
           final data = snapshot.data!.data() ?? {};
-          final name = data['name'] as String? ??
-              user.displayName ??
-              '';
+          final name = data['name'] as String? ?? user.displayName ?? '';
           final email = data['email'] as String? ?? user.email ?? '';
           final phone = data['phone'] as String? ?? '';
           final role = (data['role'] as String? ?? '').toLowerCase();
-          final activeMode =
-              (data['activeMode'] as String? ?? 'patient').toLowerCase();
+          final activeMode = (data['activeMode'] as String? ?? 'patient')
+              .toLowerCase();
 
           final photoUrl =
               (data['profileImageUrl'] as String?) ??
@@ -108,10 +98,9 @@ class ProfilePage extends StatelessWidget {
                     CircleAvatar(
                       radius: 43,
                       backgroundColor: Colors.white,
-                      backgroundImage:
-                          photoUrl != null && photoUrl.isNotEmpty
-                              ? NetworkImage(photoUrl)
-                              : null,
+                      backgroundImage: photoUrl != null && photoUrl.isNotEmpty
+                          ? NetworkImage(photoUrl)
+                          : null,
                       child: photoUrl == null || photoUrl.isEmpty
                           ? const Icon(
                               Icons.person_outline,
@@ -190,13 +179,37 @@ class ProfilePage extends StatelessWidget {
                     ListTile(
                       leading: const Icon(Icons.badge_outlined),
                       title: Text(l10n.profileRole),
-                      subtitle: Text(
-                        role.isEmpty ? l10n.profileNotSet : role,
-                      ),
+                      subtitle: Text(role.isEmpty ? l10n.profileNotSet : role),
                     ),
                   ],
                 ),
               ),
+              if (role == 'patient' ||
+                  role == 'caregiver' ||
+                  role == 'both') ...[
+                const SizedBox(height: 24),
+                Text(
+                  l10n.caregiverConnection,
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Card(
+                  child: ListTile(
+                    leading: const Icon(Icons.group_add_outlined),
+                    title: Text(l10n.connectionManagementTitle),
+                    subtitle: Text(l10n.connectionManagementSubtitle),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => ConnectionsPage(accountRole: role),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
               if (role == 'both') ...[
                 const SizedBox(height: 24),
                 Text(
@@ -228,17 +241,13 @@ class ProfilePage extends StatelessWidget {
                       if (!context.mounted) return;
 
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(l10n.profileModeUpdated),
-                        ),
+                        SnackBar(content: Text(l10n.profileModeUpdated)),
                       );
                     } catch (_) {
                       if (!context.mounted) return;
 
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(l10n.profileModeUpdateError),
-                        ),
+                        SnackBar(content: Text(l10n.profileModeUpdateError)),
                       );
                     }
                   },
@@ -260,9 +269,7 @@ class ProfilePage extends StatelessWidget {
                   trailing: const Icon(Icons.chevron_right),
                   onTap: () => Navigator.push(
                     context,
-                    MaterialPageRoute(
-                      builder: (_) => const SettingsPage(),
-                    ),
+                    MaterialPageRoute(builder: (_) => const SettingsPage()),
                   ),
                 ),
               ),
