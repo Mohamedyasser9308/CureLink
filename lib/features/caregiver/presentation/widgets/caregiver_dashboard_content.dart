@@ -129,6 +129,7 @@ class _PatientCard extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final alert = patient.missedCount > 0;
     final theme = Theme.of(context);
+    final colors = theme.colorScheme;
     final latestLabel = switch (patient.latestStatus) {
       'missed' => l10n.latestMedicationMissed,
       'taken' => l10n.latestDoseTaken,
@@ -136,7 +137,6 @@ class _PatientCard extends StatelessWidget {
     };
     return Card(
       margin: EdgeInsets.zero,
-      color: alert ? const Color(0xFFFBEAEC) : const Color(0xFFFFFEF8),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
       child: InkWell(
         borderRadius: BorderRadius.circular(18),
@@ -150,7 +150,7 @@ class _PatientCard extends StatelessWidget {
                 children: [
                   Icon(
                     Icons.person_outline_rounded,
-                    color: alert ? AppTheme.destructive : AppTheme.cyan,
+                    color: alert ? colors.error : colors.tertiary,
                   ),
                   const SizedBox(width: 8),
                   Expanded(
@@ -164,6 +164,7 @@ class _PatientCard extends StatelessWidget {
                   _StatusChip(
                     label: alert ? l10n.needsAttention : l10n.onTrack,
                     alert: alert,
+                    colors: colors,
                   ),
                 ],
               ),
@@ -190,21 +191,26 @@ class _PatientCard extends StatelessWidget {
 }
 
 class _StatusChip extends StatelessWidget {
-  const _StatusChip({required this.label, required this.alert});
+  const _StatusChip({
+    required this.label,
+    required this.alert,
+    required this.colors,
+  });
   final String label;
   final bool alert;
+  final ColorScheme colors;
 
   @override
   Widget build(BuildContext context) => Container(
     padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
     decoration: BoxDecoration(
-      color: alert ? const Color(0xFFF8D5D9) : const Color(0xFFDDF4ED),
+      color: alert ? colors.error : colors.secondary,
       borderRadius: BorderRadius.circular(20),
     ),
     child: Text(
       label,
       style: Theme.of(context).textTheme.labelSmall?.copyWith(
-        color: alert ? AppTheme.destructive : const Color(0xFF278C78),
+        color: alert ? colors.onError : colors.onSecondary,
       ),
     ),
   );
