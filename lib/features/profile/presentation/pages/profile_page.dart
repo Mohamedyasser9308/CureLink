@@ -1,6 +1,8 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:curelink/core/theme/app_theme.dart';
 import 'package:curelink/l10n/app_localizations.dart';
@@ -14,9 +16,38 @@ class ProfilePage extends StatelessWidget {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) return;
 
-    await FirebaseFirestore.instance.collection('users').doc(user.uid).update({
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uid)
+        .update({
       'activeMode': mode,
     });
+  }
+
+  Future<void> _copyUniqueId(
+    BuildContext context,
+    String uniqueId,
+  ) async {
+    await Clipboard.setData(ClipboardData(text: uniqueId));
+
+    if (!context.mounted) return;
+
+    final isArabic =
+        Localizations.localeOf(context).languageCode == 'ar';
+
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
+        SnackBar(
+          content: Text(
+            isArabic
+                ? 'تم نسخ الـ ID بنجاح'
+                : 'ID copied successfully',
+          ),
+          behavior: SnackBarBehavior.floating,
+          duration: const Duration(seconds: 2),
+        ),
+      );
   }
 
   @override
@@ -26,7 +57,11 @@ class ProfilePage extends StatelessWidget {
     final theme = Theme.of(context);
 
     if (user == null) {
-      return Scaffold(body: Center(child: Text(l10n.profileSignInAgain)));
+      return Scaffold(
+        body: Center(
+          child: Text(l10n.profileSignInAgain),
+        ),
+      );
     }
 
     return Scaffold(
@@ -38,7 +73,9 @@ class ProfilePage extends StatelessWidget {
             icon: const Icon(Icons.settings_outlined),
             onPressed: () => Navigator.push(
               context,
-              MaterialPageRoute(builder: (_) => const SettingsPage()),
+              MaterialPageRoute(
+                builder: (_) => const SettingsPage(),
+              ),
             ),
           ),
         ],
@@ -53,22 +90,32 @@ class ProfilePage extends StatelessWidget {
             return Center(
               child: Padding(
                 padding: const EdgeInsets.all(24),
-                child: Text(l10n.profileLoadError, textAlign: TextAlign.center),
+                child: Text(
+                  l10n.profileLoadError,
+                  textAlign: TextAlign.center,
+                ),
               ),
             );
           }
 
           if (!snapshot.hasData) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
           }
 
           final data = snapshot.data!.data() ?? {};
-          final name = data['name'] as String? ?? user.displayName ?? '';
-          final email = data['email'] as String? ?? user.email ?? '';
+
+          final name =
+              data['name'] as String? ?? user.displayName ?? '';
+          final email =
+              data['email'] as String? ?? user.email ?? '';
           final phone = data['phone'] as String? ?? '';
-          final role = (data['role'] as String? ?? '').toLowerCase();
-          final activeMode = (data['activeMode'] as String? ?? 'patient')
-              .toLowerCase();
+          final role =
+              (data['role'] as String? ?? '').toLowerCase();
+          final activeMode =
+              (data['activeMode'] as String? ?? 'patient')
+                  .toLowerCase();
 
           final photoUrl =
               (data['profileImageUrl'] as String?) ??
@@ -77,9 +124,13 @@ class ProfilePage extends StatelessWidget {
 
           final uniqueId = data['uniqueId'] as String? ?? '';
 
+          final isArabic =
+              Localizations.localeOf(context).languageCode == 'ar';
+
           return ListView(
             padding: const EdgeInsets.fromLTRB(20, 12, 20, 28),
             children: [
+              // Profile header
               Container(
                 padding: const EdgeInsets.all(24),
                 decoration: BoxDecoration(
@@ -98,9 +149,10 @@ class ProfilePage extends StatelessWidget {
                     CircleAvatar(
                       radius: 43,
                       backgroundColor: Colors.white,
-                      backgroundImage: photoUrl != null && photoUrl.isNotEmpty
-                          ? NetworkImage(photoUrl)
-                          : null,
+                      backgroundImage:
+                          photoUrl != null && photoUrl.isNotEmpty
+                              ? NetworkImage(photoUrl)
+                              : null,
                       child: photoUrl == null || photoUrl.isEmpty
                           ? const Icon(
                               Icons.person_outline,
@@ -111,7 +163,9 @@ class ProfilePage extends StatelessWidget {
                     ),
                     const SizedBox(height: 14),
                     Text(
-                      name.isEmpty ? l10n.profileDefaultName : name,
+                      name.isEmpty
+                          ? l10n.profileDefaultName
+                          : name,
                       textAlign: TextAlign.center,
                       style: theme.textTheme.titleLarge?.copyWith(
                         color: Colors.white,
@@ -126,6 +180,8 @@ class ProfilePage extends StatelessWidget {
                         color: Colors.white.withValues(alpha: 0.9),
                       ),
                     ),
+
+                    // CureLink ID and Copy button
                     if (uniqueId.isNotEmpty) ...[
                       const SizedBox(height: 12),
                       Container(
@@ -139,9 +195,30 @@ class ProfilePage extends StatelessWidget {
                         ),
                         child: Text(
                           '${l10n.profileId}: $uniqueId',
+                          textAlign: TextAlign.center,
                           style: const TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      OutlinedButton.icon(
+                        onPressed: () =>
+                            _copyUniqueId(context, uniqueId),
+                        icon: const Icon(
+                          Icons.copy_rounded,
+                          size: 18,
+                        ),
+                        label: Text(
+                          isArabic ? 'نسخ الـ ID' : 'Copy ID',
+                        ),
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          side: BorderSide(
+                            color: Colors.white.withValues(
+                              alpha: 0.7,
+                            ),
                           ),
                         ),
                       ),
@@ -149,7 +226,10 @@ class ProfilePage extends StatelessWidget {
                   ],
                 ),
               ),
+
               const SizedBox(height: 24),
+
+              // Personal information
               Text(
                 l10n.profilePersonalInfo,
                 style: theme.textTheme.titleMedium?.copyWith(
@@ -164,26 +244,44 @@ class ProfilePage extends StatelessWidget {
                       leading: const Icon(Icons.email_outlined),
                       title: Text(l10n.profileEmail),
                       subtitle: Text(
-                        email.isEmpty ? l10n.profileNotSet : email,
+                        email.isEmpty
+                            ? l10n.profileNotSet
+                            : email,
                       ),
                     ),
-                    const Divider(height: 1, indent: 16, endIndent: 16),
+                    const Divider(
+                      height: 1,
+                      indent: 16,
+                      endIndent: 16,
+                    ),
                     ListTile(
                       leading: const Icon(Icons.phone_outlined),
                       title: Text(l10n.profilePhone),
                       subtitle: Text(
-                        phone.isEmpty ? l10n.profileNotSet : phone,
+                        phone.isEmpty
+                            ? l10n.profileNotSet
+                            : phone,
                       ),
                     ),
-                    const Divider(height: 1, indent: 16, endIndent: 16),
+                    const Divider(
+                      height: 1,
+                      indent: 16,
+                      endIndent: 16,
+                    ),
                     ListTile(
                       leading: const Icon(Icons.badge_outlined),
                       title: Text(l10n.profileRole),
-                      subtitle: Text(role.isEmpty ? l10n.profileNotSet : role),
+                      subtitle: Text(
+                        role.isEmpty
+                            ? l10n.profileNotSet
+                            : role,
+                      ),
                     ),
                   ],
                 ),
               ),
+
+              // Connection management
               if (role == 'patient' ||
                   role == 'caregiver' ||
                   role == 'both') ...[
@@ -199,17 +297,22 @@ class ProfilePage extends StatelessWidget {
                   child: ListTile(
                     leading: const Icon(Icons.group_add_outlined),
                     title: Text(l10n.connectionManagementTitle),
-                    subtitle: Text(l10n.connectionManagementSubtitle),
+                    subtitle: Text(
+                      l10n.connectionManagementSubtitle,
+                    ),
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => ConnectionsPage(accountRole: role),
+                        builder: (_) =>
+                            ConnectionsPage(accountRole: role),
                       ),
                     ),
                   ),
                 ),
               ],
+
+              // Active mode for Both accounts
               if (role == 'both') ...[
                 const SizedBox(height: 24),
                 Text(
@@ -229,30 +332,43 @@ class ProfilePage extends StatelessWidget {
                     ButtonSegment(
                       value: 'caregiver',
                       label: Text(l10n.profileCaregiver),
-                      icon: const Icon(Icons.health_and_safety_outlined),
+                      icon: const Icon(
+                        Icons.health_and_safety_outlined,
+                      ),
                     ),
                   ],
                   selected: {
-                    activeMode == 'caregiver' ? 'caregiver' : 'patient',
+                    activeMode == 'caregiver'
+                        ? 'caregiver'
+                        : 'patient',
                   },
                   onSelectionChanged: (selection) async {
                     try {
                       await _switchMode(selection.first);
+
                       if (!context.mounted) return;
 
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(l10n.profileModeUpdated)),
+                        SnackBar(
+                          content: Text(l10n.profileModeUpdated),
+                        ),
                       );
                     } catch (_) {
                       if (!context.mounted) return;
 
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(l10n.profileModeUpdateError)),
+                        SnackBar(
+                          content: Text(
+                            l10n.profileModeUpdateError,
+                          ),
+                        ),
                       );
                     }
                   },
                 ),
               ],
+
+              // App preferences
               const SizedBox(height: 24),
               Text(
                 l10n.appPreferences,
@@ -265,11 +381,15 @@ class ProfilePage extends StatelessWidget {
                 child: ListTile(
                   leading: const Icon(Icons.tune_rounded),
                   title: Text(l10n.settingsTitle),
-                  subtitle: Text(l10n.profileSettingsSubtitle),
+                  subtitle: Text(
+                    l10n.profileSettingsSubtitle,
+                  ),
                   trailing: const Icon(Icons.chevron_right),
                   onTap: () => Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (_) => const SettingsPage()),
+                    MaterialPageRoute(
+                      builder: (_) => const SettingsPage(),
+                    ),
                   ),
                 ),
               ),
