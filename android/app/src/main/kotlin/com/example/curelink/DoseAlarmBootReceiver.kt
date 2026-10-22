@@ -11,10 +11,12 @@ class DoseAlarmBootReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action != Intent.ACTION_BOOT_COMPLETED &&
             intent.action != Intent.ACTION_MY_PACKAGE_REPLACED &&
-            intent.action != ACTION_QUICKBOOT_POWERON) return
+            intent.action != ACTION_QUICKBOOT_POWERON &&
+            intent.action != AlarmManager.ACTION_SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED) return
 
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) return
+        val canScheduleExact = Build.VERSION.SDK_INT < Build.VERSION_CODES.S ||
+            alarmManager.canScheduleExactAlarms()
 
         val preferences = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE)
         for ((key, value) in preferences.all) {
@@ -28,7 +30,11 @@ class DoseAlarmBootReceiver : BroadcastReceiver() {
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
             )
             try {
-                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, value, pending)
+                if (canScheduleExact) {
+                    alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, value, pending)
+                } else {
+                    alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, value, pending)
+                }
             } catch (_: SecurityException) {
                 // The Flutter local-notification boot receiver restores the regular reminder.
             }

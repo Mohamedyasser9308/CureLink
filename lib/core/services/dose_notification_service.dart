@@ -189,12 +189,22 @@ class DoseNotificationService {
 
   Future<void> sync({required String patientUid, required List<DoseModel> doses}) async {
     if (!_initialized || !_notificationsAllowed) return;
+    await _refreshExactAlarmPermission();
     // Android limits the number of outstanding alarms. The rolling 30-day
     // window is replenished whenever the schedule screen is loaded.
     final now = DateTime.now();
     final end = now.add(const Duration(days: 30));
     final activeIds = <int>{};
-    final pending = await _plugin.pendingNotificationRequests();
+    List<PendingNotificationRequest> pending;
+    try {
+      pending = await _plugin.pendingNotificationRequests();
+    } catch (error, stackTrace) {
+      // Notification state is a device-side convenience; it must not prevent
+      // medication data from being saved or refreshed in Firestore.
+      debugPrint('Could not read pending dose notifications: $error');
+      debugPrintStack(stackTrace: stackTrace);
+      pending = const [];
+    }
     final pendingIds = pending.map((request) => request.id).toSet();
     for (final dose in doses) {
       if (dose.status == DoseStatus.taken || dose.status == DoseStatus.missed) {
@@ -232,8 +242,13 @@ class DoseNotificationService {
 
   Future<void> cancelDose(DoseModel dose) async {
     final dueId = _stableId('${dose.id}:due');
-    await _plugin.cancel(dueId);
-    await _plugin.cancel(_stableId('${dose.id}:late'));
+    for (final id in [dueId, _stableId('${dose.id}:late')]) {
+      try {
+        await _plugin.cancel(id);
+      } catch (error) {
+        debugPrint('Could not cancel dose notification $id: $error');
+      }
+    }
     if (defaultTargetPlatform == TargetPlatform.android) {
       try {
         await _androidAlarmChannel.invokeMethod<void>('cancel', {'id': dueId});
@@ -250,6 +265,7 @@ class DoseNotificationService {
     required DoseModel dose,
   }) async {
     if (!_initialized || !_notificationsAllowed) return;
+    await _refreshExactAlarmPermission();
     await cancelDose(dose);
     final now = DateTime.now();
     final end = now.add(const Duration(days: 30));
@@ -270,6 +286,14 @@ class DoseNotificationService {
     );
   }
 
+  Future<void> _refreshExactAlarmPermission() async {
+    if (defaultTargetPlatform != TargetPlatform.android) return;
+    final android = _plugin.resolvePlatformSpecificImplementation<
+        AndroidFlutterLocalNotificationsPlugin>();
+    _exactAlarmsAllowed =
+        await android?.canScheduleExactNotifications() ?? false;
+  }
+
   Future<void> _scheduleAndroidAlarm({
     required int id,
     required DoseModel dose,
@@ -277,7 +301,6 @@ class DoseNotificationService {
     required DateTime end,
   }) async {
     if (defaultTargetPlatform != TargetPlatform.android ||
-        !_exactAlarmsAllowed ||
         dose.status == DoseStatus.taken ||
         dose.status == DoseStatus.missed) {
       return;
@@ -364,8 +387,9 @@ class DoseNotificationService {
             UILocalNotificationDateInterpretation.absoluteTime,
         payload: payload,
       );
-    } on PlatformException catch (error) {
-      debugPrint('Could not schedule dose alarm: ${error.code}');
+    } catch (error, stackTrace) {
+      debugPrint('Could not schedule dose notification: $error');
+      debugPrintStack(stackTrace: stackTrace);
     }
   }
 

@@ -5,8 +5,30 @@ import 'package:flutter/material.dart';
 import '../router/routes_names.dart';
 import '../../features/shell/presentation/main_shell.dart';
 
-class SessionGate extends StatelessWidget {
+class SessionGate extends StatefulWidget {
   const SessionGate({super.key});
+
+  @override
+  State<SessionGate> createState() => _SessionGateState();
+}
+
+class _SessionGateState extends State<SessionGate> {
+  Future<DocumentSnapshot<Map<String, dynamic>>>? _profileFuture;
+
+  Future<DocumentSnapshot<Map<String, dynamic>>> _loadProfile(String uid) async {
+    late DocumentSnapshot<Map<String, dynamic>> snapshot;
+    for (var attempt = 0; attempt < 3; attempt++) {
+      snapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .get(const GetOptions(source: Source.server));
+      if (snapshot.data()?['profileCompleted'] == true || attempt == 2) {
+        return snapshot;
+      }
+      await Future<void>.delayed(const Duration(milliseconds: 500));
+    }
+    return snapshot;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,11 +45,10 @@ class SessionGate extends StatelessWidget {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
+    _profileFuture ??= _loadProfile(user.uid);
+
     return FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-      future: FirebaseFirestore.instance
-          .collection('users')
-          .doc(user.uid)
-          .get(const GetOptions(source: Source.server)),
+      future: _profileFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Scaffold(
@@ -50,9 +71,7 @@ class SessionGate extends StatelessWidget {
                     const SizedBox(height: 16),
                     FilledButton(
                       onPressed: () {
-                        Navigator.of(
-                          context,
-                        ).pushReplacementNamed(RoutesNames.homePage);
+                        setState(() => _profileFuture = _loadProfile(user.uid));
                       },
                       child: const Text('Retry'),
                     ),
@@ -70,8 +89,8 @@ class SessionGate extends StatelessWidget {
                   ],
                 ),
               ),
-            ),
-          );
+          ),
+        );
         }
 
         final data = snapshot.data?.data();

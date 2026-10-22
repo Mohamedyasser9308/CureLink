@@ -34,6 +34,8 @@ migrate_working_dir/
 /coverage/
 /functions/node_modules/
 /functions/.npm-cache/
+/cloudflare-worker/node_modules/
+/cloudflare-worker/.npm-cache/
 
 # Symbolication related
 app.*.symbols
@@ -45,3 +47,7 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Service-account keys must never be committed.
+*service-account*.json
+*service_account*.json

@@ -1,0 +1,10 @@
+name = "curelink-dose-monitor"
+main = "src/index.ts"
+compatibility_date = "2026-10-22"
+workers_dev = false
+
+[vars]
+FIREBASE_PROJECT_ID = "curelink-3f36f"
+
+[triggers]
+crons = ["* * * * *"]

@@ -20,13 +20,20 @@ class SessionService {
     final user = _auth.currentUser;
     if (user == null) return null;
 
-    // Avoid routing with a stale pre-onboarding cache immediately after login.
-    final snapshot = await _firestore
-        .collection('users')
-        .doc(user.uid)
-        .get(const GetOptions(source: Source.server));
-
-    return snapshot.data();
+    // A login can complete before the profile write from onboarding is visible
+    // to a fresh session. Retry server reads briefly before routing as incomplete.
+    for (var attempt = 0; attempt < 3; attempt++) {
+      final snapshot = await _firestore
+          .collection('users')
+          .doc(user.uid)
+          .get(const GetOptions(source: Source.server));
+      final profile = snapshot.data();
+      if (profile?['profileCompleted'] == true || attempt == 2) {
+        return profile;
+      }
+      await Future<void>.delayed(const Duration(milliseconds: 500));
+    }
+    return null;
   }
 
   Future<bool> isProfileCompleted() async {
