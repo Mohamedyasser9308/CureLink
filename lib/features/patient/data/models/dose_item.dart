@@ -11,7 +11,7 @@ class DoseItem {
   final MedicationModel medication;
   final DateTime time;
 
-  static const Duration dueWindow = Duration(minutes: 30);
+  static const Duration dueWindow = Duration(minutes: 10);
 
   DoseStatus statusAt(DateTime now) {
     if (time.isAfter(now)) return DoseStatus.upcoming;

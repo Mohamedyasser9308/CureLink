@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:curelink/core/services/cloudinary_service.dart';
+import 'package:curelink/core/services/dose_notification_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:curelink/features/schedule/data/repositories/dose_repository.dart';
@@ -234,6 +235,10 @@ class MedicationCubit extends Cubit<MedicationState> {
           now: now,
         );
       }
+
+      await DoseNotificationService.instance.syncPatientSchedule(
+        normalizedPatientId,
+      );
 
       if (isClosed) return;
 

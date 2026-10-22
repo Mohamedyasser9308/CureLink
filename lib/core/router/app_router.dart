@@ -19,9 +19,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../features/add_medication/data/models/medication_model.dart';
 import '../../features/add_medication/presentation/add_medicine_page.dart';
+import '../../features/schedule/presentation/pages/medication_reminder_page.dart';
 
 class AppRouter {
   AppRouter._();
+
+  static final navigatorKey = GlobalKey<NavigatorState>();
 
   static final Map<String, WidgetBuilder> routes = {
     RoutesNames.homePage: (_) => const SessionGate(),
@@ -114,8 +117,9 @@ class AppRouter {
 
       case RoutesNames.medicineDetails:
         final medication = settings.arguments;
+        final patientId = FirebaseAuth.instance.currentUser?.uid;
 
-        if (medication is! MedicationModel) {
+        if (medication is! MedicationModel || patientId == null) {
           return _buildRoute(
             Scaffold(
               appBar: AppBar(title: const Text('Medicine details')),
@@ -129,11 +133,17 @@ class AppRouter {
 
         return _buildRoute(
           MedicineDetailsPage(
-            patientId: FirebaseAuth.instance.currentUser!.uid,
+            patientId: patientId,
             medicationId: medication.id,
           ),
           settings,
         );
+      case RoutesNames.medicationReminder:
+        final payload = settings.arguments;
+        if (payload is String) {
+          return _buildRoute(MedicationReminderPage(payload: payload), settings);
+        }
+        return _buildRoute(const Scaffold(body: Center(child: Text('Dose details are unavailable.'))), settings);
     }
     return null;
   }

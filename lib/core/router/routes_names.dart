@@ -16,5 +16,6 @@ class RoutesNames {
 
   static const String addMedicine = "/add-medicine";
   static const String medicineDetails = "/medicine-details";
+  static const String medicationReminder = "/medication-reminder";
   static const String emergency = "/emergency";
 }

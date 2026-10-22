@@ -1,0 +1,236 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function userExists(userId) {
+      return exists(/databases/$(database)/documents/users/$(userId));
+    }
+
+    function hasRole(userId, allowedRoles) {
+      return userExists(userId)
+        && get(/databases/$(database)/documents/users/$(userId)).data.role in allowedRoles;
+    }
+
+    function isAcceptedCaregiver(patientId) {
+      let connectionId = request.auth.uid + '_' + patientId;
+      return isSignedIn()
+        && exists(/databases/$(database)/documents/connections/$(connectionId))
+        && get(/databases/$(database)/documents/connections/$(connectionId)).data.patientUid == patientId
+        && get(/databases/$(database)/documents/connections/$(connectionId)).data.caregiverUid == request.auth.uid
+        && get(/databases/$(database)/documents/connections/$(connectionId)).data.status == 'accepted';
+    }
+
+    function canManagePatientData(patientId) {
+      return isOwner(patientId) || isAcceptedCaregiver(patientId);
+    }
+
+    match /users/{userId} {
+      allow create: if isOwner(userId)
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.name is string
+        && request.resource.data.phone is string
+        && request.resource.data.email is string
+        && request.resource.data.createdAt == request.time;
+
+      allow read: if isOwner(userId) || isAcceptedCaregiver(userId);
+
+      allow update: if isOwner(userId)
+        && request.resource.data.uid == resource.data.uid
+        && (!resource.data.keys().hasAny(['role'])
+          || request.resource.data.role == resource.data.role)
+        && (!resource.data.keys().hasAny(['uniqueId'])
+          || request.resource.data.uniqueId == resource.data.uniqueId);
+
+      allow delete: if false;
+
+      // Backend-created caregiver alerts. Clients can read their own feed;
+      // only Admin SDK functions may create or change feed entries.
+      match /notifications/{notificationId} {
+        allow read: if isOwner(userId);
+        allow write: if false;
+      }
+
+      match /medications/{medicationId} {
+        allow read: if canManagePatientData(userId);
+        allow create: if canManagePatientData(userId)
+          && request.resource.data.name is string
+          && request.resource.data.dosage is string;
+        allow update: if canManagePatientData(userId)
+          && request.resource.data.name is string
+          && request.resource.data.dosage is string;
+        allow delete: if isOwner(userId);
+      }
+
+      match /doses/{doseId} {
+        function validDoseData() {
+          return request.resource.data.keys().hasAll([
+              'medicationId', 'medicationName', 'dosage', 'scheduledAt',
+              'status', 'takenAt', 'snoozedUntil', 'createdAt', 'updatedAt'
+            ])
+            && request.resource.data.keys().hasOnly([
+              'medicationId', 'medicationName', 'dosage', 'imageUrl',
+              'scheduledAt', 'status', 'takenAt', 'snoozedUntil',
+              'createdAt', 'updatedAt', 'caregiverAlertClaimed',
+              'caregiverAlertAt'
+            ])
+            && request.resource.data.medicationId is string
+            && request.resource.data.medicationName is string
+            && request.resource.data.dosage is string
+            && (!request.resource.data.keys().hasAny(['imageUrl'])
+              || request.resource.data.imageUrl == null
+              || request.resource.data.imageUrl is string)
+            && request.resource.data.scheduledAt is timestamp
+            && request.resource.data.status in ['upcoming', 'due', 'taken', 'snoozed', 'missed']
+            && (request.resource.data.takenAt == null
+              || request.resource.data.takenAt is timestamp)
+            && (request.resource.data.snoozedUntil == null
+              || request.resource.data.snoozedUntil is timestamp)
+            && request.resource.data.createdAt is timestamp
+            && request.resource.data.updatedAt is timestamp
+            && (!request.resource.data.keys().hasAny(['caregiverAlertClaimed'])
+              || request.resource.data.caregiverAlertClaimed is bool)
+            && (!request.resource.data.keys().hasAny(['caregiverAlertAt'])
+              || request.resource.data.caregiverAlertAt is timestamp);
+        }
+
+        allow read: if canManagePatientData(userId);
+
+        allow create: if canManagePatientData(userId)
+          && validDoseData()
+          && !request.resource.data.keys().hasAny([
+            'caregiverAlertClaimed', 'caregiverAlertAt'
+          ]);
+
+        allow update: if canManagePatientData(userId)
+          && validDoseData()
+          && request.resource.data.medicationId == resource.data.medicationId
+          && request.resource.data.scheduledAt == resource.data.scheduledAt
+          && request.resource.data.createdAt == resource.data.createdAt
+          // The server owns the caregiver alert claim fields.
+          && !request.resource.data.diff(resource.data).affectedKeys().hasAny([
+            'caregiverAlertClaimed', 'caregiverAlertAt'
+          ]);
+
+        allow delete: if canManagePatientData(userId)
+          && ((resource.data.status == 'upcoming'
+              && resource.data.scheduledAt is timestamp
+              && resource.data.scheduledAt > request.time)
+            || (resource.data.status == 'snoozed'
+              && resource.data.snoozedUntil is timestamp
+              && resource.data.snoozedUntil > request.time));
+      }
+    }
+
+    match /unique_ids/{uniqueId} {
+      allow get: if isSignedIn();
+      allow list: if false;
+      allow create: if isSignedIn()
+        && !exists(/databases/$(database)/documents/unique_ids/$(uniqueId))
+        && request.resource.data.uniqueId == uniqueId
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.prefix in ['CL', 'CR', 'BO', 'US']
+        && request.resource.data.createdAt == request.time;
+      allow update, delete: if false;
+    }
+
+    match /connections/{connectionId} {
+      function validNewRequest() {
+        return request.resource.data.keys().hasOnly([
+            'caregiverUid', 'patientUid', 'patientUniqueId', 'caregiverName',
+            'status', 'createdAt', 'updatedAt'
+          ])
+          && request.resource.data.caregiverUid == request.auth.uid
+          && request.resource.data.patientUid is string
+          && request.resource.data.patientUid != request.auth.uid
+          && request.resource.data.patientUniqueId is string
+          && get(/databases/$(database)/documents/unique_ids/$(request.resource.data.patientUniqueId)).data.uid == request.resource.data.patientUid
+          && connectionId == request.auth.uid + '_' + request.resource.data.patientUid
+          && request.resource.data.caregiverName is string
+          && request.resource.data.caregiverName == get(/databases/$(database)/documents/users/$(request.auth.uid)).data.name
+          && request.resource.data.status == 'pending'
+          && request.resource.data.createdAt == request.time
+          && request.resource.data.updatedAt == request.time
+          && hasRole(request.auth.uid, ['Caregiver', 'Both'])
+          && hasRole(request.resource.data.patientUid, ['Patient', 'Both']);
+      }
+
+      function patientCanRespond() {
+        return isSignedIn()
+          && resource.data.patientUid == request.auth.uid
+          && resource.data.status == 'pending'
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+            'status', 'respondedAt', 'updatedAt'
+          ])
+          && request.resource.data.status in ['accepted', 'rejected']
+          && request.resource.data.respondedAt == request.time
+          && request.resource.data.updatedAt == request.time;
+      }
+
+      function caregiverCanRetryRejectedRequest() {
+        return isSignedIn()
+          && resource.data.caregiverUid == request.auth.uid
+          && resource.data.status == 'rejected'
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+            'status', 'respondedAt', 'updatedAt'
+          ])
+          && request.resource.data.status == 'pending'
+          && !request.resource.data.keys().hasAny(['respondedAt'])
+          && request.resource.data.updatedAt == request.time;
+      }
+
+      allow get: if isSignedIn()
+        && (!exists(/databases/$(database)/documents/connections/$(connectionId)
+          ) || resource.data.patientUid == request.auth.uid
+          || resource.data.caregiverUid == request.auth.uid);
+      allow list: if isSignedIn()
+        && (resource.data.patientUid == request.auth.uid
+          || resource.data.caregiverUid == request.auth.uid);
+      allow create: if isSignedIn() && validNewRequest();
+      allow update: if patientCanRespond() || caregiverCanRetryRejectedRequest();
+      allow delete: if false;
+    }
+
+    match /medications/{medicationId} {
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+      allow read: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow update: if isSignedIn()
+        && resource.data.userId == request.auth.uid
+        && request.resource.data.userId == request.auth.uid;
+      allow delete: if isSignedIn() && resource.data.userId == request.auth.uid;
+    }
+
+    match /medication_logs/{logId} {
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+      allow read: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow update, delete: if false;
+    }
+
+    match /notifications/{notificationId} {
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+      allow read: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow update: if isSignedIn()
+        && request.resource.data.userId == resource.data.userId;
+      allow delete: if isSignedIn() && resource.data.userId == request.auth.uid;
+    }
+
+    match /emergency_contacts/{contactId} {
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+      allow read: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow update: if isSignedIn()
+        && request.resource.data.userId == resource.data.userId;
+      allow delete: if isSignedIn() && resource.data.userId == request.auth.uid;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

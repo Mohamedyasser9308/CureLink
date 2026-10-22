@@ -1,5 +1,10 @@
 
+import 'dart:async';
+
 import 'package:curelink/core/router/app_router.dart';
+import 'package:curelink/core/router/routes_names.dart';
+import 'package:curelink/core/services/dose_notification_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:curelink/core/settings/settings_cubit.dart';
 import 'package:curelink/core/theme/dark_theme.dart';
 import 'package:curelink/core/theme/light_theme.dart';
@@ -22,12 +27,42 @@ void main() async {
   await initializeDateFormatting('ar');
   await initializeDateFormatting('en');
 
+  await DoseNotificationService.instance.initialize(onOpen: (payload) {
+    AppRouter.navigatorKey.currentState?.pushNamed(
+      RoutesNames.medicationReminder, arguments: payload,
+    );
+  });
+  FirebaseAuth.instance.authStateChanges().listen((user) {
+    unawaited(_handleAuthChange(user));
+  });
+
   runApp(
     BlocProvider(
       create: (_) => SettingsCubit()..loadSettings(),
       child: const MyApp(),
     ),
   );
+}
+
+Future<void> _handleAuthChange(User? user) async {
+  try {
+    if (user == null) {
+      await DoseNotificationService.instance.unregisterPushToken();
+      return;
+    }
+    try {
+      await DoseNotificationService.instance.registerPushToken();
+    } catch (error, stackTrace) {
+      // Push token access must not prevent local medication alarms from being
+      // registered on this device.
+      debugPrint('Could not register the FCM token: $error');
+      debugPrintStack(stackTrace: stackTrace);
+    }
+    await DoseNotificationService.instance.syncPatientSchedule(user.uid);
+  } catch (error, stackTrace) {
+    debugPrint('Could not initialize user notifications: $error');
+    debugPrintStack(stackTrace: stackTrace);
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -39,6 +74,7 @@ class MyApp extends StatelessWidget {
       builder: (context, settings) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
+          navigatorKey: AppRouter.navigatorKey,
           title: 'CureLink',
 
           theme: LightTheme.theme,

@@ -27,7 +27,7 @@ class SessionGate extends StatelessWidget {
       future: FirebaseFirestore.instance
           .collection('users')
           .doc(user.uid)
-          .get(),
+          .get(const GetOptions(source: Source.server)),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Scaffold(

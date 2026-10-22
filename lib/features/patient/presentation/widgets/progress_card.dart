@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 /// "Today's progress" card.
 ///
-/// Placeholder: [done] is always 0 until dose logs (taken/missed) exist.
+/// Displays confirmed doses from the patient's saved dose records.
 class ProgressCard extends StatelessWidget {
   const ProgressCard({super.key, required this.done, required this.total});
 

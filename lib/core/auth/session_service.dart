@@ -20,8 +20,11 @@ class SessionService {
     final user = _auth.currentUser;
     if (user == null) return null;
 
-    final snapshot =
-        await _firestore.collection('users').doc(user.uid).get();
+    // Avoid routing with a stale pre-onboarding cache immediately after login.
+    final snapshot = await _firestore
+        .collection('users')
+        .doc(user.uid)
+        .get(const GetOptions(source: Source.server));
 
     return snapshot.data();
   }

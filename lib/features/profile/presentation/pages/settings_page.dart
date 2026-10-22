@@ -1,4 +1,3 @@
-
 import 'package:curelink/core/settings/settings_cubit.dart';
 import 'package:curelink/core/router/routes_names.dart';
 import 'package:curelink/l10n/app_localizations.dart';
@@ -15,17 +14,14 @@ class SettingsPage extends StatelessWidget {
     try {
       await FirebaseAuth.instance.signOut();
       if (!context.mounted) return;
-      Navigator.of(context).pushNamedAndRemoveUntil(
-        RoutesNames.loginPage,
-        (_) => false,
-      );
+      Navigator.of(
+        context,
+      ).pushNamedAndRemoveUntil(RoutesNames.loginPage, (_) => false);
     } catch (_) {
       if (!context.mounted) return;
       ScaffoldMessenger.of(context)
         ..hideCurrentSnackBar()
-        ..showSnackBar(
-          SnackBar(content: Text(l10n.somethingWentWrong)),
-        );
+        ..showSnackBar(SnackBar(content: Text(l10n.somethingWentWrong)));
     }
   }
 
@@ -36,9 +32,7 @@ class SettingsPage extends StatelessWidget {
     final colors = theme.colorScheme;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.settingsTitle),
-      ),
+      appBar: AppBar(title: Text(l10n.settingsTitle)),
       body: BlocBuilder<SettingsCubit, SettingsState>(
         builder: (context, settings) {
           final cubit = context.read<SettingsCubit>();
@@ -111,51 +105,45 @@ class SettingsPage extends StatelessWidget {
               ),
               const SizedBox(height: 12),
 
-              Card(
-                clipBehavior: Clip.antiAlias,
-                child: Column(
-                  children: [
-                    RadioListTile<String>(
-                      value: 'en',
-                      groupValue: settings.locale.languageCode,
-                      secondary: Icon(
-                        Icons.language_rounded,
-                        color: colors.primary,
+              RadioGroup<String>(
+                groupValue: settings.locale.languageCode,
+                onChanged: (value) {
+                  if (value != null) cubit.setLanguage(value);
+                },
+                child: Card(
+                  clipBehavior: Clip.antiAlias,
+                  child: Column(
+                    children: [
+                      RadioListTile<String>(
+                        value: 'en',
+                        secondary: Icon(
+                          Icons.language_rounded,
+                          color: colors.primary,
+                        ),
+                        title: Text(
+                          l10n.english,
+                          style: theme.textTheme.bodyLarge,
+                        ),
                       ),
-                      title: Text(
-                        l10n.english,
-                        style: theme.textTheme.bodyLarge,
+                      Divider(
+                        height: 1,
+                        indent: 16,
+                        endIndent: 16,
+                        color: colors.outlineVariant,
                       ),
-                      onChanged: (value) {
-                        if (value != null) {
-                          cubit.setLanguage(value);
-                        }
-                      },
-                    ),
-                    Divider(
-                      height: 1,
-                      indent: 16,
-                      endIndent: 16,
-                      color: colors.outlineVariant,
-                    ),
-                    RadioListTile<String>(
-                      value: 'ar',
-                      groupValue: settings.locale.languageCode,
-                      secondary: Icon(
-                        Icons.translate_rounded,
-                        color: colors.primary,
+                      RadioListTile<String>(
+                        value: 'ar',
+                        secondary: Icon(
+                          Icons.translate_rounded,
+                          color: colors.primary,
+                        ),
+                        title: Text(
+                          l10n.arabic,
+                          style: theme.textTheme.bodyLarge,
+                        ),
                       ),
-                      title: Text(
-                        l10n.arabic,
-                        style: theme.textTheme.bodyLarge,
-                      ),
-                      onChanged: (value) {
-                        if (value != null) {
-                          cubit.setLanguage(value);
-                        }
-                      },
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
 

@@ -22,6 +22,10 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>NSCameraUsageDescription</key>
+	<string>CureLink uses the camera to add a profile or medication image.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>CureLink uses your photo library to add a profile or medication image.</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

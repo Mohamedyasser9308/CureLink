@@ -5,7 +5,7 @@ import '../../../add_medication/data/models/medication_model.dart';
 
 class DoseRepository {
   static const int scheduleHorizonDays = 91;
-  static const Duration missedGracePeriod = Duration(minutes: 20);
+  static const Duration missedGracePeriod = Duration(minutes: 10);
 
   final FirebaseFirestore firestore;
 
@@ -37,8 +37,7 @@ class DoseRepository {
     // Keep the medication ID safe for use in a Firestore document ID.
     final safeMedicationId = medicationId.replaceAll('/', '_');
 
-    return '${safeMedicationId}_${year}${month}${day}_'
-        '${hour}${minute}';
+    return '${safeMedicationId}_$year$month${day}_$hour$minute';
   }
 
   Stream<List<DoseModel>> watchDoses({
@@ -188,11 +187,58 @@ class DoseRepository {
   /// Updates a dose document.
   ///
   /// The document must already exist. Errors are propagated to the caller.
-  Future<void> updateDose({
+  Future<DoseModel> updateDose({
     required String patientUid,
     required DoseModel dose,
   }) async {
-    await dosesRef(patientUid).doc(dose.id).update(dose.toMap());
+    final ref = dosesRef(patientUid).doc(dose.id);
+    return firestore.runTransaction<DoseModel>((transaction) async {
+      final snapshot = await transaction.get(ref);
+      final data = snapshot.data();
+      if (data == null) {
+        throw StateError('Dose ${dose.id} no longer exists.');
+      }
+      final current = DoseModel.fromMap(data, snapshot.id);
+      final currentStatus = DoseModel.statusFromString(
+        data['status'] as String?,
+      );
+
+      // A stale schedule refresh must never overwrite a user's confirmation
+      // or a missed state written by the server.
+      if ((currentStatus == DoseStatus.taken ||
+              currentStatus == DoseStatus.missed) &&
+          dose.status != currentStatus) {
+        return current;
+      }
+
+      transaction.update(ref, dose.toMap());
+      return dose;
+    });
+  }
+
+  /// Removes only pending future doses when a medication is deleted.
+  /// Taken and missed records remain available as adherence history.
+  Future<void> deletePendingDosesForMedication({
+    required String patientUid,
+    required String medicationId,
+  }) async {
+    final snapshot = await dosesRef(
+      patientUid,
+    ).where('medicationId', isEqualTo: medicationId).get();
+    final deletable = snapshot.docs.where((doc) {
+      final dose = DoseModel.fromMap(doc.data(), doc.id);
+      return dose.status == DoseStatus.upcoming ||
+          dose.status == DoseStatus.due ||
+          dose.status == DoseStatus.snoozed;
+    }).toList();
+
+    for (var start = 0; start < deletable.length; start += 400) {
+      final batch = firestore.batch();
+      for (final doc in deletable.skip(start).take(400)) {
+        batch.delete(doc.reference);
+      }
+      await batch.commit();
+    }
   }
 
   /// Reconciles future dose records with the medication's current schedule.

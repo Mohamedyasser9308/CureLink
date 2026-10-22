@@ -13,11 +13,17 @@ import 'package:intl/intl.dart';
 /// not rebuilt every second. [onElapsed] fires once when it reaches zero so
 /// the Cubit can move on to the following dose.
 class NextDoseCard extends StatefulWidget {
-  const NextDoseCard({super.key, required this.dose, this.onElapsed});
+  const NextDoseCard({
+    super.key,
+    required this.dose,
+    this.onElapsed,
+    this.allDosesTaken = true,
+  });
 
   /// Null means nothing is left today.
   final DoseItem? dose;
   final VoidCallback? onElapsed;
+  final bool allDosesTaken;
 
   @override
   State<NextDoseCard> createState() => _NextDoseCardState();
@@ -85,7 +91,7 @@ class _NextDoseCardState extends State<NextDoseCard> {
   @override
   Widget build(BuildContext context) {
     final dose = widget.dose;
-    if (dose == null) return const _AllDoneCard();
+    if (dose == null) return _AllDoneCard(allTaken: widget.allDosesTaken);
 
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
@@ -184,7 +190,9 @@ class _UpcomingChip extends StatelessWidget {
 }
 
 class _AllDoneCard extends StatelessWidget {
-  const _AllDoneCard();
+  const _AllDoneCard({required this.allTaken});
+
+  final bool allTaken;
 
   @override
   Widget build(BuildContext context) {
@@ -207,7 +215,10 @@ class _AllDoneCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(l10n.allDosesDone, style: theme.textTheme.titleMedium),
+                Text(
+                  allTaken ? l10n.allDosesDone : l10n.statusPending,
+                  style: theme.textTheme.titleMedium,
+                ),
                 const SizedBox(height: 4),
                 Text(
                   l10n.allDosesDoneMessage,

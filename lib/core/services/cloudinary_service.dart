@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 import 'dart:io';
 
@@ -29,15 +28,12 @@ class CloudinaryService {
 
     final request = http.MultipartRequest('POST', uri)
       ..fields['upload_preset'] = uploadPreset
-      ..files.add(
-        await http.MultipartFile.fromPath('file', image.path),
-      );
+      ..files.add(await http.MultipartFile.fromPath('file', image.path));
 
     final response = await request.send();
     final responseBody = await response.stream.bytesToString();
 
-    if (response.statusCode != 200 &&
-        response.statusCode != 201) {
+    if (response.statusCode != 200 && response.statusCode != 201) {
       throw Exception(
         'Cloudinary upload failed '
         '(${response.statusCode}): $responseBody',
@@ -57,15 +53,10 @@ class CloudinaryService {
         secureUrl.isEmpty ||
         publicId == null ||
         publicId.isEmpty) {
-      throw Exception(
-        'Cloudinary response is missing image information.',
-      );
+      throw Exception('Cloudinary response is missing image information.');
     }
 
-    return CloudinaryUploadResult(
-      secureUrl: secureUrl,
-      publicId: publicId,
-    );
+    return CloudinaryUploadResult(secureUrl: secureUrl, publicId: publicId);
   }
 
   /// Backward compatibility: return both URL and public ID.
@@ -86,9 +77,7 @@ class CloudinaryService {
     final normalizedPublicId = publicId.trim();
 
     if (normalizedPublicId.isEmpty) {
-      throw ArgumentError(
-        'Cloudinary public ID cannot be empty.',
-      );
+      throw ArgumentError('Cloudinary public ID cannot be empty.');
     }
 
     final callable = FirebaseFunctions.instance.httpsCallable(
@@ -102,9 +91,7 @@ class CloudinaryService {
     final data = response.data;
 
     if (data is! Map) {
-      throw Exception(
-        'Cloudinary deletion returned an invalid response.',
-      );
+      throw Exception('Cloudinary deletion returned an invalid response.');
     }
 
     final result = data['result']?.toString();
@@ -123,7 +110,7 @@ class CloudinaryService {
   /// Recover a public ID from a Cloudinary delivery URL.
   ///
   /// Example:
-  /// https://res.cloudinary.com/<cloud>/image/upload/v123/folder/image.jpg
+  /// Example Cloudinary delivery URL with a cloud, version, and image path.
   /// Returns: folder/image
   static String? publicIdFromUrl(String url) {
     final uri = Uri.tryParse(url);
@@ -133,8 +120,7 @@ class CloudinaryService {
     final segments = uri.pathSegments;
     final uploadIndex = segments.indexOf('upload');
 
-    if (uploadIndex == -1 ||
-        uploadIndex + 1 >= segments.length) {
+    if (uploadIndex == -1 || uploadIndex + 1 >= segments.length) {
       return null;
     }
 
@@ -160,9 +146,7 @@ class CloudinaryService {
     final path = idSegments.join('/');
     final dotIndex = path.lastIndexOf('.');
 
-    return dotIndex == -1
-        ? path
-        : path.substring(0, dotIndex);
+    return dotIndex == -1 ? path : path.substring(0, dotIndex);
   }
 
   static bool _looksLikeTransformation(String segment) {

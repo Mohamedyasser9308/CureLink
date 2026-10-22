@@ -6,6 +6,8 @@ import 'package:curelink/core/widgets/app_button.dart';
 import 'package:curelink/core/widgets/app_scaffold.dart';
 import 'package:curelink/features/medicine_details/data/repositories/medicine_details_repository.dart';
 import 'package:curelink/l10n/app_localizations.dart';
+import 'package:curelink/core/services/dose_notification_service.dart';
+import 'package:curelink/features/schedule/data/repositories/dose_repository.dart';
 
 import '../../add_medication/data/models/medication_model.dart';
 import '../../add_medication/presentation/add_medicine_page.dart';
@@ -231,6 +233,20 @@ class _MedicineDetailsPageState extends State<MedicineDetailsPage> {
         patientId: widget.patientId,
         medicationId: widget.medicationId,
       );
+      try {
+        await DoseRepository().deletePendingDosesForMedication(
+          patientUid: widget.patientId,
+          medicationId: widget.medicationId,
+        );
+        await DoseNotificationService.instance.syncPatientSchedule(
+          widget.patientId,
+        );
+      } catch (error, stackTrace) {
+        debugPrint(
+          'Medication was deleted but reminder cleanup failed: $error',
+        );
+        debugPrintStack(stackTrace: stackTrace);
+      }
       if (mounted) Navigator.of(context).pop(true);
     } catch (_) {
       if (!mounted) return;

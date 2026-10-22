@@ -2,9 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 
 import 'package:curelink/core/theme/app_theme.dart';
+import 'package:curelink/core/router/app_router.dart';
+import 'package:curelink/core/router/routes_names.dart';
 import 'package:curelink/features/schedule/data/models/dose_model.dart';
 import 'package:curelink/features/schedule/data/repositories/dose_repository.dart';
 import 'package:curelink/features/schedule/presentation/cubit/schedule_cubit.dart';
@@ -35,23 +38,64 @@ class _ScheduleView extends StatefulWidget {
   State<_ScheduleView> createState() => _ScheduleViewState();
 }
 
-class _ScheduleViewState extends State<_ScheduleView> {
+class _ScheduleViewState extends State<_ScheduleView> with WidgetsBindingObserver {
   Timer? _timer;
+  bool _reminderOpen = false;
 
   @override
   void initState() {
     super.initState();
-
-    _timer = Timer.periodic(const Duration(minutes: 1), (_) {
+    WidgetsBinding.instance.addObserver(this);
+    _timer = Timer.periodic(const Duration(seconds: 15), (_) {
       if (mounted) {
-        context.read<ScheduleCubit>().refreshDoseStatuses();
+        final cubit = context.read<ScheduleCubit>();
+        cubit.refreshDoseStatuses();
+        _openDueReminder(cubit);
       }
     });
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed && mounted) {
+      _openDueReminder(context.read<ScheduleCubit>());
+    }
+  }
+
+  void _openDueReminder(ScheduleCubit cubit) {
+    if (_reminderOpen ||
+        cubit.state.isLoading ||
+        WidgetsBinding.instance.lifecycleState != AppLifecycleState.resumed ||
+        !(ModalRoute.of(context)?.isCurrent ?? false)) {
+      return;
+    }
+    final due = cubit.state.doses.where((dose) => dose.status == DoseStatus.due);
+    if (due.isEmpty) return;
+    final dose = due.first;
+    final patientUid = FirebaseAuth.instance.currentUser?.uid;
+    if (patientUid == null) return;
+    _reminderOpen = true;
+    final navigator = AppRouter.navigatorKey.currentState;
+    if (navigator == null) {
+      _reminderOpen = false;
+      return;
+    }
+    navigator
+        .pushNamed(
+          RoutesNames.medicationReminder,
+          arguments: '$patientUid|${dose.id}',
+        )
+        .whenComplete(() {
+          if (!mounted) return;
+          _reminderOpen = false;
+          unawaited(cubit.load());
+        });
+  }
+
+  @override
   void dispose() {
     _timer?.cancel();
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
@@ -333,12 +377,6 @@ class _DoseCard extends StatelessWidget {
     final theme = Theme.of(context);
     final color = _statusColor(context);
 
-    final canAct = {
-      DoseStatus.upcoming,
-      DoseStatus.due,
-      DoseStatus.snoozed,
-    }.contains(dose.status);
-
     return Card(
       elevation: 0,
       color: theme.colorScheme.surface,
@@ -428,50 +466,6 @@ class _DoseCard extends StatelessWidget {
                 ),
               ],
             ),
-            if (canAct) ...[
-              const SizedBox(height: 14),
-              Row(
-                children: [
-                  Expanded(
-                    flex: 3,
-                    child: FilledButton.icon(
-                      onPressed: () {
-                        context.read<ScheduleCubit>().markAsTaken(dose);
-                      },
-                      icon: const Icon(Icons.check_circle_outline, size: 18),
-                      label: Text(
-                        l10n.scheduleMarkTaken,
-                        textAlign: TextAlign.center,
-                      ),
-                      style: FilledButton.styleFrom(
-                        backgroundColor: AppTheme.primary,
-                        foregroundColor: Colors.white,
-                        minimumSize: const Size(0, 48),
-                        padding: const EdgeInsets.symmetric(horizontal: 8),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    flex: 2,
-                    child: OutlinedButton(
-                      onPressed: () {
-                        context.read<ScheduleCubit>().snooze(dose);
-                      },
-                      style: OutlinedButton.styleFrom(
-                        foregroundColor: theme.colorScheme.primary,
-                        minimumSize: const Size(0, 48),
-                        padding: const EdgeInsets.symmetric(horizontal: 8),
-                      ),
-                      child: Text(
-                        l10n.scheduleSnooze,
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
             if (dose.status == DoseStatus.taken && dose.takenAt != null)
               _DoseNote(text: l10n.scheduleTakenAt(_formatTime(dose.takenAt!))),
             if (dose.status == DoseStatus.snoozed && dose.snoozedUntil != null)

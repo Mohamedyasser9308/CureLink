@@ -1,16 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:curelink/core/widgets/app_bottom_nav_bar.dart';
-import 'package:curelink/core/widgets/app_empty_state.dart';
-import 'package:curelink/core/widgets/app_scaffold.dart';
 import 'package:curelink/core/widgets/mode_switcher.dart';
 import 'package:curelink/features/calendar/presentation/pages/calendar_page.dart';
 import 'package:curelink/features/schedule/presentation/pages/schedule_page.dart';
-import 'package:curelink/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 import '../../patient/patient_home_screen.dart';
 import '../../caregiver/presentation/pages/caregiver_home_screen.dart';
 import '../../profile/presentation/pages/profile_page.dart';
+import '../../notifications/presentation/notifications_page.dart';
 
 class MainShell extends StatefulWidget {
   const MainShell({super.key, required this.patientUid, required this.role});
@@ -48,7 +46,6 @@ class _MainShellState extends State<MainShell> {
   }
 
   Widget _buildShell(BuildContext context, AppMode activeMode) {
-    final l10n = AppLocalizations.of(context)!;
     final caregiverHome = activeMode == AppMode.caregiver;
 
     return Scaffold(
@@ -76,10 +73,7 @@ class _MainShellState extends State<MainShell> {
           CalendarPage(patientUid: widget.patientUid),
 
           // Notifications
-          _TabPlaceholder(
-            title: l10n.navNotifications,
-            icon: Icons.notifications_none_rounded,
-          ),
+          NotificationsPage(patientUid: widget.patientUid),
 
           // Profile
           const ProfilePage(),
@@ -100,20 +94,5 @@ class _MainShellState extends State<MainShell> {
         .collection('users')
         .doc(widget.patientUid)
         .update({'activeMode': mode.name});
-  }
-}
-
-class _TabPlaceholder extends StatelessWidget {
-  const _TabPlaceholder({required this.title, required this.icon});
-
-  final String title;
-  final IconData icon;
-
-  @override
-  Widget build(BuildContext context) {
-    return AppScaffold(
-      title: title,
-      body: AppEmptyState(title: title, icon: icon),
-    );
   }
 }

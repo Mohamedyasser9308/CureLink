@@ -194,6 +194,7 @@ class _SuccessBody extends StatelessWidget {
 
         NextDoseCard(
           dose: state.nextDose,
+          allDosesTaken: state.takenCount == state.doses.length,
           onElapsed: () => context.read<HomeCubit>().refresh(),
         ),
 
