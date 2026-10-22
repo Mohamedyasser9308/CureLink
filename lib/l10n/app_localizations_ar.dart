@@ -839,6 +839,14 @@ class AppLocalizationsAr extends AppLocalizations {
   String get profileTitle => 'الملف الشخصي';
 
   @override
+  String get sessionVerificationFailed =>
+      'تعذر التحقق من حسابك. تحقق من اتصالك بالإنترنت.';
+
+  @override
+  String get sessionProfileIncomplete =>
+      'يجب إكمال ملفك الشخصي. سجّل الدخول مجددًا لمتابعة التسجيل.';
+
+  @override
   String get profileSignInAgain => 'من فضلك سجّل الدخول مرة أخرى.';
 
   @override
@@ -849,6 +857,12 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get profileId => 'رقم العضوية';
+
+  @override
+  String get copyId => 'نسخ المعرّف';
+
+  @override
+  String get idCopied => 'تم نسخ المعرّف بنجاح';
 
   @override
   String get profilePersonalInfo => 'المعلومات الشخصية';

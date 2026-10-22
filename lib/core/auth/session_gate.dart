@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../router/routes_names.dart';
 import '../../features/shell/presentation/main_shell.dart';
+import '../../l10n/app_localizations.dart';
 
 class SessionGate extends StatefulWidget {
   const SessionGate({super.key});
@@ -32,6 +33,7 @@ class _SessionGateState extends State<SessionGate> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final user = FirebaseAuth.instance.currentUser;
 
     if (user == null) {
@@ -64,8 +66,8 @@ class _SessionGateState extends State<SessionGate> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Text(
-                      'Could not verify your account. Check your connection.',
+                    Text(
+                      l10n.sessionVerificationFailed,
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 16),
@@ -73,7 +75,7 @@ class _SessionGateState extends State<SessionGate> {
                       onPressed: () {
                         setState(() => _profileFuture = _loadProfile(user.uid));
                       },
-                      child: const Text('Retry'),
+                      child: Text(l10n.retry),
                     ),
                     TextButton(
                       onPressed: () async {
@@ -84,7 +86,7 @@ class _SessionGateState extends State<SessionGate> {
                           (_) => false,
                         );
                       },
-                      child: const Text('Log out'),
+                      child: Text(l10n.logOut),
                     ),
                   ],
                 ),
@@ -135,8 +137,8 @@ class _SessionGateState extends State<SessionGate> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Text(
-                      'Your profile needs to be completed. Please sign in again and continue your registration.',
+                    Text(
+                      l10n.sessionProfileIncomplete,
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 16),
@@ -149,7 +151,7 @@ class _SessionGateState extends State<SessionGate> {
                           (_) => false,
                         );
                       },
-                      child: const Text('Log out'),
+                      child: Text(l10n.logOut),
                     ),
                   ],
                 ),

@@ -189,7 +189,12 @@ class DoseNotificationService {
 
   Future<void> sync({required String patientUid, required List<DoseModel> doses}) async {
     if (!_initialized || !_notificationsAllowed) return;
-    await _refreshExactAlarmPermission();
+    try {
+      await _refreshExactAlarmPermission();
+    } catch (error) {
+      debugPrint('Could not refresh exact-alarm permission: $error');
+      _exactAlarmsAllowed = false;
+    }
     // Android limits the number of outstanding alarms. The rolling 30-day
     // window is replenished whenever the schedule screen is loaded.
     final now = DateTime.now();
@@ -208,35 +213,58 @@ class DoseNotificationService {
     final pendingIds = pending.map((request) => request.id).toSet();
     for (final dose in doses) {
       if (dose.status == DoseStatus.taken || dose.status == DoseStatus.missed) {
+        final dueId = _stableId('${dose.id}:due');
+        if (pendingIds.contains(dueId)) await _cancelAndroidAlarm(dueId);
         continue;
       }
       final dueId = _stableId('${dose.id}:due');
       final lateId = _stableId('${dose.id}:late');
       activeIds..add(dueId)..add(lateId);
-      await _scheduleAndroidAlarm(
-        id: dueId,
-        dose: dose,
-        now: now,
-        end: end,
-      );
+      try {
+        await _scheduleAndroidAlarm(
+          id: dueId,
+          dose: dose,
+          now: now,
+          end: end,
+        );
+      } catch (error, stackTrace) {
+        debugPrint('Could not register dose alarm audio: $error');
+        debugPrintStack(stackTrace: stackTrace);
+      }
       // Keep existing Android alarms in place. Re-registering every alarm
       // whenever the schedule refreshes can overwhelm the notification
       // manager on devices with many medications.
-      if (pendingIds.contains(dueId) || pendingIds.contains(lateId)) continue;
       final payload = '$patientUid|${dose.id}';
-      await _scheduleDose(
-        dose: dose,
-        patientUid: patientUid,
-        dueId: dueId,
-        lateId: lateId,
-        payload: payload,
-        now: now,
-        end: end,
-      );
+      // Repair each reminder independently. A pending due notification must
+      // not prevent a missing late notification from being restored.
+      try {
+        await _scheduleDose(
+          dose: dose,
+          patientUid: patientUid,
+          dueId: dueId,
+          lateId: lateId,
+          payload: payload,
+          now: now,
+          end: end,
+          scheduleDue: !pendingIds.contains(dueId),
+          scheduleLate: !pendingIds.contains(lateId),
+        );
+      } catch (error, stackTrace) {
+        debugPrint('Could not sync dose ${dose.id}: $error');
+        debugPrintStack(stackTrace: stackTrace);
+      }
     }
     for (final request in pending) {
       if (!_isDoseNotification(request.id)) continue;
-      if (!activeIds.contains(request.id)) await _plugin.cancel(request.id);
+      if (!activeIds.contains(request.id)) {
+        try {
+          await _plugin.cancel(request.id);
+          await _cancelAndroidAlarm(request.id);
+        } catch (error, stackTrace) {
+          debugPrint('Could not remove stale dose notification: $error');
+          debugPrintStack(stackTrace: stackTrace);
+        }
+      }
     }
   }
 
@@ -249,12 +277,17 @@ class DoseNotificationService {
         debugPrint('Could not cancel dose notification $id: $error');
       }
     }
-    if (defaultTargetPlatform == TargetPlatform.android) {
-      try {
-        await _androidAlarmChannel.invokeMethod<void>('cancel', {'id': dueId});
-      } on PlatformException catch (error) {
-        debugPrint('Could not stop dose alarm audio: ${error.code}');
-      }
+    await _cancelAndroidAlarm(dueId);
+  }
+
+  Future<void> _cancelAndroidAlarm(int dueId) async {
+    if (defaultTargetPlatform != TargetPlatform.android) return;
+    try {
+      await _androidAlarmChannel.invokeMethod<void>('cancel', {'id': dueId});
+    } on PlatformException catch (error) {
+      debugPrint('Could not stop dose alarm audio: ${error.code}');
+    } on MissingPluginException {
+      // Native alarms are unavailable in this build; local notifications still work.
     }
   }
 
@@ -265,7 +298,12 @@ class DoseNotificationService {
     required DoseModel dose,
   }) async {
     if (!_initialized || !_notificationsAllowed) return;
-    await _refreshExactAlarmPermission();
+    try {
+      await _refreshExactAlarmPermission();
+    } catch (error) {
+      debugPrint('Could not refresh exact-alarm permission: $error');
+      _exactAlarmsAllowed = false;
+    }
     await cancelDose(dose);
     final now = DateTime.now();
     final end = now.add(const Duration(days: 30));
@@ -330,6 +368,8 @@ class DoseNotificationService {
     required String payload,
     required DateTime now,
     required DateTime end,
+    bool scheduleDue = true,
+    bool scheduleLate = true,
   }) async {
     if (dose.status == DoseStatus.taken || dose.status == DoseStatus.missed) {
       return;
@@ -340,14 +380,14 @@ class DoseNotificationService {
     final timeoutAt = dueAt.add(const Duration(minutes: 10));
     if (dueAt.isAfter(end) || !timeoutAt.isAfter(now)) return;
     final notificationAt = dueAt.isBefore(now) ? now : dueAt;
-    await _schedule(
+    if (scheduleDue) await _schedule(
       id: dueId,
       at: notificationAt,
       title: 'Medication reminder',
       body: '${dose.medicationName} • ${dose.dosage}',
       payload: payload,
     );
-    await _schedule(
+    if (scheduleLate) await _schedule(
       id: lateId,
       at: timeoutAt,
       title: 'Dose not confirmed',

@@ -840,6 +840,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileTitle => 'My Profile';
 
   @override
+  String get sessionVerificationFailed =>
+      'Could not verify your account. Check your connection.';
+
+  @override
+  String get sessionProfileIncomplete =>
+      'Your profile needs to be completed. Please sign in again and continue your registration.';
+
+  @override
   String get profileSignInAgain => 'Please sign in again.';
 
   @override
@@ -850,6 +858,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get profileId => 'Member ID';
+
+  @override
+  String get copyId => 'Copy ID';
+
+  @override
+  String get idCopied => 'ID copied successfully';
 
   @override
   String get profilePersonalInfo => 'Personal Information';

@@ -32,17 +32,14 @@ class ProfilePage extends StatelessWidget {
 
     if (!context.mounted) return;
 
-    final isArabic =
-        Localizations.localeOf(context).languageCode == 'ar';
+    final l10n = AppLocalizations.of(context)!;
 
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
       ..showSnackBar(
         SnackBar(
           content: Text(
-            isArabic
-                ? 'تم نسخ الـ ID بنجاح'
-                : 'ID copied successfully',
+            l10n.idCopied,
           ),
           behavior: SnackBarBehavior.floating,
           duration: const Duration(seconds: 2),
@@ -123,9 +120,6 @@ class ProfilePage extends StatelessWidget {
               user.photoURL;
 
           final uniqueId = data['uniqueId'] as String? ?? '';
-
-          final isArabic =
-              Localizations.localeOf(context).languageCode == 'ar';
 
           return ListView(
             padding: const EdgeInsets.fromLTRB(20, 12, 20, 28),
@@ -210,9 +204,7 @@ class ProfilePage extends StatelessWidget {
                           Icons.copy_rounded,
                           size: 18,
                         ),
-                        label: Text(
-                          isArabic ? 'نسخ الـ ID' : 'Copy ID',
-                        ),
+                        label: Text(l10n.copyId),
                         style: OutlinedButton.styleFrom(
                           foregroundColor: Colors.white,
                           side: BorderSide(

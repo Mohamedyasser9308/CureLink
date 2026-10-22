@@ -240,7 +240,7 @@ class _RecentAlerts extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     if (alerts.isEmpty) {
       return Card(
-        color: const Color(0xFFFFFEF8),
+        color: Theme.of(context).colorScheme.surface,
         child: ListTile(
           leading: const Icon(Icons.notifications_none_rounded),
           title: Text(l10n.noNewAlerts),
@@ -252,7 +252,7 @@ class _RecentAlerts extends StatelessWidget {
       children: [
         for (final alert in alerts.take(5))
           Card(
-            color: const Color(0xFFFBEAEC),
+            color: Theme.of(context).colorScheme.errorContainer,
             margin: const EdgeInsets.only(bottom: 8),
             child: ListTile(
               leading: const Icon(

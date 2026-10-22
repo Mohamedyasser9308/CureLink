@@ -1014,10 +1014,14 @@
   
 
   "profileTitle": "My Profile",
+  "sessionVerificationFailed": "Could not verify your account. Check your connection.",
+  "sessionProfileIncomplete": "Your profile needs to be completed. Please sign in again and continue your registration.",
   "profileSignInAgain": "Please sign in again.",
   "profileLoadError": "Could not load your profile.",
   "profileDefaultName": "CureLink User",
   "profileId": "Member ID",
+  "copyId": "Copy ID",
+  "idCopied": "ID copied successfully",
   "profilePersonalInfo": "Personal Information",
   "profileEmail": "Email Address",
   "profilePhone": "Phone Number",

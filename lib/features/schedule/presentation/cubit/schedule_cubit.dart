@@ -294,6 +294,16 @@ class ScheduleCubit extends Cubit<ScheduleState> {
 
         if (isClosed) return;
 
+        try {
+          await DoseNotificationService.instance.sync(
+            patientUid: uid,
+            doses: persistedDoses,
+          );
+        } catch (error, stackTrace) {
+          debugPrint('Could not refresh local dose alarms: $error');
+          debugPrintStack(stackTrace: stackTrace);
+        }
+
         emit(
           state.copyWith(
             doses: persistedDoses,

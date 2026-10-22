@@ -1652,6 +1652,18 @@ abstract class AppLocalizations {
   /// **'My Profile'**
   String get profileTitle;
 
+  /// No description provided for @sessionVerificationFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not verify your account. Check your connection.'**
+  String get sessionVerificationFailed;
+
+  /// No description provided for @sessionProfileIncomplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Your profile needs to be completed. Please sign in again and continue your registration.'**
+  String get sessionProfileIncomplete;
+
   /// No description provided for @profileSignInAgain.
   ///
   /// In en, this message translates to:
@@ -1675,6 +1687,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Member ID'**
   String get profileId;
+
+  /// No description provided for @copyId.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy ID'**
+  String get copyId;
+
+  /// No description provided for @idCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'ID copied successfully'**
+  String get idCopied;
 
   /// No description provided for @profilePersonalInfo.
   ///
