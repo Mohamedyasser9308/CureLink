@@ -1144,5 +1144,29 @@
         "type": "String"
       }
     }
+  },
+  
+  "emergencyWarning": "هذا التنبيه منفصل عن تأكيد تناول الدواء. اتصلي بخدمات الطوارئ المحلية في حالات الخطر الفوري.",
+  "sosHoldInstruction": "اضغطي باستمرار لمدة 3 ثوانٍ",
+  "sosKeepHolding": "استمري في الضغط...",
+  "sosResultPending": "جارٍ معالجة الطلب",
+  "sosUnavailable": "خدمة الطوارئ غير متاحة",
+  "connectedCaregivers": "مقدمو الرعاية المرتبطون",
+  "caregiverPlaceholder": "اسم مقدم الرعاية · حالة الاتصال",
+  "emergencyContactPlaceholder": "الاسم · رقم الهاتف",
+  "sosButtonLabel": "طوارئ SOS",
+  "sosButtonHint": "اضغطي باستمرار لمدة 3 ثوانٍ",
+  "sosPressAndHold": "اضغطي باستمرار لمدة 3 ثوانٍ",
+"sosConceptualResult": "حالة توضيحية · لم يتم إرسال بلاغ",
+"caregiverNameStatusPlaceholder": "اسم مقدم الرعاية · حالة الاتصال",
+"sosHoldHint": "اضغطي باستمرار لمدة 3 ثوانٍ",
+"sosSeconds": "{seconds} ثانية",
+"@sosSeconds": {
+  "placeholders": {
+    "seconds": {
+      "type": "String"
+    }
   }
+}
+  
 }

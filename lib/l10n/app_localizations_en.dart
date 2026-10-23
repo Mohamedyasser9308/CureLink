@@ -156,7 +156,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Use this ID when connecting with caregivers';
 
   @override
-  String get emergencyContact => 'Emergency contact';
+  String get emergencyContact => 'EMERGENCY CONTACT';
 
   @override
   String get emergencyContactHint => 'Someone we can contact in an emergency';
@@ -1145,5 +1145,54 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String scheduleNextReminder(String time) {
     return 'Next reminder: $time';
+  }
+
+  @override
+  String get emergencyWarning =>
+      'Separate from medication confirmation. Contact local emergency services for immediate danger.';
+
+  @override
+  String get sosHoldInstruction => 'Press and hold for 3 seconds';
+
+  @override
+  String get sosKeepHolding => 'Keep holding...';
+
+  @override
+  String get sosResultPending => 'Request processing';
+
+  @override
+  String get sosUnavailable => 'SOS unavailable';
+
+  @override
+  String get connectedCaregivers => 'CONNECTED CAREGIVERS';
+
+  @override
+  String get caregiverPlaceholder => 'Caregiver name · connection status';
+
+  @override
+  String get emergencyContactPlaceholder => 'Contact name · phone placeholder';
+
+  @override
+  String get sosButtonLabel => 'Emergency SOS';
+
+  @override
+  String get sosButtonHint => 'Press and hold for 3 seconds';
+
+  @override
+  String get sosPressAndHold => 'Press and hold for 3 seconds';
+
+  @override
+  String get sosConceptualResult => 'Conceptual result · no alert claim';
+
+  @override
+  String get caregiverNameStatusPlaceholder =>
+      'Caregiver name · connection status';
+
+  @override
+  String get sosHoldHint => 'Press and hold for 3 seconds';
+
+  @override
+  String sosSeconds(String seconds) {
+    return '$seconds seconds';
   }
 }

@@ -29,6 +29,9 @@ dependencies:
   http: ^1.6.0
   cloud_functions: ^6.5.0
   table_calendar: ^3.2.1
+  flutter_svg: ^2.3.0
+  
+
 
 dev_dependencies:
   flutter_test:
@@ -56,3 +59,4 @@ flutter:
     - assets/med.avif
     - assets/med3.jpg
     - assets/medicine.png
+    - assets/siren.svg

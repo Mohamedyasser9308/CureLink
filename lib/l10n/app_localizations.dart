@@ -377,7 +377,7 @@ abstract class AppLocalizations {
   /// Localized Emergency contact text displayed in the interface.
   ///
   /// In en, this message translates to:
-  /// **'Emergency contact'**
+  /// **'EMERGENCY CONTACT'**
   String get emergencyContact;
 
   /// Localized Emergency contact hint text displayed in the interface.
@@ -2251,6 +2251,96 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Next reminder: {time}'**
   String scheduleNextReminder(String time);
+
+  /// No description provided for @emergencyWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Separate from medication confirmation. Contact local emergency services for immediate danger.'**
+  String get emergencyWarning;
+
+  /// No description provided for @sosHoldInstruction.
+  ///
+  /// In en, this message translates to:
+  /// **'Press and hold for 3 seconds'**
+  String get sosHoldInstruction;
+
+  /// No description provided for @sosKeepHolding.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep holding...'**
+  String get sosKeepHolding;
+
+  /// No description provided for @sosResultPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Request processing'**
+  String get sosResultPending;
+
+  /// No description provided for @sosUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'SOS unavailable'**
+  String get sosUnavailable;
+
+  /// No description provided for @connectedCaregivers.
+  ///
+  /// In en, this message translates to:
+  /// **'CONNECTED CAREGIVERS'**
+  String get connectedCaregivers;
+
+  /// No description provided for @caregiverPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Caregiver name · connection status'**
+  String get caregiverPlaceholder;
+
+  /// No description provided for @emergencyContactPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact name · phone placeholder'**
+  String get emergencyContactPlaceholder;
+
+  /// No description provided for @sosButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Emergency SOS'**
+  String get sosButtonLabel;
+
+  /// No description provided for @sosButtonHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Press and hold for 3 seconds'**
+  String get sosButtonHint;
+
+  /// No description provided for @sosPressAndHold.
+  ///
+  /// In en, this message translates to:
+  /// **'Press and hold for 3 seconds'**
+  String get sosPressAndHold;
+
+  /// No description provided for @sosConceptualResult.
+  ///
+  /// In en, this message translates to:
+  /// **'Conceptual result · no alert claim'**
+  String get sosConceptualResult;
+
+  /// No description provided for @caregiverNameStatusPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Caregiver name · connection status'**
+  String get caregiverNameStatusPlaceholder;
+
+  /// No description provided for @sosHoldHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Press and hold for 3 seconds'**
+  String get sosHoldHint;
+
+  /// No description provided for @sosSeconds.
+  ///
+  /// In en, this message translates to:
+  /// **'{seconds} seconds'**
+  String sosSeconds(String seconds);
 }
 
 class _AppLocalizationsDelegate
