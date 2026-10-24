@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:curelink/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
+import '../../data/services/medicine_catalog_service.dart';
 import 'medicine_image_picker.dart';
 import 'medicine_textfield.dart';
 
@@ -51,6 +52,14 @@ class MedicineForm extends StatefulWidget {
 }
 
 class _MedicineFormState extends State<MedicineForm> {
+  final MedicineCatalogService _catalogService = MedicineCatalogService();
+  final FocusNode _nameFocusNode = FocusNode();
+
+  List<MedicineCatalogEntry> _suggestions = const [];
+  bool _isSearchingCatalog = false;
+  bool _catalogSearchFailed = false;
+  int _searchRequestId = 0;
+
   static const List<String> frequencyOptions = [
     'Every day',
     'Every other day',
@@ -69,6 +78,76 @@ class _MedicineFormState extends State<MedicineForm> {
   String? selectedDuration;
   List<int> selectedWeekdays = [];
   List<String> selectedTimes = [];
+
+  void _handleNameFocusChange() {
+    if (!_nameFocusNode.hasFocus) {
+      _searchRequestId++;
+      setState(() {
+        _suggestions = const [];
+        _isSearchingCatalog = false;
+        _catalogSearchFailed = false;
+      });
+    }
+  }
+
+  Future<void> _searchCatalog(String query) async {
+    final requestId = ++_searchRequestId;
+    if (query.trim().isEmpty) {
+      setState(() {
+        _suggestions = const [];
+        _isSearchingCatalog = false;
+        _catalogSearchFailed = false;
+      });
+      return;
+    }
+
+    setState(() {
+      _suggestions = const [];
+      _isSearchingCatalog = true;
+      _catalogSearchFailed = false;
+    });
+
+    try {
+      final results = await _catalogService.search(query, limit: 5);
+      if (!mounted || requestId != _searchRequestId || !_nameFocusNode.hasFocus) {
+        return;
+      }
+      setState(() {
+        _suggestions = results;
+        _isSearchingCatalog = false;
+      });
+    } catch (_) {
+      if (!mounted || requestId != _searchRequestId || !_nameFocusNode.hasFocus) {
+        return;
+      }
+      setState(() {
+        _suggestions = const [];
+        _isSearchingCatalog = false;
+        _catalogSearchFailed = true;
+      });
+    }
+  }
+
+  void _selectSuggestion(MedicineCatalogEntry entry) {
+    final englishName = entry.commercialNameEn.trim();
+    final arabicName = entry.commercialNameAr.trim();
+    widget.nameController.text = englishName.isNotEmpty ? englishName : arabicName;
+    _searchRequestId++;
+    setState(() {
+      _suggestions = const [];
+      _isSearchingCatalog = false;
+      _catalogSearchFailed = false;
+    });
+    _nameFocusNode.unfocus();
+  }
+
+  @override
+  void dispose() {
+    _nameFocusNode
+      ..removeListener(_handleNameFocusChange)
+      ..dispose();
+    super.dispose();
+  }
 
   List<String> frequencyLabels(AppLocalizations l10n) => [
         l10n.medEveryDay,
@@ -94,9 +173,47 @@ class _MedicineFormState extends State<MedicineForm> {
         l10n.medSunday,
       ];
 
+  Widget _buildSuggestion(MedicineCatalogEntry entry, ColorScheme colors) {
+    final englishName = entry.commercialNameEn.trim();
+    final arabicName = entry.commercialNameAr.trim();
+
+    return InkWell(
+      onTap: () => _selectSuggestion(entry),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        child: SizedBox(
+          width: double.infinity,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (englishName.isNotEmpty)
+                Text(
+                  englishName,
+                  style: TextStyle(color: colors.onSurface, fontSize: 15),
+                ),
+              if (arabicName.isNotEmpty)
+                Padding(
+                  padding: EdgeInsets.only(top: englishName.isNotEmpty ? 4 : 0),
+                  child: Text(
+                    arabicName,
+                    textDirection: TextDirection.rtl,
+                    style: TextStyle(
+                      color: colors.onSurfaceVariant,
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
+    _nameFocusNode.addListener(_handleNameFocusChange);
 
     selectedFrequency = resolveFrequency(
       widget.initialFrequency ?? widget.frequencyController.text,
@@ -441,6 +558,8 @@ class _MedicineFormState extends State<MedicineForm> {
         MedicineTextField(
           label: l10n.medicationName,
           controller: widget.nameController,
+          focusNode: _nameFocusNode,
+          onChanged: _searchCatalog,
           validator: (value) {
             if (value == null || value.trim().isEmpty) {
               return l10n.medNameRequired;
@@ -448,6 +567,39 @@ class _MedicineFormState extends State<MedicineForm> {
             return null;
           },
         ),
+        if (_isSearchingCatalog)
+          const Padding(
+            padding: EdgeInsets.only(top: 8),
+            child: LinearProgressIndicator(minHeight: 2),
+          )
+        else if (_catalogSearchFailed)
+          Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: Text(
+              'Medicine suggestions are unavailable right now.',
+              style: TextStyle(color: colors.onSurfaceVariant, fontSize: 13),
+            ),
+          )
+        else if (_suggestions.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: Material(
+              color: colors.surface,
+              elevation: 2,
+              borderRadius: BorderRadius.circular(12),
+              clipBehavior: Clip.antiAlias,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  for (var index = 0; index < _suggestions.length; index++) ...[
+                    _buildSuggestion(_suggestions[index], colors),
+                    if (index < _suggestions.length - 1)
+                      Divider(height: 1, color: colors.outlineVariant),
+                  ],
+                ],
+              ),
+            ),
+          ),
         const SizedBox(height: 20),
 
         MedicineTextField(

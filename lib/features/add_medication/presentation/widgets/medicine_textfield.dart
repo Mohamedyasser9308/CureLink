@@ -12,6 +12,7 @@ class MedicineTextField extends StatelessWidget {
   final String? Function(String?)? validator;
   final TextInputType? keyboardType;
   final ValueChanged<String>? onChanged;
+  final FocusNode? focusNode;
 
   const MedicineTextField({
     super.key,
@@ -24,6 +25,7 @@ class MedicineTextField extends StatelessWidget {
     this.validator,
     this.keyboardType,
     this.onChanged,
+    this.focusNode,
   });
 
   @override
@@ -49,6 +51,7 @@ class MedicineTextField extends StatelessWidget {
           maxLines: maxLines,
           keyboardType: keyboardType,
           onChanged: onChanged,
+          focusNode: focusNode,
           style: TextStyle(
             color: colors.onSurface,
             fontSize: 16,

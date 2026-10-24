@@ -30,7 +30,7 @@ dependencies:
   cloud_functions: ^6.5.0
   table_calendar: ^3.2.1
   firebase_messaging: ^16.7.0
-  flutter_local_notifications: ^18.0.1
+  flutter_local_notifications:  ^18.0.1
   flutter_timezone: ^3.0.1
   timezone: ^0.10.1
 
@@ -58,3 +58,4 @@ flutter:
     - assets/med.avif
     - assets/med3.jpg
     - assets/medicine.png
+    - assets/data/egyptian-drugs.json
