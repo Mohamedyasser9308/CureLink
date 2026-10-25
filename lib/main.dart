@@ -16,12 +16,40 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:workmanager/workmanager.dart';
+
+const _doseScheduleRefreshTask = 'curelink-dose-schedule-refresh';
+
+@pragma('vm:entry-point')
+void doseScheduleCallbackDispatcher() {
+  Workmanager().executeTask((task, inputData) async {
+    if (task != _doseScheduleRefreshTask) return true;
+    WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return true;
+    await DoseNotificationService.instance.initialize(
+      onOpen: (_) {},
+      requestPermissions: false,
+    );
+    await DoseNotificationService.instance.syncPatientSchedule(user.uid);
+    return true;
+  });
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
+  );
+  await Workmanager().initialize(doseScheduleCallbackDispatcher);
+  await Workmanager().registerPeriodicTask(
+    _doseScheduleRefreshTask,
+    _doseScheduleRefreshTask,
+    frequency: const Duration(minutes: 15),
+    existingWorkPolicy: ExistingPeriodicWorkPolicy.keep,
+    constraints: Constraints(networkType: NetworkType.connected),
   );
 
   await initializeDateFormatting('ar');

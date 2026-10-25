@@ -341,7 +341,13 @@ async function deliverOneAlert(
         doseId,
       }),
     );
-    const failures = sendResults.filter((success) => !success).length;
+    const invalidTokens = sendResults.flatMap((result, index) =>
+      result === "invalid" ? [registrationTokens[index]] : [],
+    );
+    if (invalidTokens.length > 0) {
+      await removeInvalidTokens(projectId, token, recipients, invalidTokens);
+    }
+    const failures = sendResults.filter((result) => result === "failed").length;
     if (failures > 0) throw new Error(`FCM delivery failed for ${failures} caregiver device(s)`);
 
     const finish = await firestoreRequest(projectId, token, "documents:commit", {
@@ -416,7 +422,7 @@ async function sendPush(
   token: string,
   registrationToken: string,
   details: { title: string; body: string; notificationId: string; patientUid: string; doseId: string },
-): Promise<boolean> {
+): Promise<"sent" | "invalid" | "failed"> {
   const response = await fetch(
     `https://fcm.googleapis.com/v1/projects/${projectId}/messages:send`,
     {
@@ -443,9 +449,38 @@ async function sendPush(
       }),
     },
   );
-  if (response.ok) return true;
+  if (response.ok) return "sent";
   console.error(`FCM send failed (${response.status}): ${await response.text()}`);
-  return false;
+  // FCM returns NOT_FOUND when a registration token is no longer registered.
+  // Retrying a job with that token would otherwise keep it pending forever.
+  return response.status === 404 ? "invalid" : "failed";
+}
+
+async function removeInvalidTokens(
+  projectId: string,
+  token: string,
+  recipients: Array<{ caregiverUid: string; tokens: string[] }>,
+  invalidTokens: string[],
+): Promise<void> {
+  const invalid = new Set(invalidTokens);
+  const writes = recipients.flatMap((recipient) => {
+    const staleTokens = recipient.tokens.filter((value) => invalid.has(value));
+    if (staleTokens.length === 0) return [];
+    return [{
+      transform: {
+        document: documentName(projectId, `users/${recipient.caregiverUid}`),
+        fieldTransforms: [{
+          fieldPath: "fcmTokens",
+          removeAllFromArray: { values: staleTokens.map((stringValue) => ({ stringValue })) },
+        }],
+      },
+    }];
+  });
+  if (writes.length === 0) return;
+  const response = await firestoreRequest(projectId, token, "documents:commit", { writes }, true);
+  if (!response.ok) {
+    throw new Error(`Could not remove invalid FCM tokens: ${await response.text()}`);
+  }
 }
 
 async function getUserName(projectId: string, token: string, uid: string): Promise<string> {

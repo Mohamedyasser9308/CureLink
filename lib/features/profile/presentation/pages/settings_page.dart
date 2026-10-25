@@ -1,6 +1,7 @@
 import 'package:curelink/core/settings/settings_cubit.dart';
 import 'package:curelink/core/router/routes_names.dart';
 import 'package:curelink/l10n/app_localizations.dart';
+import 'alarm_permissions_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -40,6 +41,24 @@ class SettingsPage extends StatelessWidget {
           return ListView(
             padding: const EdgeInsets.all(20),
             children: [
+              Card(
+                clipBehavior: Clip.antiAlias,
+                child: ListTile(
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                  leading: Icon(Icons.alarm, color: colors.primary, size: 28),
+                  title: Text(settings.locale.languageCode == 'ar'
+                      ? 'صلاحيات المنبه' : 'Alarm permissions',
+                      style: theme.textTheme.titleMedium),
+                  subtitle: Text(settings.locale.languageCode == 'ar'
+                      ? 'افحص الإشعارات والمنبه الدقيق وشاشة القفل.'
+                      : 'Check notifications, exact alarms, and lock-screen access.'),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                    builder: (_) => const AlarmPermissionsPage(),
+                  )),
+                ),
+              ),
+              const SizedBox(height: 20),
               Text(
                 l10n.appearance,
                 style: theme.textTheme.titleMedium?.copyWith(

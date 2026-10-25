@@ -31,8 +31,11 @@ dependencies:
   table_calendar: ^3.2.1
   firebase_messaging: ^16.7.0
   flutter_local_notifications: ^18.0.1
-  flutter_timezone: ^3.0.1
+  flutter_timezone: 4.1.1
   timezone: ^0.10.1
+  workmanager: ^0.10.10
+  curelink_alarm_bridge:
+    path: packages/curelink_alarm_bridge
 
 dev_dependencies:
   flutter_test:

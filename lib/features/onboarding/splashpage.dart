@@ -7,6 +7,8 @@ import 'package:curelink/core/theme/app_theme.dart';
 import 'package:curelink/l10n/app_localizations.dart';
 import 'package:curelink/features/onboarding/onboardingview.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+import 'package:curelink/features/profile/presentation/pages/alarm_permissions_page.dart';
 
 class Splashscreen extends StatefulWidget {
   const Splashscreen({super.key});
@@ -62,11 +64,14 @@ class _SplashscreenState extends State<Splashscreen> {
       }
 
       if (profile['profileCompleted'] == true) {
+        final role = (profile['role'] as String? ?? '').toLowerCase();
         Navigator.of(context).pushNamedAndRemoveUntil(
           RoutesNames.homePage,
           (_) => false,
         );
-        _openInitialReminderAfterHome();
+        _openInitialReminderAfterHome(
+          checkAlarmPermissions: role == 'patient' || role == 'both',
+        );
         return;
       }
 
@@ -102,15 +107,36 @@ class _SplashscreenState extends State<Splashscreen> {
     }
   }
 
-  void _openInitialReminderAfterHome() {
+  void _openInitialReminderAfterHome({required bool checkAlarmPermissions}) {
     final payload = DoseNotificationService.instance.takeInitialPayload();
-    if (payload == null || payload.isEmpty) return;
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      AppRouter.navigatorKey.currentState?.pushNamed(
-        RoutesNames.medicationReminder,
-        arguments: payload,
-      );
+      final navigator = AppRouter.navigatorKey.currentState;
+      if (payload != null && payload.isNotEmpty) {
+        navigator?.pushNamed(RoutesNames.medicationReminder, arguments: payload);
+        return;
+      }
+      if (checkAlarmPermissions && defaultTargetPlatform == TargetPlatform.android) {
+        _openAlarmPermissionSetupIfNeeded();
+      }
     });
+  }
+
+  Future<void> _openAlarmPermissionSetupIfNeeded() async {
+    try {
+      final status = await DoseNotificationService.instance
+          .getAndroidAlarmPermissionStatus();
+      final hasCorePermissions = status['notifications'] == true &&
+          status['nativeAlarmChannel'] == true &&
+          status['exactAlarms'] == true &&
+          status['fullScreen'] == true;
+      if (!hasCorePermissions && mounted) {
+        AppRouter.navigatorKey.currentState?.push(MaterialPageRoute(
+          builder: (_) => const AlarmPermissionsPage(),
+        ));
+      }
+    } catch (error) {
+      debugPrint('Could not verify dose alarm permissions: $error');
+    }
   }
 
   @override
