@@ -978,6 +978,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get medDoseQuantity => 'Dose & quantity';
 
   @override
+  String get medMealRelation => 'Relation to food';
+
+  @override
+  String get medBeforeFood => 'Before food';
+
+  @override
+  String get medAfterFood => 'After food';
+
+  @override
+  String get medNoMealRelation => 'No relation to food';
+
+  @override
   String get medDoseRequired => 'Please enter dose and quantity';
 
   @override

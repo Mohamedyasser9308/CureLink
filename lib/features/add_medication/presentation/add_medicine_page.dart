@@ -41,6 +41,7 @@ class _AddMedicinePageState extends State<AddMedicinePage> {
   File? selectedImage;
   List<int> selectedWeekdays = [];
   List<String> selectedTimes = [];
+  MealRelation selectedMealRelation = MealRelation.noRelation;
 
   String? selectedFrequencyValue;
   String? selectedDurationValue;
@@ -87,6 +88,7 @@ class _AddMedicinePageState extends State<AddMedicinePage> {
     doseController.text = medication.dosage;
 
     selectedTimes = List<String>.from(medication.times);
+    selectedMealRelation = medication.mealRelation;
 
     frequencyController.text = medication.frequency;
     selectedFrequencyValue = medication.frequency;
@@ -188,6 +190,7 @@ class _AddMedicinePageState extends State<AddMedicinePage> {
       name: nameController.text.trim(),
       dosage: doseController.text.trim(),
       times: List<String>.from(selectedTimes),
+      mealRelation: selectedMealRelation,
       frequency: frequency,
       weekdays: List<int>.from(selectedWeekdays),
       durationDays: durationDays,
@@ -312,6 +315,7 @@ class _AddMedicinePageState extends State<AddMedicinePage> {
                       nameController: nameController,
                       doseController: doseController,
                       initialTimes: selectedTimes,
+                      initialMealRelation: selectedMealRelation,
                       frequencyController: frequencyController,
                       durationController: durationController,
                       descriptionController: descriptionController,
@@ -334,6 +338,9 @@ class _AddMedicinePageState extends State<AddMedicinePage> {
                       },
                       onTimesChanged: (times) {
                         selectedTimes = List<String>.from(times);
+                      },
+                      onMealRelationChanged: (relation) {
+                        selectedMealRelation = relation;
                       },
                     ),
                     const SizedBox(height: 24),

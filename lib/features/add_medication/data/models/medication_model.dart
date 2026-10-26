@@ -1,11 +1,14 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+enum MealRelation { beforeFood, afterFood, noRelation }
+
 class MedicationModel {
   final String id;
   final String name;
   final String dosage;
   final List<String> times;
+  final MealRelation mealRelation;
   final String frequency;
   final List<int> weekdays;
   final int? durationDays;
@@ -28,6 +31,7 @@ class MedicationModel {
     required this.name,
     required this.dosage,
     required this.times,
+    this.mealRelation = MealRelation.noRelation,
     required this.frequency,
     required this.startDate,
     required this.createdAt,
@@ -46,6 +50,7 @@ class MedicationModel {
       'name': name,
       'dosage': dosage,
       'times': times,
+      'mealRelation': mealRelation.name,
       'frequency': frequency,
       'weekdays': weekdays,
       'durationDays': durationDays,
@@ -74,6 +79,10 @@ class MedicationModel {
               ?.whereType<String>()
               .toList() ??
           const [],
+      mealRelation: MealRelation.values.firstWhere(
+        (relation) => relation.name == map['mealRelation'],
+        orElse: () => MealRelation.noRelation,
+      ),
       frequency: map['frequency'] as String? ?? 'daily',
       weekdays: (map['weekdays'] as List<dynamic>?)
               ?.whereType<num>()
@@ -110,6 +119,7 @@ class MedicationModel {
     String? name,
     String? dosage,
     List<String>? times,
+    MealRelation? mealRelation,
     String? frequency,
     List<int>? weekdays,
     int? durationDays,
@@ -131,6 +141,7 @@ class MedicationModel {
       name: name ?? this.name,
       dosage: dosage ?? this.dosage,
       times: times ?? this.times,
+      mealRelation: mealRelation ?? this.mealRelation,
       frequency: frequency ?? this.frequency,
       weekdays: weekdays ?? this.weekdays,
       durationDays: clearDurationDays

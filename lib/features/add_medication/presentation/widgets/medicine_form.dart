@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:curelink/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
+import '../../data/models/medication_model.dart';
+
 import 'medicine_image_picker.dart';
 import 'medicine_textfield.dart';
 
@@ -19,12 +21,14 @@ class MedicineForm extends StatefulWidget {
   final ValueChanged<String> onFrequencyChanged;
   final ValueChanged<String> onDurationChanged;
   final ValueChanged<List<String>> onTimesChanged;
+  final ValueChanged<MealRelation> onMealRelationChanged;
 
   final String? initialImageUrl;
   final List<int> initialWeekdays;
   final String? initialFrequency;
   final String? initialDuration;
   final List<String> initialTimes;
+  final MealRelation initialMealRelation;
 
   const MedicineForm({
     super.key,
@@ -39,11 +43,13 @@ class MedicineForm extends StatefulWidget {
     required this.onFrequencyChanged,
     required this.onDurationChanged,
     required this.onTimesChanged,
+    required this.onMealRelationChanged,
     this.initialImageUrl,
     this.initialWeekdays = const [],
     this.initialFrequency,
     this.initialDuration,
     this.initialTimes = const [],
+    this.initialMealRelation = MealRelation.noRelation,
   });
 
   @override
@@ -69,6 +75,7 @@ class _MedicineFormState extends State<MedicineForm> {
   String? selectedDuration;
   List<int> selectedWeekdays = [];
   List<String> selectedTimes = [];
+  late MealRelation selectedMealRelation;
 
   List<String> frequencyLabels(AppLocalizations l10n) => [
         l10n.medEveryDay,
@@ -112,6 +119,7 @@ class _MedicineFormState extends State<MedicineForm> {
         .toList()
       ..sort();
     selectedTimes = List<String>.from(widget.initialTimes);
+    selectedMealRelation = widget.initialMealRelation;
   }
 
   @override
@@ -142,6 +150,10 @@ class _MedicineFormState extends State<MedicineForm> {
           .toSet()
           .toList()
         ..sort();
+    }
+
+    if (oldWidget.initialMealRelation != widget.initialMealRelation) {
+      selectedMealRelation = widget.initialMealRelation;
     }
 
     _syncLocalizedLabels();
@@ -491,6 +503,36 @@ class _MedicineFormState extends State<MedicineForm> {
                   .toList(),
             ),
           ),
+        const SizedBox(height: 20),
+
+        Text(l10n.medMealRelation, style: sectionLabelStyle),
+        const SizedBox(height: 8),
+        DropdownButtonFormField<MealRelation>(
+          initialValue: selectedMealRelation,
+          decoration: medicineDecoration(
+            context,
+            suffixIcon: Icon(Icons.keyboard_arrow_down, color: iconColor),
+          ).copyWith(hintText: l10n.medMealRelation),
+          items: [
+            DropdownMenuItem(
+              value: MealRelation.beforeFood,
+              child: Text(l10n.medBeforeFood),
+            ),
+            DropdownMenuItem(
+              value: MealRelation.afterFood,
+              child: Text(l10n.medAfterFood),
+            ),
+            DropdownMenuItem(
+              value: MealRelation.noRelation,
+              child: Text(l10n.medNoMealRelation),
+            ),
+          ],
+          onChanged: (relation) {
+            if (relation == null) return;
+            setState(() => selectedMealRelation = relation);
+            widget.onMealRelationChanged(relation);
+          },
+        ),
         const SizedBox(height: 20),
 
         Text(l10n.medFrequencyDuration, style: sectionLabelStyle),

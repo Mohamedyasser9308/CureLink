@@ -976,6 +976,18 @@ class AppLocalizationsAr extends AppLocalizations {
   String get medDoseQuantity => 'الجرعة والكمية';
 
   @override
+  String get medMealRelation => 'علاقة الدواء بالطعام';
+
+  @override
+  String get medBeforeFood => 'قبل الأكل';
+
+  @override
+  String get medAfterFood => 'بعد الأكل';
+
+  @override
+  String get medNoMealRelation => 'لا توجد علاقة بالطعام';
+
+  @override
   String get medDoseRequired => 'من فضلك أدخل الجرعة والكمية';
 
   @override

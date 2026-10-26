@@ -1922,6 +1922,30 @@ abstract class AppLocalizations {
   /// **'Dose & quantity'**
   String get medDoseQuantity;
 
+  /// No description provided for @medMealRelation.
+  ///
+  /// In en, this message translates to:
+  /// **'Relation to food'**
+  String get medMealRelation;
+
+  /// No description provided for @medBeforeFood.
+  ///
+  /// In en, this message translates to:
+  /// **'Before food'**
+  String get medBeforeFood;
+
+  /// No description provided for @medAfterFood.
+  ///
+  /// In en, this message translates to:
+  /// **'After food'**
+  String get medAfterFood;
+
+  /// No description provided for @medNoMealRelation.
+  ///
+  /// In en, this message translates to:
+  /// **'No relation to food'**
+  String get medNoMealRelation;
+
   /// No description provided for @medDoseRequired.
   ///
   /// In en, this message translates to:
