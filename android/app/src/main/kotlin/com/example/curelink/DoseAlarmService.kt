@@ -38,6 +38,7 @@ class DoseAlarmService : Service() {
         const val NOTIFICATION_ID = 73104
 
         private const val ACTIVE_ALARM_KEY = "active_alarm_id"
+        private const val ACTIVE_DOSE_PAYLOAD_KEY = "active_dose_payload"
         private const val CHANNEL_ID = "active_dose_alarm_v2"
         private const val TAG = "CureLinkDoseAlarm"
 
@@ -183,6 +184,7 @@ class DoseAlarmService : Service() {
 
             preferences.edit()
                 .remove(ACTIVE_ALARM_KEY)
+                .remove(ACTIVE_DOSE_PAYLOAD_KEY)
                 .apply()
 
             val manager = context.getSystemService(
@@ -219,26 +221,45 @@ class DoseAlarmService : Service() {
             return START_NOT_STICKY
         }
 
-        activeAlarmId = intent?.getIntExtra(
+        val preferences = getSharedPreferences(
+            DoseAlarmBootReceiver.PREFERENCES,
+            MODE_PRIVATE
+        )
+        val requestedAlarmId = intent?.getIntExtra(
             DoseAlarmReceiver.EXTRA_ALARM_ID,
             INVALID_ALARM_ID
         ) ?: INVALID_ALARM_ID
 
-        activeDosePayload = intent?.getStringExtra(
-            DoseAlarmReceiver.EXTRA_DOSE_PAYLOAD
-        )
+        if (requestedAlarmId == INVALID_ALARM_ID) {
+            // START_STICKY may restart this service without its original
+            // intent after Android reclaims the app process.
+            activeAlarmId = preferences.getInt(
+                ACTIVE_ALARM_KEY,
+                INVALID_ALARM_ID
+            )
+            activeDosePayload = preferences.getString(
+                ACTIVE_DOSE_PAYLOAD_KEY,
+                null
+            )
+            if (activeAlarmId == INVALID_ALARM_ID) {
+                stopSelf(startId)
+                return START_NOT_STICKY
+            }
+        } else {
+            activeAlarmId = requestedAlarmId
+            activeDosePayload = intent?.getStringExtra(
+                DoseAlarmReceiver.EXTRA_DOSE_PAYLOAD
+            )
+            preferences.edit()
+                .putInt(ACTIVE_ALARM_KEY, activeAlarmId)
+                .putString(ACTIVE_DOSE_PAYLOAD_KEY, activeDosePayload)
+                .apply()
+        }
 
         Log.i(
             TAG,
             "Starting alarm service: id=$activeAlarmId"
         )
-
-        getSharedPreferences(
-            DoseAlarmBootReceiver.PREFERENCES,
-            MODE_PRIVATE
-        ).edit()
-            .putInt(ACTIVE_ALARM_KEY, activeAlarmId)
-            .apply()
 
         try {
             startForegroundCompat(
@@ -257,7 +278,7 @@ class DoseAlarmService : Service() {
         watchDoseConfirmation(activeDosePayload)
         startAlarmTone()
 
-        return START_NOT_STICKY
+        return START_STICKY
     }
 
     private fun startForegroundCompat(
@@ -315,7 +336,14 @@ class DoseAlarmService : Service() {
                         return@addSnapshotListener
                     }
 
-                    val status = snapshot?.getString("status")
+                    // WorkManager/headless starts and process restores can
+                    // initially expose a stale cached document. Do not stop
+                    // the audible alarm until the server confirms the dose
+                    // was taken; the explicit notification action stops it
+                    // locally as soon as the user taps Taken.
+                    val status = snapshot
+                        ?.takeIf { !it.metadata.isFromCache }
+                        ?.getString("status")
 
                     if (status == "taken") {
                         Log.i(
@@ -460,6 +488,7 @@ class DoseAlarmService : Service() {
         ) {
             preferences.edit()
                 .remove(ACTIVE_ALARM_KEY)
+                .remove(ACTIVE_DOSE_PAYLOAD_KEY)
                 .apply()
         }
 

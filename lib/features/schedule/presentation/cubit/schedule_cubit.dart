@@ -76,7 +76,7 @@ class ScheduleCubit extends Cubit<ScheduleState> {
       // Keep the schedule visible even when Firestore is temporarily
       // unavailable or its reconciliation write is rejected by the network.
       try {
-        await doseRepository.reconcileMedicationDoses(
+        final removedDoseIds = await doseRepository.reconcileMedicationDoses(
           patientUid: uid,
           medicationIds: medications.map((medication) => medication.id).toSet(),
           scheduledDoses: generatedDoses,
@@ -84,6 +84,12 @@ class ScheduleCubit extends Cubit<ScheduleState> {
           to: rangeEnd,
           now: now,
         );
+        for (final doseId in removedDoseIds) {
+          await DoseNotificationService.instance.cancelDoseId(
+            doseId,
+            stopRinging: true,
+          );
+        }
       } catch (error, stackTrace) {
         debugPrint('Schedule reconciliation failed; showing generated doses: $error');
         debugPrintStack(stackTrace: stackTrace);

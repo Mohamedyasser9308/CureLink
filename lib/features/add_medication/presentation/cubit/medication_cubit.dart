@@ -228,7 +228,7 @@ class MedicationCubit extends Cubit<MedicationState> {
           to: rangeEnd,
           now: now,
         );
-        await doseRepository.reconcileMedicationDoses(
+        final removedDoseIds = await doseRepository.reconcileMedicationDoses(
           patientUid: normalizedPatientId,
           medicationIds: {medication.id},
           scheduledDoses: scheduledDoses,
@@ -236,6 +236,12 @@ class MedicationCubit extends Cubit<MedicationState> {
           to: rangeEnd,
           now: now,
         );
+        for (final doseId in removedDoseIds) {
+          await DoseNotificationService.instance.cancelDoseId(
+            doseId,
+            stopRinging: true,
+          );
+        }
       }
 
       await DoseNotificationService.instance.syncPatientSchedule(

@@ -363,7 +363,10 @@ class DoseNotificationService {
     _registeredToken = null;
   }
 
-  Future<void> syncPatientSchedule(String patientUid) async {
+  Future<void> syncPatientSchedule(
+    String patientUid, {
+    bool rethrowOnFailure = false,
+  }) async {
     try {
       final now = DateTime.now();
       final today = DateTime(now.year, now.month, now.day);
@@ -389,7 +392,7 @@ class DoseNotificationService {
           ),
       ];
 
-      await repository.reconcileMedicationDoses(
+      final removedDoseIds = await repository.reconcileMedicationDoses(
         patientUid: patientUid,
         medicationIds:
             medications.map((item) => item.id).toSet(),
@@ -398,6 +401,9 @@ class DoseNotificationService {
         to: end,
         now: now,
       );
+      for (final doseId in removedDoseIds) {
+        await cancelDoseId(doseId, stopRinging: true);
+      }
 
       final alarms = await repository.getDoses(
         patientUid: patientUid,
@@ -409,6 +415,7 @@ class DoseNotificationService {
     } catch (error, stackTrace) {
       debugPrint('Could not sync medication reminders: $error');
       debugPrintStack(stackTrace: stackTrace);
+      if (rethrowOnFailure) rethrow;
     }
   }
 
@@ -634,8 +641,15 @@ class DoseNotificationService {
   }
 
   Future<void> cancelDose(DoseModel dose) async {
-    final dueId = _stableId('${dose.id}:due');
-    final lateId = _stableId('${dose.id}:late');
+    await cancelDoseId(dose.id, stopRinging: true);
+  }
+
+  Future<void> cancelDoseId(
+    String doseId, {
+    bool stopRinging = false,
+  }) async {
+    final dueId = _stableId('$doseId:due');
+    final lateId = _stableId('$doseId:late');
 
     try {
       await _plugin.cancel(dueId);
@@ -646,7 +660,7 @@ class DoseNotificationService {
       );
     }
 
-    await _cancelAndroidAlarm(dueId, stopRinging: true);
+    await _cancelAndroidAlarm(dueId, stopRinging: stopRinging);
   }
 
   Future<void> _cancelAndroidAlarm(

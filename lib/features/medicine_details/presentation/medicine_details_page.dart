@@ -234,10 +234,17 @@ class _MedicineDetailsPageState extends State<MedicineDetailsPage> {
         medicationId: widget.medicationId,
       );
       try {
-        await DoseRepository().deletePendingDosesForMedication(
+        final removedDoseIds = await DoseRepository()
+            .deletePendingDosesForMedication(
           patientUid: widget.patientId,
           medicationId: widget.medicationId,
         );
+        for (final doseId in removedDoseIds) {
+          await DoseNotificationService.instance.cancelDoseId(
+            doseId,
+            stopRinging: true,
+          );
+        }
         await DoseNotificationService.instance.syncPatientSchedule(
           widget.patientId,
         );

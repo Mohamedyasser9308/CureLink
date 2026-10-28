@@ -24,16 +24,35 @@ const _doseScheduleRefreshTask = 'curelink-dose-schedule-refresh';
 void doseScheduleCallbackDispatcher() {
   Workmanager().executeTask((task, inputData) async {
     if (task != _doseScheduleRefreshTask) return true;
-    WidgetsFlutterBinding.ensureInitialized();
-    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-    final user = FirebaseAuth.instance.currentUser;
-    if (user == null) return true;
-    await DoseNotificationService.instance.initialize(
-      onOpen: (_) {},
-      requestPermissions: false,
-    );
-    await DoseNotificationService.instance.syncPatientSchedule(user.uid);
-    return true;
+    try {
+      WidgetsFlutterBinding.ensureInitialized();
+      await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+      // Firebase Auth may still be restoring its persisted session when a
+      // headless WorkManager engine starts. Wait for its initial auth event
+      // instead of treating a temporary null currentUser as a signed-out user.
+      final user = FirebaseAuth.instance.currentUser ??
+          await FirebaseAuth.instance
+              .authStateChanges()
+              .first
+              .timeout(const Duration(seconds: 15));
+      if (user == null) return true;
+
+      await DoseNotificationService.instance.initialize(
+        onOpen: (_) {},
+        requestPermissions: false,
+      );
+      await DoseNotificationService.instance.syncPatientSchedule(
+        user.uid,
+        rethrowOnFailure: true,
+      );
+      return true;
+    } catch (error, stackTrace) {
+      debugPrint('Background dose schedule refresh failed: $error');
+      debugPrintStack(stackTrace: stackTrace);
+      // Ask WorkManager to retry transient Firebase/session failures.
+      return false;
+    }
   });
 }
 

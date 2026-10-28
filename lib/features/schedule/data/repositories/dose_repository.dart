@@ -218,7 +218,7 @@ class DoseRepository {
 
   /// Removes only pending future doses when a medication is deleted.
   /// Taken and missed records remain available as adherence history.
-  Future<void> deletePendingDosesForMedication({
+  Future<List<String>> deletePendingDosesForMedication({
     required String patientUid,
     required String medicationId,
   }) async {
@@ -239,6 +239,7 @@ class DoseRepository {
       }
       await batch.commit();
     }
+    return deletable.map((doc) => doc.id).toList(growable: false);
   }
 
   /// Reconciles future dose records with the medication's current schedule.
@@ -246,7 +247,7 @@ class DoseRepository {
   /// Matching doses keep their current status. Obsolete upcoming doses are
   /// removed, while taken and missed records remain as history. New schedule
   /// times are inserted using the same deterministic IDs as normal generation.
-  Future<void> reconcileMedicationDoses({
+  Future<List<String>> reconcileMedicationDoses({
     required String patientUid,
     required Set<String> medicationIds,
     required List<DoseModel> scheduledDoses,
@@ -254,7 +255,7 @@ class DoseRepository {
     required DateTime to,
     required DateTime now,
   }) async {
-    if (medicationIds.isEmpty) return;
+    if (medicationIds.isEmpty) return const [];
 
     final ref = dosesRef(patientUid);
     final snapshot = await ref
@@ -272,6 +273,7 @@ class DoseRepository {
         if (medicationIds.contains(dose.medicationId)) dose.id: dose,
     };
     final writes = <void Function(WriteBatch)>[];
+    final removedDoseIds = <String>[];
 
     for (final dose in desiredById.values) {
       final existingDoc = existingById.remove(dose.id);
@@ -311,6 +313,7 @@ class DoseRepository {
           dose.snoozedUntil != null &&
           dose.snoozedUntil!.isAfter(now);
       if (isFutureUpcoming || isActiveSnooze) {
+        removedDoseIds.add(doc.id);
         writes.add((batch) => batch.delete(doc.reference));
       }
     }
@@ -323,6 +326,7 @@ class DoseRepository {
       }
       await batch.commit();
     }
+    return removedDoseIds;
   }
 
   String _normalizeFrequency(String value) => value

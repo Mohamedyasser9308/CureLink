@@ -157,7 +157,10 @@ class CureLinkAlarmBridgePlugin : FlutterPlugin, ActivityAware, MethodChannel.Me
         appContext.stopService(
             Intent().setClassName(appContext, "${appContext.packageName}.DoseAlarmService"),
         )
-        preferences.edit().remove(ACTIVE_ALARM_KEY).apply()
+        preferences.edit()
+            .remove(ACTIVE_ALARM_KEY)
+            .remove(ACTIVE_DOSE_PAYLOAD_KEY)
+            .apply()
         (appContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager)
             .cancel(ACTIVE_NOTIFICATION_ID)
     }
@@ -241,6 +244,7 @@ class CureLinkAlarmBridgePlugin : FlutterPlugin, ActivityAware, MethodChannel.Me
         private const val KEY_PREFIX = "alarm_"
         private const val PAYLOAD_PREFIX = "payload_"
         private const val ACTIVE_ALARM_KEY = "active_alarm_id"
+        private const val ACTIVE_DOSE_PAYLOAD_KEY = "active_dose_payload"
         private const val INVALID_ALARM_ID = -1
         private const val ACTIVE_NOTIFICATION_ID = 73104
         private const val EXTRA_ALARM_ID = "dose_alarm_id"
