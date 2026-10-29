@@ -110,14 +110,27 @@ service cloud.firestore {
           ]);
 
         allow update: if canManagePatientData(userId)
-          && validDoseData()
-          && request.resource.data.medicationId == resource.data.medicationId
-          && request.resource.data.scheduledAt == resource.data.scheduledAt
-          && request.resource.data.createdAt == resource.data.createdAt
-          // The server owns the caregiver alert claim fields.
-          && !request.resource.data.diff(resource.data).affectedKeys().hasAny([
-            'caregiverAlertClaimed', 'caregiverAlertAt'
-          ]);
+          && (
+            // Reminder actions touch only these fields. Allow them on legacy
+            // dose documents even if an optional timestamp was never stored.
+            (request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+                'status', 'takenAt', 'snoozedUntil', 'updatedAt'
+              ])
+              && request.resource.data.status in ['taken', 'snoozed']
+              && (request.resource.data.takenAt == null
+                || request.resource.data.takenAt is timestamp)
+              && (request.resource.data.snoozedUntil == null
+                || request.resource.data.snoozedUntil is timestamp)
+              && request.resource.data.updatedAt is timestamp)
+            || (validDoseData()
+              && request.resource.data.medicationId == resource.data.medicationId
+              && request.resource.data.scheduledAt == resource.data.scheduledAt
+              && request.resource.data.createdAt == resource.data.createdAt
+              // The server owns the caregiver alert claim fields.
+              && !request.resource.data.diff(resource.data).affectedKeys().hasAny([
+                'caregiverAlertClaimed', 'caregiverAlertAt'
+              ]))
+          );
 
         allow delete: if canManagePatientData(userId)
           && ((resource.data.status == 'upcoming'

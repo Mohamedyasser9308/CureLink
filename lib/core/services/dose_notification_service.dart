@@ -140,6 +140,11 @@ class DoseNotificationService {
   bool _notificationsAllowed = true;
   bool _exactAlarmsAllowed = false;
 
+  // A dose can be updated from both the reminder screen and the schedule
+  // stream. Serialize its cancel-and-reschedule work so the old alarm cannot
+  // win a race and fire immediately after a snooze.
+  final Map<String, Future<void>> _doseScheduleOperations = {};
+
   String? initialPayload;
   String? _lastOpenedPayload;
   DateTime? _lastOpenedAt;
@@ -687,6 +692,25 @@ class DoseNotificationService {
   }
 
   Future<void> scheduleDose({
+    required String patientUid,
+    required DoseModel dose,
+  }) async {
+    final previous = _doseScheduleOperations[dose.id] ?? Future<void>.value();
+    final operation = previous
+        .catchError((Object _) {})
+        .then((_) => _scheduleDoseNow(patientUid: patientUid, dose: dose));
+    _doseScheduleOperations[dose.id] = operation;
+
+    try {
+      await operation;
+    } finally {
+      if (identical(_doseScheduleOperations[dose.id], operation)) {
+        _doseScheduleOperations.remove(dose.id);
+      }
+    }
+  }
+
+  Future<void> _scheduleDoseNow({
     required String patientUid,
     required DoseModel dose,
   }) async {
