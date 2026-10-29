@@ -30,6 +30,8 @@ dependencies:
   cloud_functions: ^6.5.0
   table_calendar: ^3.2.1
   flutter_svg: ^2.3.0
+  firebase_messaging: ^16.7.1
+  
   
 
 
