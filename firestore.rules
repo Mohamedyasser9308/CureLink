@@ -211,6 +211,14 @@ service cloud.firestore {
       allow delete: if false;
     }
 
+    // SOS requests are written only by the authenticated backend. Patients
+    // can observe delivery status for their own request from the app.
+    match /sos_requests/{requestId} {
+      allow read: if isSignedIn()
+        && resource.data.patientUid == request.auth.uid;
+      allow write: if false;
+    }
+
     match /medications/{medicationId} {
       allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
       allow read: if isSignedIn() && resource.data.userId == request.auth.uid;

@@ -1,5 +1,6 @@
 interface Env {
   FIREBASE_PROJECT_ID: string;
+  FIREBASE_WEB_API_KEY: string;
   GOOGLE_SERVICE_ACCOUNT_JSON: string;
 }
 
@@ -47,6 +48,40 @@ const MAX_PARALLEL_REQUESTS = 4;
 let cachedAccessToken: { token: string; expiresAt: number } | undefined;
 
 export default {
+  async fetch(request: Request, env: Env): Promise<Response> {
+    const url = new URL(request.url);
+    if (request.method !== "POST" || url.pathname !== "/sos") {
+      return new Response("Not found", { status: 404 });
+    }
+    try {
+      const authorization = request.headers.get("authorization") ?? "";
+      const idToken = authorization.match(/^Bearer\s+(.+)$/i)?.[1];
+      if (!idToken) return jsonResponse({ error: "Authentication required" }, 401);
+      const identityResponse = await fetch(
+        `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${encodeURIComponent(env.FIREBASE_WEB_API_KEY)}`,
+        { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ idToken }) },
+      );
+      if (!identityResponse.ok) return jsonResponse({ error: "Invalid authentication" }, 401);
+      const identity = await identityResponse.json() as { users?: Array<{ localId?: string }> };
+      const patientUid = identity.users?.[0]?.localId;
+      if (!patientUid) return jsonResponse({ error: "Invalid authentication" }, 401);
+      const body = await request.json() as { requestId?: unknown };
+      const requestId = typeof body.requestId === "string" ? body.requestId.trim() : "";
+      if (!requestId || requestId.includes("/") || requestId.length > 150) {
+        return jsonResponse({ error: "Invalid requestId" }, 400);
+      }
+      const account = parseServiceAccount(env.GOOGLE_SERVICE_ACCOUNT_JSON);
+      if (account.project_id && account.project_id !== env.FIREBASE_PROJECT_ID) {
+        throw new Error("Service account project does not match FIREBASE_PROJECT_ID");
+      }
+      const token = await getAccessToken(account);
+      const result = await deliverSos(env.FIREBASE_PROJECT_ID, token, patientUid, requestId);
+      return jsonResponse({ requestId, ...result }, result.status === "failed" ? 502 : 200);
+    } catch (error) {
+      console.error("SOS delivery failed:", error);
+      return jsonResponse({ error: "SOS delivery failed" }, 500);
+    }
+  },
   async scheduled(
     _controller: ScheduledController,
     env: Env,
@@ -62,6 +97,89 @@ export default {
     await deliverPendingAlerts(env.FIREBASE_PROJECT_ID, token);
   },
 };
+
+function jsonResponse(value: unknown, status: number): Response {
+  return new Response(JSON.stringify(value), {
+    status,
+    headers: { "content-type": "application/json", "cache-control": "no-store" },
+  });
+}
+
+async function deliverSos(
+  projectId: string, token: string, patientUid: string, requestId: string,
+): Promise<{ status: "sent" | "partiallySent" | "failed" }> {
+  const existing = await firestoreRequest(projectId, token, `sos_requests/${requestId}`, undefined, true);
+  if (existing.ok) {
+    const document = await existing.json() as FirestoreDocument;
+    if (document.fields.patientUid?.stringValue !== patientUid) throw new Error("SOS request belongs to another user");
+    const state = document.fields.status?.stringValue;
+    if (state === "sent" || state === "partiallySent") return { status: state };
+  }
+  const connections = await queryDocuments(projectId, token, "connections", [
+    equalsFilter("patientUid", patientUid), equalsFilter("status", "accepted"),
+  ], 100);
+  const accepted = connections.filter((c) => c.fields.patientUid?.stringValue === patientUid && c.fields.status?.stringValue === "accepted");
+  const caregivers = await mapWithConcurrency(accepted, MAX_PARALLEL_REQUESTS, async (connection) => {
+    const caregiverUid = connection.fields.caregiverUid?.stringValue;
+    if (!caregiverUid || caregiverUid === patientUid) return undefined;
+    const caregiver = await getUser(projectId, token, caregiverUid);
+    const tokens = stringArray(caregiver?.fields.fcmTokens);
+    const legacyToken = caregiver?.fields.fcmToken?.stringValue;
+    if (legacyToken) tokens.push(legacyToken);
+    return { caregiverUid, tokens: [...new Set(tokens)] };
+  });
+  const recipients = caregivers.filter((item): item is { caregiverUid: string; tokens: string[] } => !!item);
+  const caregiverUids = [...new Set(recipients.map((r) => r.caregiverUid))];
+  if (caregiverUids.length === 0) throw new Error("No accepted caregivers are linked to this patient");
+  const patientName = await getUserName(projectId, token, patientUid);
+  const title = "Emergency SOS";
+  const body = `${patientName} needs your help.`;
+  const createdAt = new Date().toISOString();
+  const deviceTokens = [...new Set(recipients.flatMap((r) => r.tokens))];
+  const results = await mapWithConcurrency(deviceTokens, MAX_PARALLEL_REQUESTS, (deviceToken) =>
+    sendSosPush(projectId, token, deviceToken, { title, body, requestId, patientUid }));
+  const invalidTokens = results.flatMap((result, i) => result === "invalid" ? [deviceTokens[i]] : []);
+  if (invalidTokens.length) await removeInvalidTokens(projectId, token, recipients, invalidTokens);
+  const failures = results.filter((r) => r === "failed").length;
+  const delivered = results.filter((r) => r === "sent").length;
+  const status = delivered === deviceTokens.length && delivered > 0 ? "sent" : delivered > 0 ? "partiallySent" : "failed";
+  const requestDoc = {
+    name: documentName(projectId, `sos_requests/${requestId}`),
+    fields: {
+      patientUid: { stringValue: patientUid }, caregiverUids: { arrayValue: { values: caregiverUids.map((uid) => ({ stringValue: uid })) } },
+      createdAt: { timestampValue: createdAt }, status: { stringValue: status },
+    },
+  };
+  const writes: object[] = [{ update: requestDoc }];
+  for (const caregiverUid of caregiverUids) {
+    writes.push({ update: { name: documentName(projectId, `users/${caregiverUid}/notifications/sos_${requestId}`), fields: {
+      type: { stringValue: "sos" }, title: { stringValue: title }, body: { stringValue: body }, patientUid: { stringValue: patientUid },
+      requestId: { stringValue: requestId }, createdAt: { timestampValue: createdAt }, read: { booleanValue: false },
+    } } });
+  }
+  const saved = await firestoreRequest(projectId, token, "documents:commit", { writes }, true);
+  if (!saved.ok) throw new Error(`Could not save SOS request/notifications: ${await saved.text()}`);
+  if (failures) console.error(`SOS push failed for ${failures} device(s)`);
+  return { status };
+}
+
+async function sendSosPush(
+  projectId: string, token: string, registrationToken: string,
+  details: { title: string; body: string; requestId: string; patientUid: string },
+): Promise<"sent" | "invalid" | "failed"> {
+  const response = await fetch(`https://fcm.googleapis.com/v1/projects/${projectId}/messages:send`, {
+    method: "POST", headers: { authorization: `Bearer ${token}`, "content-type": "application/json" },
+    body: JSON.stringify({ message: {
+      token: registrationToken, notification: { title: details.title, body: details.body },
+      data: { type: "sos", requestId: details.requestId, patientUid: details.patientUid, notificationId: `sos_${details.requestId}` },
+      android: { priority: "HIGH", notification: { channel_id: "caregiver_sos_alarm", sound: "default", tag: `sos_${details.requestId}`, priority: "MAX" } },
+      apns: { payload: { aps: { sound: "default", "interruption-level": "time-sensitive" } } },
+    } }),
+  });
+  if (response.ok) return "sent";
+  console.error(`SOS FCM send failed (${response.status}): ${await response.text()}`);
+  return response.status === 404 ? "invalid" : "failed";
+}
 
 function parseServiceAccount(json: string): ServiceAccount {
   const account = JSON.parse(json) as Partial<ServiceAccount>;

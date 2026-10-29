@@ -325,24 +325,36 @@ class DoseNotificationService {
             message.messageId ??
             '${notification.title}:${notification.body}';
 
+    final isSos = message.data['type'] == 'sos';
     await _plugin.show(
       notificationKey.hashCode & 0x7fffffff,
       notification.title,
       notification.body,
-      const NotificationDetails(
+      NotificationDetails(
         android: AndroidNotificationDetails(
-          'caregiver_alerts',
-          'Caregiver alerts',
+          isSos ? 'caregiver_sos_alarm' : 'caregiver_alerts',
+          isSos ? 'Emergency SOS alarms' : 'Caregiver alerts',
           channelDescription:
-              'Alerts about linked patients medication doses',
+              isSos
+                  ? 'Urgent emergency alerts from linked patients'
+                  : 'Alerts about linked patients medication doses',
           importance: Importance.max,
           priority: Priority.high,
-          category: AndroidNotificationCategory.alarm,
+          category: isSos
+              ? AndroidNotificationCategory.alarm
+              : AndroidNotificationCategory.message,
           visibility: NotificationVisibility.public,
+          playSound: true,
+          audioAttributesUsage: isSos
+              ? AudioAttributesUsage.alarm
+              : AudioAttributesUsage.notification,
         ),
         iOS: DarwinNotificationDetails(
           presentAlert: true,
           presentSound: true,
+          interruptionLevel: isSos
+              ? InterruptionLevel.timeSensitive
+              : InterruptionLevel.active,
         ),
       ),
     );
@@ -492,6 +504,18 @@ class DoseNotificationService {
 
     final android = _plugin.resolvePlatformSpecificImplementation<
         AndroidFlutterLocalNotificationsPlugin>();
+
+    await android?.createNotificationChannel(
+      const AndroidNotificationChannel(
+        'caregiver_sos_alarm',
+        'Emergency SOS alarms',
+        description: 'Urgent emergency alerts from linked patients',
+        importance: Importance.max,
+        playSound: true,
+        enableVibration: true,
+        audioAttributesUsage: AudioAttributesUsage.alarm,
+      ),
+    );
 
     _notificationsAllowed = requestPermissions
         ? await android?.requestNotificationsPermission() ?? true

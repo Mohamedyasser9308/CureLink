@@ -1,10 +1,11 @@
 name = "curelink-dose-monitor"
 main = "src/index.ts"
 compatibility_date = "2026-10-22"
-workers_dev = false
+workers_dev = true
 
 [vars]
 FIREBASE_PROJECT_ID = "curelink-3f36f"
+FIREBASE_WEB_API_KEY = "AIzaSyBLg-6WEk1MdiXYxT3eX9qgFezB7kmm0-U"
 
 [triggers]
 crons = ["* * * * *"]

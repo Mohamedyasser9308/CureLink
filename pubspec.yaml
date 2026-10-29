@@ -1,3 +1,4 @@
+
 name: curelink
 description: "A new Flutter project."
 
@@ -29,18 +30,16 @@ dependencies:
   http: ^1.6.0
   cloud_functions: ^6.5.0
   table_calendar: ^3.2.1
-  firebase_messaging: ^16.7.0
+  firebase_messaging: ^16.7.1
   flutter_local_notifications: ^18.0.1
-  flutter_timezone: 4.1.1
   timezone: ^0.10.1
   workmanager: ^0.10.10
+  flutter_timezone: ^4.1.1
+
   curelink_alarm_bridge:
     path: packages/curelink_alarm_bridge
-  flutter_svg: ^2.3.0
- 
-  
-  
 
+  flutter_svg: ^2.3.0
 
 dev_dependencies:
   flutter_test:
@@ -69,3 +68,4 @@ flutter:
     - assets/med3.jpg
     - assets/medicine.png
     - assets/siren.svg
+    - assets/data/egyptian-drugs.json
