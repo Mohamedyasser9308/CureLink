@@ -1142,5 +1142,31 @@
         "type": "String"
       }
     }
+  },
+  
+ 
+  "emergencyWarning": "Separate from medication confirmation. Contact local emergency services for immediate danger.",
+  "sosHoldInstruction": "Press and hold for 3 seconds",
+  "sosKeepHolding": "Keep holding...",
+  "sosResultPending": "Request processing",
+  "sosUnavailable": "SOS unavailable",
+  "connectedCaregivers": "CONNECTED CAREGIVERS",
+  "caregiverPlaceholder": "Caregiver name · connection status",
+  "emergencyContact": "EMERGENCY CONTACT",
+  "emergencyContactPlaceholder": "Contact name · phone placeholder",
+  "sosButtonLabel": "Emergency SOS",
+  "sosButtonHint": "Press and hold for 3 seconds",
+  "sosPressAndHold": "Press and hold for 3 seconds",
+"sosConceptualResult": "Conceptual result · no alert claim",
+"caregiverNameStatusPlaceholder": "Caregiver name · connection status",
+"sosHoldHint": "Press and hold for 3 seconds",
+"sosSeconds": "{seconds} seconds",
+"@sosSeconds": {
+  "placeholders": {
+    "seconds": {
+      "type": "String"
+    }
   }
+}
+  
 }

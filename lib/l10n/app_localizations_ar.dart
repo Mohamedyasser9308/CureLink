@@ -1170,4 +1170,53 @@ class AppLocalizationsAr extends AppLocalizations {
   String scheduleNextReminder(String time) {
     return 'التذكير التالي: $time';
   }
+
+  @override
+  String get emergencyWarning =>
+      'هذا التنبيه منفصل عن تأكيد تناول الدواء. اتصلي بخدمات الطوارئ المحلية في حالات الخطر الفوري.';
+
+  @override
+  String get sosHoldInstruction => 'اضغطي باستمرار لمدة 3 ثوانٍ';
+
+  @override
+  String get sosKeepHolding => 'استمري في الضغط...';
+
+  @override
+  String get sosResultPending => 'جارٍ معالجة الطلب';
+
+  @override
+  String get sosUnavailable => 'خدمة الطوارئ غير متاحة';
+
+  @override
+  String get connectedCaregivers => 'مقدمو الرعاية المرتبطون';
+
+  @override
+  String get caregiverPlaceholder => 'اسم مقدم الرعاية · حالة الاتصال';
+
+  @override
+  String get emergencyContactPlaceholder => 'الاسم · رقم الهاتف';
+
+  @override
+  String get sosButtonLabel => 'طوارئ SOS';
+
+  @override
+  String get sosButtonHint => 'اضغطي باستمرار لمدة 3 ثوانٍ';
+
+  @override
+  String get sosPressAndHold => 'اضغطي باستمرار لمدة 3 ثوانٍ';
+
+  @override
+  String get sosConceptualResult => 'حالة توضيحية · لم يتم إرسال بلاغ';
+
+  @override
+  String get caregiverNameStatusPlaceholder =>
+      'اسم مقدم الرعاية · حالة الاتصال';
+
+  @override
+  String get sosHoldHint => 'اضغطي باستمرار لمدة 3 ثوانٍ';
+
+  @override
+  String sosSeconds(String seconds) {
+    return '$seconds ثانية';
+  }
 }
