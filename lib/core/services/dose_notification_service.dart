@@ -60,6 +60,10 @@ void doseNotificationBackgroundResponse(
         .collection('doses')
         .doc(parts[1]);
 
+    // Capture the timestamp before the transaction. Firestore may retry
+    // the callback, and every retry should use the same timestamp.
+    final now = DateTime.now();
+
     final wasSaved =
         await FirebaseFirestore.instance.runTransaction<bool>(
       (transaction) async {
@@ -67,9 +71,11 @@ void doseNotificationBackgroundResponse(
         final data = snapshot.data();
 
         if (data == null) return false;
-        if (data['status'] == 'taken') return true;
 
-        final now = DateTime.now();
+        // Keep terminal states consistent with the reminder screen.
+        // A missed dose must not be changed to taken from an old notification.
+        if (data['status'] == 'taken') return true;
+        if (data['status'] == 'missed') return false;
 
         transaction.update(doseRef, {
           'status': 'taken',
@@ -585,11 +591,25 @@ class DoseNotificationService {
           dose.status == DoseStatus.missed) {
         try {
           await _plugin.cancel(dueId);
-          await _plugin.cancel(lateId);
-          await _cancelAndroidAlarm(dueId);
         } catch (error) {
           debugPrint(
-            'Could not cancel inactive dose ${dose.id}: $error',
+            'Could not cancel inactive due notification ${dose.id}: $error',
+          );
+        }
+
+        try {
+          await _plugin.cancel(lateId);
+        } catch (error) {
+          debugPrint(
+            'Could not cancel inactive late notification ${dose.id}: $error',
+          );
+        }
+
+        try {
+          await _cancelAndroidAlarm(dueId, stopRinging: true);
+        } catch (error) {
+          debugPrint(
+            'Could not cancel inactive native alarm ${dose.id}: $error',
           );
         }
         continue;
@@ -669,8 +689,8 @@ class DoseNotificationService {
     }
   }
 
-  Future<void> cancelDose(DoseModel dose) async {
-    await cancelDoseId(dose.id, stopRinging: true);
+  Future<void> cancelDose(DoseModel dose) {
+    return cancelDoseId(dose.id, stopRinging: true);
   }
 
   Future<void> cancelDoseId(
@@ -679,17 +699,44 @@ class DoseNotificationService {
   }) async {
     final dueId = _stableId('$doseId:due');
     final lateId = _stableId('$doseId:late');
+    final errors = <Object>[];
 
+    // Attempt every cancellation independently. A failure to cancel the
+    // first notification must not prevent the late notification or native
+    // alarm from being cancelled.
     try {
       await _plugin.cancel(dueId);
-      await _plugin.cancel(lateId);
-    } catch (error) {
-      debugPrint(
-        'Could not cancel dose notification: $error',
-      );
+    } catch (error, stackTrace) {
+      errors.add(error);
+      debugPrint('Could not cancel due notification ($dueId): $error');
+      debugPrintStack(stackTrace: stackTrace);
     }
 
-    await _cancelAndroidAlarm(dueId, stopRinging: stopRinging);
+    try {
+      await _plugin.cancel(lateId);
+    } catch (error, stackTrace) {
+      errors.add(error);
+      debugPrint('Could not cancel late notification ($lateId): $error');
+      debugPrintStack(stackTrace: stackTrace);
+    }
+
+    try {
+      await _cancelAndroidAlarm(
+        dueId,
+        stopRinging: stopRinging,
+      );
+    } catch (error, stackTrace) {
+      errors.add(error);
+      debugPrint('Could not cancel native alarm ($dueId): $error');
+      debugPrintStack(stackTrace: stackTrace);
+    }
+
+    if (errors.isNotEmpty) {
+      throw StateError(
+        'Failed to completely cancel dose $doseId: '
+        '${errors.join(' | ')}',
+      );
+    }
   }
 
   Future<void> _cancelAndroidAlarm(
@@ -698,21 +745,15 @@ class DoseNotificationService {
   }) async {
     if (defaultTargetPlatform != TargetPlatform.android) return;
 
-    try {
-      await _androidAlarmChannel.invokeMethod<void>(
-        'cancel',
-        {
-          'id': dueId,
-          'stopRinging': stopRinging,
-        },
-      );
-    } on PlatformException catch (error) {
-      debugPrint(
-        'Could not cancel native alarm $dueId: ${error.code}',
-      );
-    } on MissingPluginException {
-      debugPrint('Native alarm channel is unavailable.');
-    }
+    // Let the caller know when native cancellation failed. Callers that
+    // perform reconciliation can log the error and retry on the next sync.
+    await _androidAlarmChannel.invokeMethod<void>(
+      'cancel',
+      {
+        'id': dueId,
+        'stopRinging': stopRinging,
+      },
+    );
   }
 
   Future<void> scheduleDose({
@@ -738,7 +779,11 @@ class DoseNotificationService {
     required String patientUid,
     required DoseModel dose,
   }) async {
-    if (!_initialized) return;
+    if (!_initialized) {
+      throw StateError(
+        'DoseNotificationService must be initialized before scheduling.',
+      );
+    }
 
     try {
       await _refreshExactAlarmPermission();
@@ -881,6 +926,10 @@ class DoseNotificationService {
 
     // Scheduling the same notification ID replaces its prior trigger time.
     // Always rebuild it so edits and reschedules cannot leave a stale alarm.
+    final schedulingErrors = <Object>[];
+
+    // Try both reminders independently. Even if the due notification fails,
+    // the late reminder may still be registered successfully.
     try {
       await _schedule(
         id: dueId,
@@ -889,8 +938,10 @@ class DoseNotificationService {
         body: '${dose.medicationName} • ${dose.dosage}',
         payload: payload,
       );
-    } catch (error) {
+    } catch (error, stackTrace) {
+      schedulingErrors.add(error);
       debugPrint('Could not schedule due reminder for ${dose.id}: $error');
+      debugPrintStack(stackTrace: stackTrace);
     }
 
     try {
@@ -901,8 +952,17 @@ class DoseNotificationService {
         body: 'Please confirm ${dose.medicationName} in CureLink.',
         payload: payload,
       );
-    } catch (error) {
+    } catch (error, stackTrace) {
+      schedulingErrors.add(error);
       debugPrint('Could not schedule late reminder for ${dose.id}: $error');
+      debugPrintStack(stackTrace: stackTrace);
+    }
+
+    if (schedulingErrors.isNotEmpty) {
+      throw StateError(
+        'Could not schedule all reminders for dose ${dose.id}: '
+        '${schedulingErrors.join(' | ')}',
+      );
     }
   }
 

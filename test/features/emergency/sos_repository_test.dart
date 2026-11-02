@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:curelink/features/emergency/data/repositories/sos_repository.dart';
 import 'package:curelink/features/emergency/data/models/sos_model.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';

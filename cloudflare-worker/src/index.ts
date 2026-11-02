@@ -44,6 +44,10 @@ const MAX_DOSES_PER_RUN = 40;
 const MAX_ALERTS_PER_RUN = 3;
 const DOSE_COMMIT_BATCH_SIZE = 20;
 const MAX_PARALLEL_REQUESTS = 4;
+// A failed alert job is retried with exponential backoff (2, 4, 8, 16 min...)
+// and given up after MAX_ATTEMPTS, so one bad job can't burn reads forever.
+const MAX_ATTEMPTS = 5;
+const MAX_BACKOFF_MS = 30 * 60 * 1000;
 
 let cachedAccessToken: { token: string; expiresAt: number } | undefined;
 
@@ -296,47 +300,90 @@ async function markOverdueDoses(projectId: string, token: string): Promise<void>
   // Each commit atomically changes the dose and creates its alert outbox item.
   // updateTime prevents a concurrent dose confirmation or snooze from being lost.
   for (const batch of chunks(overdue, DOSE_COMMIT_BATCH_SIZE)) {
-    const writes = batch.flatMap((dose) => {
-      const { patientUid, doseId } = parseDosePath(dose.name);
-      const jobName = documentName(projectId, `caregiver_alert_jobs/${patientUid}_${doseId}`);
-      const job = {
-        name: jobName,
-        fields: {
-          patientUid: { stringValue: patientUid },
-          doseId: { stringValue: doseId },
-          medicationName: {
-            stringValue: dose.fields.medicationName?.stringValue ?? "Medication dose",
-          },
-          state: { stringValue: "pending" },
-          attempts: { integerValue: "0" },
-          leaseUntil: { nullValue: null },
-          createdAt: { timestampValue: now.toISOString() },
-        },
-      };
-      return [
-        {
-          update: {
-            name: dose.name,
-            fields: {
-              status: { stringValue: "missed" },
-              snoozedUntil: { nullValue: null },
-              updatedAt: { timestampValue: now.toISOString() },
-            },
-          },
-          updateMask: { fieldPaths: ["status", "snoozedUntil", "updatedAt"] },
-          currentDocument: { updateTime: dose.updateTime },
-        },
-        { update: job, currentDocument: { exists: false } },
-      ];
-    });
+    const writes = batch.flatMap((dose) => buildMissedWrites(projectId, dose, now, true));
     const response = await firestoreRequest(projectId, token, "documents:commit", { writes });
-    if (!response.ok) {
-      const body = await response.text();
-      // A stale read is safe: the next minute re-reads and only handles doses
-      // that are still overdue. Other errors must stay visible in Worker logs.
-      if (response.status === 409 || body.includes("FAILED_PRECONDITION") ||
-          body.includes("ALREADY_EXISTS")) continue;
-      throw new Error(`Could not mark overdue doses missed (${response.status}): ${body}`);
+    if (response.ok) continue;
+    const body = await response.text();
+    if (isConflict(response.status, body)) {
+      // One conflicting dose (stale read, or an alert job that already exists)
+      // fails the whole atomic batch. Retry each dose on its own so the others
+      // are not re-read and re-attempted every minute.
+      await markDosesIndividually(projectId, token, batch, now);
+      continue;
+    }
+    throw new Error(`Could not mark overdue doses missed (${response.status}): ${body}`);
+  }
+}
+
+function isConflict(status: number, body: string): boolean {
+  return status === 409 || body.includes("FAILED_PRECONDITION") || body.includes("ALREADY_EXISTS");
+}
+
+function buildMissedWrites(
+  projectId: string,
+  dose: FirestoreDocument,
+  now: Date,
+  withJob: boolean,
+): object[] {
+  const { patientUid, doseId } = parseDosePath(dose.name);
+  const doseWrite = {
+    update: {
+      name: dose.name,
+      fields: {
+        status: { stringValue: "missed" },
+        snoozedUntil: { nullValue: null },
+        updatedAt: { timestampValue: now.toISOString() },
+      },
+    },
+    updateMask: { fieldPaths: ["status", "snoozedUntil", "updatedAt"] },
+    currentDocument: { updateTime: dose.updateTime },
+  };
+  if (!withJob) return [doseWrite];
+  const job = {
+    name: documentName(projectId, `caregiver_alert_jobs/${patientUid}_${doseId}`),
+    fields: {
+      patientUid: { stringValue: patientUid },
+      doseId: { stringValue: doseId },
+      medicationName: {
+        stringValue: dose.fields.medicationName?.stringValue ?? "Medication dose",
+      },
+      state: { stringValue: "pending" },
+      attempts: { integerValue: "0" },
+      leaseUntil: { nullValue: null },
+      nextAttemptAt: { timestampValue: now.toISOString() },
+      createdAt: { timestampValue: now.toISOString() },
+    },
+  };
+  return [doseWrite, { update: job, currentDocument: { exists: false } }];
+}
+
+async function markDosesIndividually(
+  projectId: string,
+  token: string,
+  doses: FirestoreDocument[],
+  now: Date,
+): Promise<void> {
+  for (const dose of doses) {
+    const withJob = await firestoreRequest(projectId, token, "documents:commit", {
+      writes: buildMissedWrites(projectId, dose, now, true),
+    });
+    if (withJob.ok) continue;
+    const body = await withJob.text();
+    if (!isConflict(withJob.status, body)) {
+      throw new Error(`Could not mark dose missed (${withJob.status}): ${body}`);
+    }
+    // The alert job already exists (it was created earlier), so just mark the
+    // dose missed. If the dose itself changed since we read it, skip it.
+    if (body.includes("ALREADY_EXISTS")) {
+      const doseOnly = await firestoreRequest(projectId, token, "documents:commit", {
+        writes: buildMissedWrites(projectId, dose, now, false),
+      });
+      if (!doseOnly.ok) {
+        const doseOnlyBody = await doseOnly.text();
+        if (!isConflict(doseOnly.status, doseOnlyBody)) {
+          throw new Error(`Could not mark dose missed (${doseOnly.status}): ${doseOnlyBody}`);
+        }
+      }
     }
   }
 }
@@ -355,18 +402,20 @@ function isStillOverdue(document: FirestoreDocument, now: Date): boolean {
 }
 
 async function deliverPendingAlerts(projectId: string, token: string): Promise<void> {
+  // Only jobs that are due are read: nextAttemptAt is set to "now" when a job is
+  // created, to the lease end while processing, to a backoff time after a
+  // failure, and to null once the job is sent or given up. A single-field range
+  // query needs no composite index, and an idle minute costs one read.
   const jobs = await queryDocuments(projectId, token, "caregiver_alert_jobs", [
-    inFilter("state", ["pending", "processing"]),
-  ], 100);
-  let processed = 0;
+    lessThanOrEqualFilter("nextAttemptAt", new Date().toISOString()),
+  ], MAX_ALERTS_PER_RUN);
   for (const job of jobs) {
-    if (processed >= MAX_ALERTS_PER_RUN) break;
     const state = job.fields.state?.stringValue;
+    if (state !== "pending" && state !== "processing") continue;
     const leaseUntil = job.fields.leaseUntil?.timestampValue;
     if (state === "processing" && leaseUntil && Date.parse(leaseUntil) > Date.now()) {
       continue;
     }
-    processed++;
     await deliverOneAlert(projectId, token, job);
   }
 }
@@ -395,6 +444,7 @@ async function deliverOneAlert(
           state: { stringValue: "processing" },
           attempts: { integerValue: String(attempts) },
           leaseUntil: { timestampValue: leaseUntil },
+          nextAttemptAt: { timestampValue: leaseUntil },
           lastAttemptAt: { timestampValue: now.toISOString() },
         },
       },
@@ -477,6 +527,7 @@ async function deliverOneAlert(
             state: { stringValue: "sent" },
             attempts: { integerValue: String(attempts) },
             leaseUntil: { nullValue: null },
+            nextAttemptAt: { nullValue: null },
             sentAt: { timestampValue: new Date().toISOString() },
             recipientCount: { integerValue: String(recipients.length) },
             deviceCount: { integerValue: String(registrationTokens.length) },
@@ -488,15 +539,23 @@ async function deliverOneAlert(
     if (!finish.ok) throw new Error(`Could not finish alert job (${finish.status}): ${await finish.text()}`);
     return true;
   } catch (error) {
+    // Back off exponentially and stop after MAX_ATTEMPTS instead of retrying
+    // (and re-reading Firestore) every minute forever.
+    const gaveUp = attempts >= MAX_ATTEMPTS;
+    const backoffMs = Math.min(2 ** attempts * 60 * 1000, MAX_BACKOFF_MS);
+    const nextAttemptAt: FirestoreValue = gaveUp
+      ? { nullValue: null }
+      : { timestampValue: new Date(Date.now() + backoffMs).toISOString() };
     const reset = await firestoreRequest(projectId, token, "documents:commit", {
       writes: [{
         update: {
           name: job.name,
           fields: {
             ...job.fields,
-            state: { stringValue: "pending" },
+            state: { stringValue: gaveUp ? "failed" : "pending" },
             attempts: { integerValue: String(attempts) },
             leaseUntil: { nullValue: null },
+            nextAttemptAt,
             lastError: { stringValue: String(error).slice(0, 500) },
           },
         },

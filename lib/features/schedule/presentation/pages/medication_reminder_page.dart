@@ -1,6 +1,5 @@
 ﻿import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/services/dose_notification_service.dart';
@@ -39,11 +38,14 @@ class _MedicationReminderPageState extends State<MedicationReminderPage> {
       .collection('doses')
       .doc(_doseId);
 
-  Future<void> _setStatus(DoseStatus status) async {
+  Future<void> _setStatus(
+    DoseStatus status, {
+    Duration snoozeDuration = const Duration(minutes: 10),
+  }) async {
     if (_saving || _patientUid.isEmpty || _doseId.isEmpty) return;
     final user = FirebaseAuth.instance.currentUser;
     if (user == null || user.uid != _patientUid) {
-      setState(() => _error = 'Ø³Ø¬Ù‘Ù„ Ø§Ù„Ø¯Ø®ÙˆÙ„ Ø¨Ø­Ø³Ø§Ø¨ Ø§Ù„Ù…Ø±ÙŠØ¶ Ù„ØªØ­Ø¯ÙŠØ« Ø§Ù„Ø¬Ø±Ø¹Ø©.');
+      setState(() => _error = 'Log in as the patient to update this dose.');
       return;
     }
 
@@ -52,29 +54,44 @@ class _MedicationReminderPageState extends State<MedicationReminderPage> {
       _error = null;
     });
     try {
-      var alreadyFinished = false;
-      await FirebaseFirestore.instance.runTransaction((transaction) async {
+      final now = DateTime.now();
+      final updated = await FirebaseFirestore.instance.runTransaction<bool>((
+        transaction,
+      ) async {
         final snapshot = await transaction.get(_doseRef);
+
+        if (!snapshot.exists) {
+          return false;
+        }
+
         final data = snapshot.data();
+
         if (data == null ||
             data['status'] == 'taken' ||
             data['status'] == 'missed') {
-          alreadyFinished = true;
-          return;
+          return false;
         }
-        final now = DateTime.now();
+
         transaction.update(_doseRef, {
           'status': status.name,
-          'takenAt': status == DoseStatus.taken ? Timestamp.fromDate(now) : null,
+          'takenAt': status == DoseStatus.taken
+              ? Timestamp.fromDate(now)
+              : null,
           'snoozedUntil': status == DoseStatus.snoozed
-              ? Timestamp.fromDate(now.add(const Duration(minutes: 10)))
+              ? Timestamp.fromDate(now.add(snoozeDuration))
               : null,
           'updatedAt': Timestamp.fromDate(now),
         });
+
+        return true;
       });
 
-      if (alreadyFinished) {
-        if (mounted) setState(() => _error = 'This dose has already been completed or expired.');
+      if (!updated) {
+        if (mounted) {
+          setState(() {
+            _error = 'This dose has already been completed or expired.';
+          });
+        }
         return;
       }
 
@@ -92,7 +109,12 @@ class _MedicationReminderPageState extends State<MedicationReminderPage> {
       }
       if (mounted) Navigator.of(context).pop();
     } on FirebaseException catch (error) {
-      if (mounted) setState(() => _error = 'Could not save (${error.code}). Check your connection and account access.');
+      if (mounted) {
+        setState(
+          () => _error =
+              'Could not save (${error.code}). Check your connection and account access.',
+        );
+      }
     } catch (error) {
       if (mounted) {
         setState(() => _error = 'Could not save: $error');
@@ -102,6 +124,20 @@ class _MedicationReminderPageState extends State<MedicationReminderPage> {
     }
   }
 
+  Widget _snoozeButton(String label, Duration duration) {
+    return SizedBox(
+      width: double.infinity,
+      child: OutlinedButton.icon(
+        onPressed: _saving
+            ? null
+            : () => _setStatus(DoseStatus.snoozed, snoozeDuration: duration),
+        icon: const Icon(Icons.snooze),
+        label: Text(label),
+        style: OutlinedButton.styleFrom(minimumSize: const Size(0, 54)),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final isArabic = Localizations.localeOf(context).languageCode == 'ar';
@@ -109,7 +145,11 @@ class _MedicationReminderPageState extends State<MedicationReminderPage> {
     if (_patientUid.isEmpty || _doseId.isEmpty) {
       return Scaffold(
         body: Center(
-          child: Text(isArabic ? 'Ø¨ÙŠØ§Ù†Ø§Øª Ø§Ù„Ø¬Ø±Ø¹Ø© ØºÙŠØ± Ù…ØªØ§Ø­Ø©' : 'Dose details are unavailable'),
+          child: Text(
+            isArabic
+                ? 'بيانات الجرعة غير متاحة'
+                : 'Dose details are unavailable',
+          ),
         ),
       );
     }
@@ -129,7 +169,7 @@ class _MedicationReminderPageState extends State<MedicationReminderPage> {
                   padding: const EdgeInsets.all(24),
                   child: Text(
                     isArabic
-                        ? 'ØªØ¹Ø°Ø± ØªØ­Ù…ÙŠÙ„ ØªÙØ§ØµÙŠÙ„ Ø§Ù„Ø¬Ø±Ø¹Ø©. Ø§ÙØªØ­ Ø§Ù„ØªØ·Ø¨ÙŠÙ‚ ÙˆØ§ØªØµÙ„ Ø¨Ø§Ù„Ø¥Ù†ØªØ±Ù†Øª Ø«Ù… Ø­Ø§ÙˆÙ„ Ù…Ø¬Ø¯Ø¯Ù‹Ø§.'
+                        ? 'تعذر تحميل تفاصيل الجرعة. افتح التطبيق واتصل بالإنترنت ثم حاول مجددًا.'
                         : 'Could not load this dose. Open the app with an internet connection and try again.',
                     textAlign: TextAlign.center,
                   ),
@@ -138,11 +178,12 @@ class _MedicationReminderPageState extends State<MedicationReminderPage> {
             }
 
             final dose = DoseModel.fromMap(data, _doseId);
-            final finished = dose.status == DoseStatus.taken ||
+            final finished =
+                dose.status == DoseStatus.taken ||
                 dose.status == DoseStatus.missed;
-            final time = MaterialLocalizations.of(context).formatTimeOfDay(
-              TimeOfDay.fromDateTime(dose.scheduledAt),
-            );
+            final time = MaterialLocalizations.of(
+              context,
+            ).formatTimeOfDay(TimeOfDay.fromDateTime(dose.scheduledAt));
 
             return Center(
               child: SingleChildScrollView(
@@ -152,10 +193,14 @@ class _MedicationReminderPageState extends State<MedicationReminderPage> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Icon(Icons.alarm_rounded, size: 72, color: Color(0xff81459e)),
+                      const Icon(
+                        Icons.alarm_rounded,
+                        size: 72,
+                        color: Color(0xff81459e),
+                      ),
                       const SizedBox(height: 20),
                       Text(
-                        isArabic ? 'Ù…ÙˆØ¹Ø¯ Ø§Ù„Ø¯ÙˆØ§Ø¡' : 'Medication time',
+                        isArabic ? 'موعد الدواء' : 'Medication time',
                         style: theme.textTheme.titleMedium?.copyWith(
                           color: theme.colorScheme.primary,
                           fontWeight: FontWeight.w600,
@@ -172,13 +217,21 @@ class _MedicationReminderPageState extends State<MedicationReminderPage> {
                       const SizedBox(height: 12),
                       Card(
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 24,
+                            vertical: 18,
+                          ),
                           child: Column(
                             children: [
-                              Text(dose.dosage, style: theme.textTheme.titleLarge),
+                              Text(
+                                dose.dosage,
+                                style: theme.textTheme.titleLarge,
+                              ),
                               const SizedBox(height: 8),
                               Text(
-                                isArabic ? 'Ù…ÙˆØ¹Ø¯ Ø§Ù„Ø¬Ø±Ø¹Ø©: $time' : 'Scheduled for $time',
+                                isArabic
+                                    ? 'موعد الجرعة: $time'
+                                    : 'Scheduled for $time',
                                 style: theme.textTheme.titleMedium,
                               ),
                             ],
@@ -187,41 +240,57 @@ class _MedicationReminderPageState extends State<MedicationReminderPage> {
                       ),
                       if (_error != null) ...[
                         const SizedBox(height: 12),
-                        Text(_error!, style: TextStyle(color: theme.colorScheme.error), textAlign: TextAlign.center),
+                        Text(
+                          _error!,
+                          style: TextStyle(color: theme.colorScheme.error),
+                          textAlign: TextAlign.center,
+                        ),
                       ],
                       if (finished) ...[
                         const SizedBox(height: 24),
                         Text(
                           dose.status == DoseStatus.taken
-                              ? (isArabic ? 'ØªÙ… ØªØ£ÙƒÙŠØ¯ Ø£Ø®Ø° Ù‡Ø°Ù‡ Ø§Ù„Ø¬Ø±Ø¹Ø©' : 'This dose was marked as taken')
-                              : (isArabic ? 'Ø§Ù†ØªÙ‡Ù‰ ÙˆÙ‚Øª Ù‡Ø°Ù‡ Ø§Ù„Ø¬Ø±Ø¹Ø©' : 'The time window for this dose has passed'),
+                              ? (isArabic
+                                    ? 'تم تأكيد أخذ هذه الجرعة'
+                                    : 'This dose was marked as taken')
+                              : (isArabic
+                                    ? 'انتهى وقت هذه الجرعة'
+                                    : 'The time window for this dose has passed'),
                           textAlign: TextAlign.center,
                         ),
                         const SizedBox(height: 20),
                         OutlinedButton(
                           onPressed: () => Navigator.of(context).maybePop(),
-                          child: Text(isArabic ? 'Ø¥ØºÙ„Ø§Ù‚' : 'Close'),
+                          child: Text(isArabic ? 'إغلاق' : 'Close'),
                         ),
                       ] else ...[
                         const SizedBox(height: 28),
                         SizedBox(
                           width: double.infinity,
                           child: FilledButton.icon(
-                            onPressed: _saving ? null : () => _setStatus(DoseStatus.taken),
+                            onPressed: _saving
+                                ? null
+                                : () => _setStatus(DoseStatus.taken),
                             icon: const Icon(Icons.check_circle_outline),
-                            label: Text(isArabic ? 'Ø£Ø®Ø°Øª Ø§Ù„Ø¯ÙˆØ§Ø¡' : 'Mark as taken'),
-                            style: FilledButton.styleFrom(minimumSize: const Size(0, 54)),
+                            label: Text(
+                              isArabic ? 'أخذت الدواء' : 'Mark as taken',
+                            ),
+                            style: FilledButton.styleFrom(
+                              minimumSize: const Size(0, 54),
+                            ),
                           ),
                         ),
                         const SizedBox(height: 12),
-                        SizedBox(
-                          width: double.infinity,
-                          child: OutlinedButton.icon(
-                            onPressed: _saving ? null : () => _setStatus(DoseStatus.snoozed),
-                            icon: const Icon(Icons.snooze),
-                            label: Text(isArabic ? 'ØªØ£Ø¬ÙŠÙ„ 10 Ø¯Ù‚Ø§Ø¦Ù‚' : 'Snooze 10 minutes'),
-                            style: OutlinedButton.styleFrom(minimumSize: const Size(0, 54)),
-                          ),
+                        _snoozeButton(
+                          isArabic ? 'تأجيل 10 دقائق' : 'Snooze 10 minutes',
+                          const Duration(minutes: 10),
+                        ),
+                        const SizedBox(height: 12),
+                        _snoozeButton(
+                          isArabic
+                              ? 'تأجيل 30 دقيقة (قبل الأكل)'
+                              : 'Snooze 30 minutes (Before food)',
+                          const Duration(minutes: 30),
                         ),
                         if (_saving) ...[
                           const SizedBox(height: 16),
