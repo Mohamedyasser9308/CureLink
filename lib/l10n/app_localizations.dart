@@ -1322,6 +1322,30 @@ abstract class AppLocalizations {
   /// **'Today\'s medications'**
   String get todaysMedications;
 
+  /// No description provided for @lightMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Light'**
+  String get lightMode;
+
+  /// No description provided for @systemMode.
+  ///
+  /// In en, this message translates to:
+  /// **'System'**
+  String get systemMode;
+
+  /// No description provided for @logOutConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Log out?'**
+  String get logOutConfirmTitle;
+
+  /// No description provided for @logOutConfirmMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to log out ?'**
+  String get logOutConfirmMessage;
+
   /// Localized Adherence text displayed in the interface.
   ///
   /// In en, this message translates to:

@@ -662,6 +662,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get todaysMedications => 'Today\'s medications';
 
   @override
+  String get lightMode => 'Light';
+
+  @override
+  String get systemMode => 'System';
+
+  @override
+  String get logOutConfirmTitle => 'Log out?';
+
+  @override
+  String get logOutConfirmMessage => 'Are you sure you want to log out ?';
+
+  @override
   String get adherence => 'Adherence';
 
   @override

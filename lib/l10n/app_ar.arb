@@ -93,6 +93,10 @@
   "@createAccountSubtitle": {
     "description": "Localized Create account subtitle text displayed in the interface."
   },
+  "lightMode": "فاتح",
+"systemMode": "النظام",
+"logOutConfirmTitle": "تسجيل الخروج؟",
+"logOutConfirmMessage": "هل أنت متأكد أنك تريد تسجيل الخروج؟",
   "enterYourName": "أدخل اسمك",
   "@enterYourName": {
     "description": "Localized Enter your name text displayed in the interface."

@@ -49,6 +49,17 @@ class SettingsCubit extends Cubit<SettingsState> {
       ),
     );
   }
+  Future<void> setThemeMode(ThemeMode mode) async {
+    if (state.themeMode == mode) return;
+
+    emit(state.copyWith(themeMode: mode));
+
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(
+      'themeMode',
+      mode.name,
+    ); // 'light' | 'dark' | 'system'
+  }
 
   Future<void> toggleDarkMode(bool enabled) async {
     final themeMode = enabled ? ThemeMode.dark : ThemeMode.light;

@@ -664,6 +664,18 @@ class AppLocalizationsAr extends AppLocalizations {
   String get todaysMedications => 'أدوية اليوم';
 
   @override
+  String get lightMode => 'فاتح';
+
+  @override
+  String get systemMode => 'النظام';
+
+  @override
+  String get logOutConfirmTitle => 'تسجيل الخروج؟';
+
+  @override
+  String get logOutConfirmMessage => 'هل أنت متأكد أنك تريد تسجيل الخروج؟';
+
+  @override
   String get adherence => 'الالتزام';
 
   @override

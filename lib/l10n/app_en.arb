@@ -863,6 +863,10 @@
   "@todaysMedications": {
     "description": "Localized Todays medications text displayed in the interface."
   },
+  "lightMode": "Light",
+"systemMode": "System",
+"logOutConfirmTitle": "Log out?",
+"logOutConfirmMessage": "Are you sure you want to log out ?",
   "adherence": "Adherence",
   "@adherence": {
     "description": "Localized Adherence text displayed in the interface."
