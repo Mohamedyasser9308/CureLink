@@ -38,7 +38,8 @@ class _ScheduleView extends StatefulWidget {
   State<_ScheduleView> createState() => _ScheduleViewState();
 }
 
-class _ScheduleViewState extends State<_ScheduleView> with WidgetsBindingObserver {
+class _ScheduleViewState extends State<_ScheduleView>
+    with WidgetsBindingObserver {
   Timer? _timer;
   bool _reminderOpen = false;
 
@@ -69,7 +70,9 @@ class _ScheduleViewState extends State<_ScheduleView> with WidgetsBindingObserve
         !(ModalRoute.of(context)?.isCurrent ?? false)) {
       return;
     }
-    final due = cubit.state.doses.where((dose) => dose.status == DoseStatus.due);
+    final due = cubit.state.doses.where(
+      (dose) => dose.status == DoseStatus.due,
+    );
     if (due.isEmpty) return;
     final dose = due.first;
     final patientUid = FirebaseAuth.instance.currentUser?.uid;
@@ -276,7 +279,7 @@ class _DoseList extends StatelessWidget {
         ScheduleTab.today => day == today,
         ScheduleTab.all => true,
       };
-    }).toList()..sort((a, b) => a.scheduledAt.compareTo(b.scheduledAt));
+    }).toList()..sort((a, b) => b.scheduledAt.compareTo(a.scheduledAt));
 
     if (filtered.isEmpty) {
       return ListView(
@@ -308,7 +311,7 @@ class _DoseList extends StatelessWidget {
       groups.putIfAbsent(day, () => []).add(dose);
     }
 
-    final days = groups.keys.toList()..sort();
+    final days = groups.keys.toList()..sort((a, b) => b.compareTo(a));
 
     return ListView(
       physics: const AlwaysScrollableScrollPhysics(),
