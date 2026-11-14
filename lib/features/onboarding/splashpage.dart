@@ -6,6 +6,7 @@ import 'package:curelink/core/services/dose_notification_service.dart';
 import 'package:curelink/core/theme/app_theme.dart';
 import 'package:curelink/l10n/app_localizations.dart';
 import 'package:curelink/features/onboarding/onboardingview.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class Splashscreen extends StatefulWidget {
@@ -19,18 +20,25 @@ class _SplashscreenState extends State<Splashscreen> {
   final SessionService _session = SessionService();
   String? _sessionError;
   bool _isResolving = false;
+  bool _testScreenOpened = false;
 
   @override
   void initState() {
     super.initState();
-    _resolveSession();
+    if (!kDebugMode) _resolveSession();
   }
 
   Future<void> _resolveSession() async {
-    if (_isResolving) return;
-    _isResolving = true;
-    if (_sessionError != null) setState(() => _sessionError = null);
+    if (_isResolving || _testScreenOpened) return;
+    setState(() {
+      _isResolving = true;
+      _sessionError = null;
+    });
     await Future.delayed(const Duration(seconds: 2));
+    if (_testScreenOpened) {
+      _isResolving = false;
+      return;
+    }
     if (!mounted) {
       _isResolving = false;
       return;
@@ -102,6 +110,15 @@ class _SplashscreenState extends State<Splashscreen> {
     }
   }
 
+  Future<void> _openGeminiTest() async {
+    if (!kDebugMode || _isResolving || _testScreenOpened) return;
+    _testScreenOpened = true;
+    await Navigator.of(context).pushNamed(RoutesNames.geminiTest);
+    if (!mounted) return;
+    _testScreenOpened = false;
+    await _resolveSession();
+  }
+
   void _openInitialReminderAfterHome() {
     final payload = DoseNotificationService.instance.takeInitialPayload();
     if (payload == null || payload.isEmpty) return;
@@ -134,6 +151,14 @@ class _SplashscreenState extends State<Splashscreen> {
                   icon: const Icon(Icons.refresh),
                   label: Text(l10n.retry),
                 ),
+                if (kDebugMode) ...[
+                  const SizedBox(height: 8),
+                  TextButton.icon(
+                    onPressed: _isResolving ? null : _openGeminiTest,
+                    icon: const Icon(Icons.science_outlined),
+                    label: const Text('Gemini Connection Test'),
+                  ),
+                ],
               ],
             ),
           ),
@@ -159,7 +184,23 @@ class _SplashscreenState extends State<Splashscreen> {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 24),
-            const CircularProgressIndicator(),
+            if (!kDebugMode || _isResolving)
+              const CircularProgressIndicator()
+            else
+              const Text('Debug mode: choose an action below.'),
+            if (kDebugMode) ...[
+              const SizedBox(height: 24),
+              FilledButton.icon(
+                onPressed: _isResolving ? null : _resolveSession,
+                icon: const Icon(Icons.login),
+                label: const Text('Continue to app'),
+              ),
+              TextButton.icon(
+                onPressed: _isResolving ? null : _openGeminiTest,
+                icon: const Icon(Icons.science_outlined),
+                label: const Text('Gemini Connection Test'),
+              ),
+            ],
           ],
         ),
       ),

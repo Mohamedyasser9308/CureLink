@@ -33,6 +33,8 @@ dependencies:
   flutter_local_notifications:  ^18.0.1
   flutter_timezone: ^3.0.1
   timezone: ^0.10.1
+  firebase_ai: ^4.0.0
+  firebase_app_check: ^0.4.9
 
 dev_dependencies:
   flutter_test:

@@ -4,6 +4,7 @@ import 'dart:async';
 import 'package:curelink/core/router/app_router.dart';
 import 'package:curelink/core/router/routes_names.dart';
 import 'package:curelink/core/services/dose_notification_service.dart';
+import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:curelink/core/settings/settings_cubit.dart';
 import 'package:curelink/core/theme/dark_theme.dart';
@@ -23,6 +24,12 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await FirebaseAppCheck.instance.activate(
+    // ignore: deprecated_member_use
+    androidProvider: AndroidProvider.debug,
+  );
+
+  debugPrint('Firebase App Check activated successfully');
 
   await initializeDateFormatting('ar');
   await initializeDateFormatting('en');
